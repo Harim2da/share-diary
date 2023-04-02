@@ -12,12 +12,9 @@ function Header() {
         <h1>클라이밍 일기</h1>
       </div>
       <div>
-        <span>
-          <FontAwesomeIcon icon={faPlus} />
-        </span>
         <span className="bell">
           <FontAwesomeIcon icon={faBell} />
-          <span className="num">10</span>
+          <span className="red" />
         </span>
         <span className="login-btn">로그인</span>
       </div>
@@ -60,16 +57,15 @@ const HeaderWrap = styled.div`
     position: relative;
   }
 
-  .num {
+  .red {
     background: red;
     position: absolute;
     margin: 0;
-    font-size: 8px;
-    padding: 0.125rem 0.188rem;
     border-radius: 50%;
-    color: #fff;
-    top: 2px;
-    right: -10px;
+    top: 8px;
+    right: -1px;
+    width: 8px;
+    height: 8px;
   }
 
   .login-btn {
