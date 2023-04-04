@@ -1,6 +1,6 @@
 import { useCycle } from "framer-motion";
 import CombineMenu from "../component/CombineMenu/CombineMenu";
-import Header from "../component/Header";
+import Header from "../component/CombineMenu/Header";
 
 function ComponentsWrapper(props: { children: React.ReactNode }) {
   const [isOpen, toggleOpen] = useCycle(false, true);
