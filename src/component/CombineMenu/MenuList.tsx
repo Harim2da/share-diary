@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useCycle, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
   faMedal,
-  faPlus,
   faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -32,10 +31,11 @@ interface IListProps {
 }
 
 function MenuList(props: IListProps) {
-  const { isOpen } = props;
-
   return (
-    <ListWrap animate={isOpen ? "open" : "closed"} variants={listVariants}>
+    <ListWrap
+      animate={props.isOpen ? "open" : "closed"}
+      variants={listVariants}
+    >
       <div className="search">
         <FontAwesomeIcon icon={faMagnifyingGlass} />
         <input type="text" placeholder="검색" />
@@ -53,7 +53,6 @@ function MenuList(props: IListProps) {
         <li>공부 일기</li>
         <li>반려견 일기</li>
       </ul>
-      <FontAwesomeIcon icon={faPlus} className="plusBtn" />
     </ListWrap>
   );
 }
@@ -61,8 +60,8 @@ function MenuList(props: IListProps) {
 export default MenuList;
 
 const ListWrap = styled(motion.div)`
-  font-size: 18px;
-  padding: 1.5rem 1.75rem;
+  font-size: 1rem;
+  padding: 1.5rem 1.25rem;
 
   .search {
     padding: 0px 12px;
@@ -82,7 +81,7 @@ const ListWrap = styled(motion.div)`
 
   .ranking-tab {
     padding: 20px 0;
-    color: #f4c005;
+    color: #8685ef;
     font-weight: bold;
 
     svg {
@@ -103,16 +102,5 @@ const ListWrap = styled(motion.div)`
       font-weight: bold;
       background: #eeeeee;
     }
-  }
-
-  .plusBtn {
-    display: block;
-    margin: 60px auto 0;
-    padding: 4px;
-    width: 35px !important;
-    height: 35px;
-    background: #e0e0e0;
-    color: #7a7979;
-    border-radius: 10px;
   }
 `;

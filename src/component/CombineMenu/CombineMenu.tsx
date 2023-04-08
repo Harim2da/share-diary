@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import MenuToggle from "./MenuToggle";
 import styled from "styled-components";
 import MenuList from "./MenuList";
+import SideMenuBtn from "./SideMenuBtn";
 
 const sidebarVariants = {
   open: {
-    width: 300,
+    width: 260,
     transition: {
       type: "linear",
     },
@@ -14,7 +15,7 @@ const sidebarVariants = {
   closed: {
     width: 0,
     transition: {
-      delay: 0.5,
+      delay: 0.3,
       type: "linear",
     },
   },
@@ -52,6 +53,7 @@ function CombineMenu(props: ICombineProps) {
       <MenuToggle toggle={() => toggleOpen()} />
       <DiaryTitle variants={titleVariants}>클라이밍 일기</DiaryTitle>
       <MenuList isOpen={isOpen} />
+      <SideMenuBtn isOpen={isOpen} />
     </CombineNav>
   );
 }
