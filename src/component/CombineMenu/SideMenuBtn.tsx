@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
+import Modal from '../Modal/SideMenuModal'
 
 const listVariants = {
   open: {
@@ -20,15 +22,30 @@ const listVariants = {
 };
 
 function SideMenuBtn(props: { isOpen: boolean }) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCreate, setIsCreate] = useState(false);
+
+  const showModal = (create: boolean) => {
+    setIsCreate(create);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
+    <>
+    <Modal visible={isModalVisible} closeModal={closeModal} isCreate={isCreate} />
     <BtnsWrap
-      animate={props.isOpen ? "open" : "closed"}
+      animate={props.isOpen ? 'open' : 'closed'}
       variants={listVariants}
     >
       <button>오늘의 일기쓰기</button>
-      <button>일기방 초대하기</button>
-      <button>일기방 만들기</button>
+      <button onClick={() => showModal(false)}>일기방 초대하기</button>
+      <button onClick={() => showModal(true)}>일기방 만들기</button>
     </BtnsWrap>
+  </>
   );
 }
 

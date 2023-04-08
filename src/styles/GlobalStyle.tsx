@@ -64,5 +64,4 @@ input {
 	:focus {
 		outline: none;
 	} 
-}
-`;
+}`;
