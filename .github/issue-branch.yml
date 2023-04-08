@@ -2,5 +2,5 @@ branchName: '${issue.number}'
 bramches:
   - label: '*'
     prefix: feature/
-    name: develop
+    name: master
 autoCloseIssue: true
