@@ -119,7 +119,7 @@ function SideMenuModal(props: IModalProps) {
         )}
       </Form.List>
     </Form>
-    </Modal >
+    </Modal>
   );
 }
 

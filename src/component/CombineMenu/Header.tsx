@@ -7,7 +7,7 @@ function Header() {
   return (
     <HeaderWrap>
       <div>
-        <h1>클라이밍 일기</h1>
+        <h1>잇츠 다이어리</h1>
       </div>
       <div>
         <span className="bell">
