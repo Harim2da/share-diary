@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 function Header() {
   return (
-    <HeaderWrap>
+    <HeaderWrap className="header">
       <div>
         <h1>클라이밍 일기</h1>
       </div>
