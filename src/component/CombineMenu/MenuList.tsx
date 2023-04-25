@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -8,34 +7,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-const listVariants = {
-  open: {
-    opacity: 1,
-    display: "block",
-    transition: {
-      delay: 0.5,
-      type: "linear",
-    },
-  },
-  closed: {
-    opacity: 0,
-    display: "none",
-    transition: {
-      type: "linear",
-    },
-  },
-};
-
-interface IListProps {
-  isOpen: boolean;
-}
-
-function MenuList(props: IListProps) {
+function MenuList(props: { isMenuOpen: boolean }) {
   return (
-    <ListWrap
-      animate={props.isOpen ? "open" : "closed"}
-      variants={listVariants}
-    >
+    <ListWrap display={props.isMenuOpen ? "block" : "none"}>
       <div className="search">
         <FontAwesomeIcon icon={faMagnifyingGlass} />
         <input type="text" placeholder="검색" />
@@ -59,9 +33,10 @@ function MenuList(props: IListProps) {
 
 export default MenuList;
 
-const ListWrap = styled(motion.div)`
+const ListWrap = styled.div<{ display: string }>`
   font-size: 1rem;
-  padding: 1.5rem 1.25rem;
+  padding: 1.5rem 1rem;
+  display: ${(props) => props.display};
 
   .search {
     padding: 0px 12px;

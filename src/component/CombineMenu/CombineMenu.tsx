@@ -1,80 +1,52 @@
-import React from "react";
-import { motion } from "framer-motion";
-import MenuToggle from "./MenuToggle";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MenuList from "./MenuList";
 import SideMenuBtn from "./SideMenuBtn";
 
-const sidebarVariants = {
-  open: {
-    width: 260,
-    transition: {
-      type: "linear",
-    },
-  },
-  closed: {
-    width: 0,
-    transition: {
-      delay: 0.3,
-      type: "linear",
-    },
-  },
-};
+function CombineMenu() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [delay, setDelay] = useState(false);
 
-const titleVariants = {
-  open: {
-    opacity: 1,
-    display: "inline-block",
-    transition: {
-      delay: 0.5,
-      type: "linear",
-    },
-  },
-  closed: {
-    opacity: 0,
-    display: "none",
-    transition: {
-      type: "linear",
-    },
-  },
-};
+  const onClickLogo = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
 
-interface ICombineProps {
-  isOpen: boolean;
-  toggleOpen: () => void;
-}
+  useEffect(() => {
+    if (isMenuOpen) {
+      setTimeout(() => {
+        setDelay(true);
+      }, 300);
+    } else {
+      setDelay(false);
+    }
+  }, [isMenuOpen]);
 
-function CombineMenu(props: ICombineProps) {
-  const { isOpen, toggleOpen } = props;
+  console.log(isMenuOpen);
 
   return (
-    <CombineNav animate={isOpen ? "open" : "closed"}>
-      <motion.div variants={sidebarVariants} />
-      <MenuToggle toggle={() => toggleOpen()} />
-      <DiaryTitle variants={titleVariants}>클라이밍 일기</DiaryTitle>
-      <MenuList isOpen={isOpen} />
-      <SideMenuBtn isOpen={isOpen} />
+    <CombineNav className="menu" width={isMenuOpen ? "240px" : "40px"}>
+      <div className="logo" onClick={onClickLogo}></div>
+      <MenuList isMenuOpen={delay} />
+      <SideMenuBtn isMenuOpen={delay} />
     </CombineNav>
   );
 }
 
 export default CombineMenu;
 
-const CombineNav = styled(motion.nav)`
-  position: absolute;
-  top: 0;
-  /* background-color: green; */
-  height: 100%;
+const CombineNav = styled.nav<{ width: string }>`
   border-right: 1px solid #d9d9d9;
   box-shadow: 1px 0px 5px #d9d9d9;
   background: #fff;
-`;
+  padding: 0 10px;
 
-const DiaryTitle = styled(motion.h1)`
-  font-size: 18px;
-  font-weight: bold;
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  padding: 20px 0px 16px 0px;
+  .logo {
+    width: ${(props) => props.width};
+    transition: width 0.3s linear;
+    height: 40px;
+    background: #d6d4e6;
+    margin: 1rem auto 0;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 `;

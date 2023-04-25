@@ -1,30 +1,8 @@
-import { motion } from "framer-motion";
 import styled from "styled-components";
 
-const listVariants = {
-  open: {
-    opacity: 1,
-    display: "block",
-    transition: {
-      delay: 0.5,
-      type: "linear",
-    },
-  },
-  closed: {
-    opacity: 0,
-    display: "none",
-    transition: {
-      type: "linear",
-    },
-  },
-};
-
-function SideMenuBtn(props: { isOpen: boolean }) {
+function SideMenuBtn(props: { isMenuOpen: boolean }) {
   return (
-    <BtnsWrap
-      animate={props.isOpen ? "open" : "closed"}
-      variants={listVariants}
-    >
+    <BtnsWrap display={props.isMenuOpen ? "block" : "none"}>
       <button>오늘의 일기쓰기</button>
       <button>일기방 초대하기</button>
       <button>일기방 만들기</button>
@@ -34,10 +12,9 @@ function SideMenuBtn(props: { isOpen: boolean }) {
 
 export default SideMenuBtn;
 
-const BtnsWrap = styled(motion.div)`
-  position: absolute;
-  bottom: 0px;
+const BtnsWrap = styled.div<{ display: string }>`
   width: 100%;
+  display: ${(props) => props.display};
 
   button {
     display: block;
