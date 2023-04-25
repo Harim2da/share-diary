@@ -1,16 +1,21 @@
-import { useCycle } from "framer-motion";
+import styled from "styled-components";
 import CombineMenu from "../component/CombineMenu/CombineMenu";
 import Header from "../component/CombineMenu/Header";
 
 function ComponentsWrapper(props: { children: React.ReactNode }) {
-  const [isOpen, toggleOpen] = useCycle(false, true);
-
   return (
-    <div>
+    <Wrap>
+      <CombineMenu />
       <Header />
-      <CombineMenu isOpen={isOpen} toggleOpen={toggleOpen} />
       {props.children}
-    </div>
+    </Wrap>
   );
 }
 export default ComponentsWrapper;
+
+const Wrap = styled.div`
+  .menu {
+    float: left;
+    height: 100vh;
+  }
+`;
