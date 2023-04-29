@@ -15,6 +15,9 @@ export default SideMenuBtn;
 const BtnsWrap = styled.div<{ display: string }>`
   width: 100%;
   display: ${(props) => props.display};
+  position: absolute;
+  right: 0;
+  bottom: 0;
 
   button {
     display: block;

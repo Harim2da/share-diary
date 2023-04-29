@@ -17,5 +17,6 @@ const Wrap = styled.div`
   .menu {
     float: left;
     height: 100vh;
+    position: relative;
   }
 `;
