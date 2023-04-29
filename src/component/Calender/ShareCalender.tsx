@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { selectDateState } from "../../atom/recoil";
 
 function ShareCalender() {
   const [value] = useState(new Date());
-  const [clickDate, setClickDate] = useState("");
+  const setSelectDate = useSetRecoilState(selectDateState);
 
   const changeDate = (e: any) => {
     const year = new Date(e).getFullYear();
-    const month = new Date(e).getMonth() + 1;
-    const date = new Date(e).getDate();
+    const month = String(new Date(e).getMonth() + 1).padStart(2, "0");
+    const date = String(new Date(e).getDate()).padStart(2, "0");
 
-    setClickDate(`${year}년 ${month}월 ${date}일`);
+    setSelectDate(`${year}년 ${month}월 ${date}일`);
   };
 
   return (
@@ -24,9 +26,7 @@ function ShareCalender() {
         next2Label={null}
         prev2Label={null}
         onChange={(e) => changeDate(e)}
-        // onClickDay={(e) => changeDate(e)}
       />
-      <div>{clickDate}</div>
     </CalenderWrap>
   );
 }
