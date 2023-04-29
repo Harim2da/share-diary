@@ -39,7 +39,7 @@ const CalenderWrap = styled.div`
   display: flex;
 
   .react-calendar {
-    width: 90%;
+    width: 70%;
     margin: auto;
     border: none;
     border-radius: 20px;
