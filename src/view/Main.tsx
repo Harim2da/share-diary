@@ -1,7 +1,18 @@
+import { useRecoilValue } from "recoil";
+import { selectDateState } from "../atom/recoil";
+import SelectedDiary from "../component/Calender/SelectedDiary";
+import ShareCalender from "../component/Calender/ShareCalender";
 import ComponentsWrapper from "../styles/ComponentsWrapper";
 
 function Main() {
-  return <ComponentsWrapper>늦어서 죄솜합니다..</ComponentsWrapper>;
+  const selectDate = useRecoilValue(selectDateState);
+
+  return (
+    <ComponentsWrapper>
+      <ShareCalender />
+      {selectDate === "" ? null : <SelectedDiary />}
+    </ComponentsWrapper>
+  );
 }
 
 export default Main;
