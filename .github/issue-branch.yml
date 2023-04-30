@@ -1,5 +1,5 @@
 branchName: '${issue.number}'
-bramches:
+branches:
   - label: '*'
     prefix: feature/
     name: develop

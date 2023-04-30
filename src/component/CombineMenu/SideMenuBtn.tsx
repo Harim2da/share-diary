@@ -1,28 +1,9 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import styled from 'styled-components';
-import Modal from '../Modal/SideMenuModal'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Modal from "../Modal/SideMenuModal";
+import { useNavigate } from "react-router-dom";
 
-const listVariants = {
-  open: {
-    opacity: 1,
-    display: "block",
-    transition: {
-      delay: 0.5,
-      type: "linear",
-    },
-  },
-  closed: {
-    opacity: 0,
-    display: "none",
-    transition: {
-      type: "linear",
-    },
-  },
-};
-
-function SideMenuBtn(props: { isOpen: boolean }) {
+function SideMenuBtn(props: { isMenuOpen: boolean }) {
   let navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
@@ -38,25 +19,34 @@ function SideMenuBtn(props: { isOpen: boolean }) {
 
   return (
     <>
-    <Modal visible={isModalVisible} closeModal={closeModal} isCreate={isCreate} />
-    <BtnsWrap
-      animate={props.isOpen ? 'open' : 'closed'}
-      variants={listVariants}
-    >
-      <button onClick={() => { navigate('/write') }}>오늘의 일기쓰기</button>
-      <button onClick={() => showModal(false)}>일기방 초대하기</button>
-      <button onClick={() => showModal(true)}>일기방 만들기</button>
-    </BtnsWrap>
-  </>
+      <Modal
+        visible={isModalVisible}
+        closeModal={closeModal}
+        isCreate={isCreate}
+      />
+      <BtnsWrap display={props.isMenuOpen ? "block" : "none"}>
+        <button
+          onClick={() => {
+            navigate("/write");
+          }}
+        >
+          오늘의 일기쓰기
+        </button>
+        <button onClick={() => showModal(false)}>일기방 초대하기</button>
+        <button onClick={() => showModal(true)}>일기방 만들기</button>
+      </BtnsWrap>
+    </>
   );
 }
 
 export default SideMenuBtn;
 
-const BtnsWrap = styled(motion.div)`
-  position: absolute;
-  bottom: 0px;
+const BtnsWrap = styled.div<{ display: string }>`
   width: 100%;
+  display: ${(props) => props.display};
+  position: absolute;
+  right: 0;
+  bottom: 0;
 
   button {
     display: block;
