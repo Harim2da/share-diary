@@ -1,12 +1,41 @@
+import React, { useState } from "react";
 import styled from "styled-components";
+import Modal from "../Modal/SideMenuModal";
+import { useNavigate } from "react-router-dom";
 
 function SideMenuBtn(props: { isMenuOpen: boolean }) {
+  let navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCreate, setIsCreate] = useState(false);
+
+  const showModal = (create: boolean) => {
+    setIsCreate(create);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <BtnsWrap display={props.isMenuOpen ? "block" : "none"}>
-      <button>오늘의 일기쓰기</button>
-      <button>일기방 초대하기</button>
-      <button>일기방 만들기</button>
-    </BtnsWrap>
+    <>
+      <Modal
+        visible={isModalVisible}
+        closeModal={closeModal}
+        isCreate={isCreate}
+      />
+      <BtnsWrap display={props.isMenuOpen ? "block" : "none"}>
+        <button
+          onClick={() => {
+            navigate("/write");
+          }}
+        >
+          오늘의 일기쓰기
+        </button>
+        <button onClick={() => showModal(false)}>일기방 초대하기</button>
+        <button onClick={() => showModal(true)}>일기방 만들기</button>
+      </BtnsWrap>
+    </>
   );
 }
 
