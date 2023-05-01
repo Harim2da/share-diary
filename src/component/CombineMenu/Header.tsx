@@ -2,8 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  let navigate = useNavigate();
   return (
     <HeaderWrap>
       <div>
@@ -14,7 +16,7 @@ function Header() {
           <FontAwesomeIcon icon={faBell} />
           <span className="red" />
         </span>
-        <span className="login-btn">로그인</span>
+        <span className="login-btn" onClick={() => {navigate("/login");}}>로그인</span>
       </div>
     </HeaderWrap>
   );
