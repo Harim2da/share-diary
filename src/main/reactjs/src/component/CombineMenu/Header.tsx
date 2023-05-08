@@ -2,11 +2,20 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { isMenuOpenState } from "../../atom/recoil";
+import { useSetRecoilState } from "recoil";
 
 function Header() {
+  const setIsMenuOpen = useSetRecoilState(isMenuOpenState);
+
   return (
     <HeaderWrap>
       <div>
+        <FontAwesomeIcon
+          icon={faBars}
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+        />
         <h1>잇츠 다이어리</h1>
       </div>
       <div>
@@ -34,7 +43,8 @@ const HeaderWrap = styled.div`
   h1 {
     font-weight: bold;
     display: inline-block;
-    padding-left: 1.875rem;
+    padding-left: 1rem;
+    margin-top: 1px;
   }
 
   span {
