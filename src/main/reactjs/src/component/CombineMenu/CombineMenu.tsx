@@ -3,11 +3,18 @@ import styled from "styled-components";
 import MenuList from "./MenuList";
 import SideMenuBtn from "./SideMenuBtn";
 import { isMenuOpenState } from "../../atom/recoil";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import { useMediaQuery } from "react-responsive";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function CombineMenu() {
-  const isMenuOpen = useRecoilValue(isMenuOpenState);
+  const [isMenuOpen, setIsMenuOpen] = useRecoilState(isMenuOpenState);
   const [delay, setDelay] = useState(false);
+
+  const width860 = useMediaQuery({
+    query: "(max-width:860px)",
+  });
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -19,11 +26,16 @@ function CombineMenu() {
     }
   }, [isMenuOpen]);
 
-  console.log(isMenuOpen);
-
   return (
     <CombineNav className="menu" width={isMenuOpen ? "240px" : "0px"}>
       <div className="logo"></div>
+      {width860 ? (
+        <FontAwesomeIcon
+          icon={faXmark}
+          className="close"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      ) : null}
       <MenuList isMenuOpen={delay} />
       <SideMenuBtn isMenuOpen={delay} />
     </CombineNav>
@@ -45,5 +57,18 @@ const CombineNav = styled.nav<{ width: string }>`
     margin: 1rem auto 0;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  .close {
+    position: absolute;
+    right: 2rem;
+    top: 1.5rem;
+    font-size: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .logo {
+      transition: none;
+    }
   }
 `;
