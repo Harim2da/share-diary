@@ -15,6 +15,7 @@ function Header() {
         <FontAwesomeIcon
           icon={faBars}
           onClick={() => setIsMenuOpen((prev) => !prev)}
+          style={{ cursor: "pointer" }}
         />
         <h1>잇츠 다이어리</h1>
       </div>
