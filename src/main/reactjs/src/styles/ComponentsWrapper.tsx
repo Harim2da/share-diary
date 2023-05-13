@@ -6,17 +6,32 @@ function ComponentsWrapper(props: { children: React.ReactNode }) {
   return (
     <Wrap>
       <CombineMenu />
-      <Header />
-      {props.children}
+      <div className="wrap-right">
+        <Header />
+        {props.children}
+      </div>
     </Wrap>
   );
 }
 export default ComponentsWrapper;
 
 const Wrap = styled.div`
+  height: 100vh;
+  display: flex;
+
+  .wrap-right {
+    width: 100%;
+    overflow: hidden;
+  }
+
   .menu {
     float: left;
     height: 100vh;
     position: relative;
+  }
+
+  @media (max-width: 860px) {
+    .menu {
+    }
   }
 `;
