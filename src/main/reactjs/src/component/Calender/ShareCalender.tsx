@@ -34,9 +34,7 @@ function ShareCalender() {
 export default ShareCalender;
 
 const CalenderWrap = styled.div`
-  /* background: green; */
   margin-top: 2rem;
-  display: flex;
 
   .react-calendar {
     width: 70%;
