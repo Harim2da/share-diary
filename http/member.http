@@ -1,0 +1,11 @@
+### 회원가입
+
+POST http://localhost:8080/api/member
+Content-Type: application/json
+
+{
+  "memberId" : "jipdol2",
+  "email" : "jipdol2@gmail.com",
+  "password" : "1234",
+  "nickName" : "jipdol2"
+}
