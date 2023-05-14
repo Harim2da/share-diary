@@ -31,6 +31,10 @@ public enum ErrorType {
                 .forEach(errorType -> codeMap.put(errorType.classType,errorType));
     }
 
+    public static ErrorType of(Class<? extends BaseException> errorType){
+        return codeMap.get(errorType);
+    }
+
     ErrorType(String code, String message, Class<? extends BaseException> classType) {
         this.code = code;
         this.message = message;
