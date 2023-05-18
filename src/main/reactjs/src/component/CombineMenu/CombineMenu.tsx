@@ -18,9 +18,7 @@ function CombineMenu() {
 
   useEffect(() => {
     if (isMenuOpen) {
-      setTimeout(() => {
-        setDelay(true);
-      }, 300);
+      setDelay(true);
     } else {
       setDelay(false);
     }
