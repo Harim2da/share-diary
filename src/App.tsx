@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Main from "./view/Main";
 import WriteDiary from "./view/WriteDiary";
 import Login from "./view/Login";
+import FindIdPw from "./view/FindIdPw";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/write" element={<WriteDiary />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/find" element={<FindIdPw />} />
       </Routes>
     </Router>
   );
