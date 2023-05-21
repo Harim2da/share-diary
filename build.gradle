@@ -25,6 +25,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'    // lombok과 mapstruct 함께 쓸 때 순서 충돌 문제 해결용
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 //    JWT
@@ -35,6 +36,10 @@ dependencies {
 //    encrypt
     implementation 'org.springframework.security:spring-security-crypto'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
+// mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
 }
 
