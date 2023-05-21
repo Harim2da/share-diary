@@ -9,3 +9,6 @@ Content-Type: application/json
   "password" : "1234",
   "nickName" : "jipdol2"
 }
+
+### 아이디 찾기
+GET http://localhost:8080/api/member/me/id?email=jipdol2@gmail.com

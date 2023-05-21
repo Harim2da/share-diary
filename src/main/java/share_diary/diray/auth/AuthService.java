@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
-import share_diary.diray.exception.member.MemberNotFound;
+import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.jwt.JwtManager;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
@@ -25,7 +25,7 @@ public class AuthService {
     public String makeAccessToken(LoginRequestDTO loginRequestDTO){
 
         Member member = memberRepository.findByMemberId(loginRequestDTO.getMemberId())
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(MemberNotFoundException::new);
 
         validatedPassword(loginRequestDTO.getPassword(),member.getPassword());
 

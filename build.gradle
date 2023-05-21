@@ -36,6 +36,14 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 
+//    validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+//    mailing
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+//    mockito
+    testImplementation 'org.mockito:mockito-core'
 }
 
 tasks.named('test') {

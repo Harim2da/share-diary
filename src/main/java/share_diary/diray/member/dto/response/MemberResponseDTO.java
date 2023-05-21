@@ -3,24 +3,26 @@ package share_diary.diray.member.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import share_diary.diray.member.domain.Member;
 
 @Getter
 @ToString
 public class MemberResponseDTO {
 
-    private String userId;
-
+    private String memberId;
     private String email;
-
-    private String password;
-
     private String nickName;
 
-    @Builder
-    public MemberResponseDTO(String userId, String email, String password, String nickName) {
-        this.userId = userId;
+    public MemberResponseDTO(String memberId, String email, String nickName) {
+        this.memberId = memberId;
         this.email = email;
-        this.password = password;
         this.nickName = nickName;
+    }
+
+    public static MemberResponseDTO from(Member member){
+        return new MemberResponseDTO(
+                member.getMemberId(),
+                member.getEmail(),
+                member.getNickName());
     }
 }
