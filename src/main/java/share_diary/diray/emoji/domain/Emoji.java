@@ -18,5 +18,25 @@ public class Emoji {
     @Id @GeneratedValue
     private Long id;
 
-    private Emotion emotion;
+    private int angryEmojiNumber;
+
+    private int badEmojiNumber;
+
+    private int boringEmojiNumber;
+
+    private int goodEmojiNumber;
+
+    private int refreshEmojiNumber;
+
+    private int funEmojiNumber;
+
+    private int heartEmojiNumber;
+
+    private int thumbSupEmojiNumber;
+
+    private int partyPopperEmojiNumber;
+
+    private int cakeEmojiNumber;
+
+    private int devilEmojiNumber;
 }
