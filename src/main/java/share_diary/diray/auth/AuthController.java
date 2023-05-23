@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AccessToken;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
@@ -27,7 +24,7 @@ public class AuthController {
 //    https://medium.com/@uk960214/refresh-token-%EB%8F%84%EC%9E%85%EA%B8%B0-f12-dd79de9fb0f0
     @NoAuth
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestDTO loginRequestDTO){
+    public ResponseEntity<AccessToken> login(@RequestBody LoginRequestDTO loginRequestDTO){
 
         log.info("signInDto = {}", loginRequestDTO.toString());
 
@@ -52,5 +49,16 @@ public class AuthController {
                 .maxAge(Duration.ofDays(30))
                 .build();
 
+    }
+
+    @NoAuth
+    @GetMapping("/token")
+    public ResponseEntity<AccessToken> renewAccessToken(@CookieValue("refreshToken") String refreshToken){
+
+        authService.validateToken(refreshToken);
+        Long id = authService.extractIdByToken(refreshToken);
+        String accessToken = authService.renewAccessToken(id);
+        return ResponseEntity.ok()
+                .body(AccessToken.of(accessToken));
     }
 }
