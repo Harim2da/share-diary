@@ -51,4 +51,7 @@ public class AuthService {
         jwtManager.validatedJwtToken(token);
     }
 
+    public String renewAccessToken(Long id){
+        return jwtManager.makeAccessToken(id);
+    }
 }
