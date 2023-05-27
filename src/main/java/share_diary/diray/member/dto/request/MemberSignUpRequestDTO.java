@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class MemberSignUpRequestDTO {
 
-    @NotEmpty
+    @NotEmpty(message = "Id 정보가 올바르지 않습니다.")
     private String memberId;
-    @NotEmpty
+    @NotEmpty(message = "email 정보가 올바르지 않습니다.")
     private String email;
-    @NotEmpty
+    @NotEmpty(message = "비밀번호 정보가 올바르지 않습니다.")
     private String password;
-    @NotEmpty
+    @NotEmpty(message = "닉네임 정보가 올바르지 않습니다.")
     private String nickName;
 
     public MemberSignUpRequestDTO() {
