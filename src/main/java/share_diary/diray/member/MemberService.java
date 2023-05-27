@@ -11,6 +11,7 @@ import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
+import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
 @Slf4j
@@ -46,5 +47,14 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException());
         MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(member);
         return memberResponseDTO;
+    }
+
+    //TODO: 회원 정보 수정
+    public MemberResponseDTO updateMember(MemberUpdateRequestDTO memberUpdateRequestDTO) {
+        Member member = memberRepository.findByEmail(memberUpdateRequestDTO.getEmail())
+                .orElseThrow(() -> new MemberNotFoundException());
+        String encode = passwordEncoder.encode(memberUpdateRequestDTO.getPassword());
+        member.updateMember(encode,memberUpdateRequestDTO.getNickName());
+        return MemberResponseDTO.from(member);
     }
 }

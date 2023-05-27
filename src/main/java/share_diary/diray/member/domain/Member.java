@@ -45,4 +45,9 @@ public class Member {
     public void encryptPassword(String encryptPassword){
         this.password = encryptPassword;
     }
+
+    public void updateMember(String password,String nickName){
+        this.password = password;
+        this.nickName = nickName;
+    }
 }
