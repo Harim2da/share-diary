@@ -3,6 +3,7 @@ package share_diary.diray.memberInviteHistory.domain;
 import javax.persistence.*;
 
 import lombok.Getter;
+import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.member.domain.Member;
 
 @Table(name = "member_invite_history")
@@ -15,11 +16,6 @@ public class MemberInviteHistory {
     @GeneratedValue
     private Long id;
 
-    // todo [하림] : 연관관계 추가 필요
-    @Column
-    @ManyToOne
-    private Member member;
-
     @Column
     private String uuid;
 
@@ -29,5 +25,11 @@ public class MemberInviteHistory {
     @Column
     private InviteAcceptStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", referencedColumnName = "id")
+    private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diary_room_id", referencedColumnName = "id")
+    private DiaryRoom diaryRoom;
 }
