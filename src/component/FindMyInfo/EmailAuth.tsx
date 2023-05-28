@@ -46,26 +46,11 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
 
     return (
         <Form name="form_item_path" layout="vertical">
-            {!isFindId && (
-                <Form.Item
-                    name="id"
-                    label="아이디"
-                    rules={[
-                        {
-                            required: true,
-                            message: '아이디를 입력해주세요',
-                        }
-                    ]}
-                >
-                    <div style={{ display: "flex" }}>
-                        <Input />
-                    </div>
-                </Form.Item>
-            )}
-            <Form.Item
-                name="email"
-                label="이메일"
-                rules={[
+            {isFindId ? 
+                 <Form.Item
+                 name="email"
+                 label="이메일"
+                 rules={[
                     {
                         type: 'email',
                         message: '유효하지 않은 이메일 형식입니다',
@@ -75,29 +60,64 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
                         message: '이메일을 입력해주세요',
                     },
                 ]}
-            >
-                <div style={{ display: "flex" }}>
-                    <Input style={{ marginRight: "5px" }} />
-                    <Button style={{ width: "150px" }} onClick={sendCertNumber}>인증번호 발송</Button>
-                </div>
-            </Form.Item>
+             >
+                 <div style={{ display: "flex" }}>
+                     <Input />
+                 </div>
+             </Form.Item>
+             : 
+             <>
             <Form.Item
-                name="number"
-                label="인증번호"
+                name="id"
+                label="아이디"
                 rules={[
                     {
                         required: true,
-                        message: '인증번호를 입력해주세요',
-                    },
-                ]}>
+                        message: '아이디를 입력해주세요',
+                    }
+                ]}
+            >
                 <div style={{ display: "flex" }}>
-                    <Input
-                        style={{ marginRight: "5px" }}
-                        suffix={<Timer>{count !== null ? formatTime(count) : ""}</Timer>}
-                    />
-                    <Button style={{ width: "150px" }}>확인</Button>
+                    <Input />
                 </div>
             </Form.Item>
+                    <Form.Item
+                        name="email"
+                        label="이메일"
+                        rules={[
+                            {
+                                type: 'email',
+                                message: '유효하지 않은 이메일 형식입니다',
+                            },
+                            {
+                                required: true,
+                                message: '이메일을 입력해주세요',
+                            },
+                        ]}
+                    >
+                        <div style={{ display: "flex" }}>
+                            <Input style={{ marginRight: "5px" }} />
+                            <Button style={{ width: "150px" }} onClick={sendCertNumber}>인증번호 발송</Button>
+                        </div>
+                    </Form.Item>
+                    <Form.Item
+                        name="number"
+                        label="인증번호"
+                        rules={[
+                            {
+                                required: true,
+                                message: '인증번호를 입력해주세요',
+                            },
+                        ]}>
+                        <div style={{ display: "flex" }}>
+                            <Input
+                                style={{ marginRight: "5px" }}
+                                suffix={<Timer>{count !== null ? formatTime(count) : ""}</Timer>}
+                            />
+                            <Button style={{ width: "150px" }}>확인</Button>
+                        </div>
+                    </Form.Item>
+                </>}
 
             <Button type="primary" htmlType="submit">
                 {btnText}
