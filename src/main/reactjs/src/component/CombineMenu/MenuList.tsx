@@ -17,7 +17,7 @@ function MenuList(props: { isMenuOpen: boolean }) {
         <FontAwesomeIcon icon={faMagnifyingGlass} />
         <input type="text" placeholder="검색" />
       </div>
-      <div className="ranking-tab">
+      <div className="ranking-tab" onClick={() => navigate("/ranking")}>
         일기방 랭킹
         <FontAwesomeIcon icon={faMedal} />
       </div>
