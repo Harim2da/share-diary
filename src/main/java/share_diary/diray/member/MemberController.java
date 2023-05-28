@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.common.dto.EmptyJsonDTO;
 import share_diary.diray.exception.member.PasswordNotCoincide;
+import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
+import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
@@ -45,6 +47,17 @@ public class MemberController {
     }
 
     /**
+     * 회원 수정 전 비밀번호 확인
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/me/pwd")
+    public EmptyJsonDTO passwordCheck(@RequestBody MemberPasswordRequestDTO memberPasswordRequestDTO){
+        log.info("memberPasswordRequestDTO={}",memberPasswordRequestDTO.toString());
+        memberService.passwordCheck(memberPasswordRequestDTO);
+        return new EmptyJsonDTO();
+    }
+
+    /**
      * 회원 수정
      */
 //    @NoAuth
@@ -53,7 +66,7 @@ public class MemberController {
     public MemberResponseDTO updateMember(@RequestBody MemberUpdateRequestDTO memberUpdateRequestDTO){
         log.info("memberUpdateDTO={}",memberUpdateRequestDTO.toString());
         if(!memberUpdateRequestDTO.validationPassword()){
-            throw new PasswordNotCoincide();
+            throw new UpdatePasswordNotCoincide();
         }
         return memberService.updateMember(memberUpdateRequestDTO);
     }

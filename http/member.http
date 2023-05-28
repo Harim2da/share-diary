@@ -12,12 +12,32 @@ Content-Type: application/json
 
 ### 아이디 찾기
 GET http://localhost:8080/api/member/me/id?email=jipdol2@gmail.com
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MTkxOTgyLCJleHAiOjE2ODUxOTI1ODJ9.U-CaQP7vlshcEAtRQCSYCXPVnGcTz2qsl4JiFoqQxYc
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjQ1MzAzLCJleHAiOjE2ODUyNDU5MDN9.bcMecTIr5PC3_N5vLoKpr2cizXwVuPjk7AoH2e8QmzI
+
+### 비밀번호 확인 - 성공
+POST http://localhost:8080/api/member/me/pwd
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2ODUyNjQ0MTZ9.wY3cNzKNVfuZeBUjfUgPnyKImZviU1W2_yP4RtjCwOs
+
+{
+  "memberId" : "jipdol2",
+  "password" : "1234"
+}
+
+### 비밀번호 확인 - 실패
+POST http://localhost:8080/api/member/me/pwd
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjY1MjY0LCJleHAiOjE2ODUyNjU4NjR9.WeJAUYS478UA1G9rAJgi5m_6X_5aMIh1k1rdNMJC1zM
+
+{
+  "memberId" : "jipdol2",
+  "password" : "4444"
+}
 
 ### 회원 수정
 PATCH http://localhost:8080/api/member/me
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MTkxOTgyLCJleHAiOjE2ODUxOTI1ODJ9.U-CaQP7vlshcEAtRQCSYCXPVnGcTz2qsl4JiFoqQxYc
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2ODUyNjQ0MTZ9.wY3cNzKNVfuZeBUjfUgPnyKImZviU1W2_yP4RtjCwOs
 
 {
   "email" : "jipdol2@gmail.com",

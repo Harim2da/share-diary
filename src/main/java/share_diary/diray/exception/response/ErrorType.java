@@ -21,6 +21,7 @@ public enum ErrorType {
     M003("M003","이미 등록된 아이디가 존재합니다.",ValidationMemberIdException.class),
     M004("M004","이미 등록된 이메일이 존재합니다.", ValidationMemberEmailException.class),
     M005("M005","비밀번호가 일치하지 않습니다.", PasswordNotCoincide.class),
+    M006("M006","수정하려는 비밀번호가 일치하지 않습니다.", UpdatePasswordNotCoincide.class),
     ;
 
     private final String code;

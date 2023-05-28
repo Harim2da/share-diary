@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.crypto.PasswordEncoder;
-import share_diary.diray.exception.member.MemberNotFoundException;
-import share_diary.diray.exception.member.ValidationMemberEmailException;
-import share_diary.diray.exception.member.ValidationMemberIdException;
+import share_diary.diray.exception.member.*;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
@@ -49,7 +48,18 @@ public class MemberService {
         return memberResponseDTO;
     }
 
-    //TODO: 회원 정보 수정
+    public void passwordCheck(MemberPasswordRequestDTO memberPasswordRequestDTO){
+        String memberId = memberPasswordRequestDTO.getMemberId();
+        String password = memberPasswordRequestDTO.getPassword();
+
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new MemberNotFoundException());
+
+        if(!passwordEncoder.match(password,member.getPassword())){
+            throw new PasswordNotCoincide();
+        }
+    }
+
     public MemberResponseDTO updateMember(MemberUpdateRequestDTO memberUpdateRequestDTO) {
         Member member = memberRepository.findByEmail(memberUpdateRequestDTO.getEmail())
                 .orElseThrow(() -> new MemberNotFoundException());
