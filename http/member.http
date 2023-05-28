@@ -12,3 +12,16 @@ Content-Type: application/json
 
 ### 아이디 찾기
 GET http://localhost:8080/api/member/me/id?email=jipdol2@gmail.com
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MTkxOTgyLCJleHAiOjE2ODUxOTI1ODJ9.U-CaQP7vlshcEAtRQCSYCXPVnGcTz2qsl4JiFoqQxYc
+
+### 회원 수정
+PATCH http://localhost:8080/api/member/me
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MTkxOTgyLCJleHAiOjE2ODUxOTI1ODJ9.U-CaQP7vlshcEAtRQCSYCXPVnGcTz2qsl4JiFoqQxYc
+
+{
+  "email" : "jipdol2@gmail.com",
+  "password" : "4321",
+  "validationPassword" : "4321",
+  "nickName" : "jipsun2"
+}

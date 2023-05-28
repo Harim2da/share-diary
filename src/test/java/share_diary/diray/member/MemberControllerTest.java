@@ -17,6 +17,7 @@ import share_diary.diray.config.WebMvcConfig;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
+import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
 import static org.mockito.Mockito.*;
@@ -25,15 +26,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = MemberController.class)
-@MockBean({JpaMetamodelMappingContext.class,WebMvcConfig.class})
+@MockBean({JpaMetamodelMappingContext.class, WebMvcConfig.class})
 class MemberControllerTest {
 
-    @Autowired private MemberController memberController;
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
+    @Autowired
+    private MemberController memberController;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    @MockBean private MemberService memberService;
-    @MockBean private MemberRepository memberRepository;
+    @MockBean
+    private MemberService memberService;
+    @MockBean
+    private MemberRepository memberRepository;
 
     private static final String URL = "/api/member";
 
@@ -59,9 +65,14 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("아이디 찾기 테스트")
-    void findMemberIdTest() throws Exception{
+    void findMemberIdTest() throws Exception {
         //given
-        Member member = createMember("jipdol2", "jipdol2@gmail.com", "1234", "jipdol2");
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "1234",
+                "jipdol2"
+        );
         memberRepository.save(member);
 
         MemberResponseDTO from = MemberResponseDTO.from(member);
@@ -69,11 +80,45 @@ class MemberControllerTest {
 
         String email = "jipdol2@gamil.com";
         //expect
-        mockMvc.perform(get(URL+"/me/id")
-                    .param("email",email)
+        mockMvc.perform(get(URL + "/me/id")
+                        .param("email", email)
                 ).andExpect(jsonPath("$.memberId").value("jipdol2"))
                 .andExpect(jsonPath("$.email").value("jipdol2@gmail.com"))
                 .andExpect(jsonPath("$.nickName").value("jipdol2"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원 수정 테스트")
+    void updateMemberTest() throws Exception {
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "1234",
+                "jipdol2"
+        );
+        memberRepository.save(member);
+
+        MemberUpdateRequestDTO memberUpdateRequestDTO = MemberUpdateRequestDTO.of(
+                "jipdol2@gmail.com",
+                "4321",
+                "4321",
+                "jipsun2"
+        );
+        String json = objectMapper.writeValueAsString(memberUpdateRequestDTO);
+
+        MemberResponseDTO memberResponseDTO = new MemberResponseDTO(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "jipsun2"
+        );
+        when(memberService.updateMember(any())).thenReturn(memberResponseDTO);
+        //expected
+        mockMvc.perform(patch(URL + "/me")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                ).andExpect(jsonPath("$.nickName").value("jipsun2"))
                 .andDo(print());
     }
 

@@ -4,10 +4,7 @@ import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.jwt.AccessTokenRenewException;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.jwt.TokenIsNotValidException;
-import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
-import share_diary.diray.exception.member.MemberNotFoundException;
-import share_diary.diray.exception.member.ValidationMemberEmailException;
-import share_diary.diray.exception.member.ValidationMemberIdException;
+import share_diary.diray.exception.member.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +20,7 @@ public enum ErrorType {
     M002("M002","아이디 혹은 비밀번호가 올바르지 않습니다.",MemberIdOrPasswordErrorException.class),
     M003("M003","이미 등록된 아이디가 존재합니다.",ValidationMemberIdException.class),
     M004("M004","이미 등록된 이메일이 존재합니다.", ValidationMemberEmailException.class),
+    M005("M005","비밀번호가 일치하지 않습니다.", PasswordNotCoincide.class),
     ;
 
     private final String code;
