@@ -31,6 +31,7 @@ const MyFormItem = ({ name, ...props }: FormItemProps) => {
     return <Form.Item name={concatName} {...props} />;
 };
 
+
 function SignUp() {
     let navigate = useNavigate();
 
@@ -44,7 +45,7 @@ function SignUp() {
     );
 
     const onFinish = (value: object) => {
-        console.log(value);
+        setIsSubmitted(true);
     };
 
     const [loadings, setLoadings] = useState<boolean[]>([]);
@@ -65,44 +66,55 @@ function SignUp() {
         }, 2000);
     };
 
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
     return (
 
         <StyledBackgroud>
             <StyledCard title={title}>
-                <Button type="primary" loading={loadings[0]} onClick={() => enterLoading(0)}>
-                    중복 체크
-                </Button>
-                <Button disabled type="primary" loading={loadings[0]} onClick={() => enterLoading(0)}>
-                    중복 체크
-                </Button>
-                <Form name="form_item_path" layout="vertical" onFinish={onFinish}>
-                    <MyFormItemGroup prefix={['user']}>
-                        <MyFormItemGroup prefix={['name']}>
-                            <MyFormItem name="firstName" label="아이디">
-                                <Input />
-                                <Button type="primary" loading={loadings[0]} onClick={() => enterLoading(0)}>
-                                    중복 체크
-                                </Button>
+                {isSubmitted ? (
+                    <>
+                        <SuccessMessage>회원가입이 완료되었습니다.</SuccessMessage>
+                        <Button type="primary" style={{ width: '100%' }} onClick={() => navigate('/login')}>
+                            메인으로 
+                        </Button>
+                    </>
+                ) : (
+                    <Form name="form_item_path" layout="vertical" onFinish={onFinish}>
+                        <MyFormItemGroup prefix={['user']}>
+                            <MyFormItemGroup prefix={['name', 'firstName']}>
+                                <MyFormItem name="firstName" label="아이디">
+                                    <FormItemWraper>
+                                        <Input style={{ marginRight: '8px' }} />
+                                        <Button disabled type="primary" loading={loadings[0]} onClick={() => enterLoading(0)}>
+                                            중복 체크
+                                        </Button>
+                                    </FormItemWraper>
+                                </MyFormItem>
+                                <MyFormItem name="lastName" label="이메일">
+                                    <FormItemWraper>
+                                        <Input style={{ marginRight: '8px' }} />
+                                        <Button type="primary" loading={loadings[1]} onClick={() => enterLoading(1)}>
+                                            인증하기
+                                        </Button>
+                                    </FormItemWraper>
+                                </MyFormItem>
+                            </MyFormItemGroup>
+                            <MyFormItem name="password" label="비밀번호">
+                                <Input.Password />
                             </MyFormItem>
-                            <MyFormItem name="lastName" label="이메일">
+                            <MyFormItem name="rePassword" label="비밀번호 재입력">
+                                <Input.Password />
+                            </MyFormItem>
+                            <MyFormItem name="firstName" label="닉네임">
                                 <Input />
                             </MyFormItem>
                         </MyFormItemGroup>
-                        <MyFormItem name="age" label="비밀번호">
-                            <Input />
-                        </MyFormItem>
-                        <MyFormItem name="age" label="비밀번호 재입력">
-                            <Input />
-                        </MyFormItem>
-                        <MyFormItem name="firstName" label="닉네임">
-                            <Input />
-                        </MyFormItem>
-                    </MyFormItemGroup>
 
-                    <Button type="primary" htmlType="submit">
-                        가입하기
-                    </Button>
-                </Form>
+                        <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                            가입하기
+                        </Button>
+                    </Form>)}
             </StyledCard>
         </StyledBackgroud>
     );
@@ -144,13 +156,6 @@ const StyledCard = styled(Card)`
 }
 `;
 
-const StyledForm = styled(Form)`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-`;
-
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -158,58 +163,17 @@ const CardHeader = styled.div`
   width: 100%;
 `;
 
-const StyledFormItem = styled(Form.Item)`
-    width: 100%;
-    margin-bottom: 10px;
-`;
-
-interface Container {
-    justifyContent: string;
-    color: string;
-    marginBottom: string;
-};
-
-const StyledTextContain = styled.div<Container>`
-    display: flex;
-    align-items: center;
-    justify-content: ${(props) => props.justifyContent};
-    color: ${(props) => props.color};
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: ${(props) => props.marginBottom};
-    font-size : 12px;
-`;
-
-const StyledCheckText = styled.span`
-    color: ${colors.darkgrey};
-    margin-left: 5px;
-`;
-
-const StyledButton = styled(Button)`
+const FormItemWraper = styled.div`
   display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 10px;
 `;
 
-const ButtonText = styled.span`
-  flex: 1;
-  text-align: center;
-`;
-
-const Text = styled.span`
+const SuccessMessage = styled.div`
     display: flex;
     align-items: center;
-    color: ${colors.darkgrey};
-    cursor: pointer;
-    justify-content: start;
-
-    &:hover{
-        color : ${colors.blue};
-      }
+    justify-content: center;
+    height: 200px;
+    font-size: 20px;
+    font-weight: bold;
 `;
 
-const StyledImage = styled.img`
-    width: 20px;
-`;
 
