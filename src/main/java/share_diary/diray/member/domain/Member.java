@@ -4,12 +4,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -32,6 +32,8 @@ public class Member {
 
     private LocalDateTime joinTime;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<MemberInviteHistory> memberInviteHistories = new HashSet<>();
     @Builder
     public Member(String memberId, String email, String password, String nickName) {
         this.memberId = memberId;
