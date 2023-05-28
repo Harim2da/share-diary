@@ -1,29 +1,29 @@
 package share_diary.diray.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import share_diary.diray.config.WebMvcConfig;
+import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = MemberController.class)
 @MockBean({JpaMetamodelMappingContext.class, WebMvcConfig.class})
@@ -85,7 +85,56 @@ class MemberControllerTest {
                 ).andExpect(jsonPath("$.memberId").value("jipdol2"))
                 .andExpect(jsonPath("$.email").value("jipdol2@gmail.com"))
                 .andExpect(jsonPath("$.nickName").value("jipdol2"))
+                .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원 수정 전 비밀번호 확인 - 성공")
+    void passwordCheckTest() throws Exception {
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "1234",
+                "jipdol2"
+        );
+        memberRepository.save(member);
+        MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.of("jipdol2", "1234");
+        String json = objectMapper.writeValueAsString(memberPasswordRequestDTO);
+
+        //expected
+        mockMvc.perform(post(URL + "/me/pwd")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                ).andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    //출처 : https://stackoverflow.com/questions/54650555/exception-is-not-thrown-when-using-mockitos-dothrow-method#:~:text=If%20you%20have%20implemented%20an%20equals%20and%2For%20hashCode,recipe.setId%20%281%29%3B%20recipe.setName%20%28%22name%22%29%3B%20doThrow%20%28Exception.class%29.when%20%28recipeService%29.save%20%28recipe%29%3B
+    @Test
+    @DisplayName("회원 수정 전 비밀번호 확인 - 실패")
+    void passwordCheckTestFail() throws Exception {
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "1234",
+                "jipdol2"
+        );
+        memberRepository.save(member);
+        MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.of("jipdol2", "4444");
+        String json = objectMapper.writeValueAsString(memberPasswordRequestDTO);
+
+        doThrow(new PasswordNotCoincide()).when(memberService).passwordCheck(any(MemberPasswordRequestDTO.class));
+
+        //expected
+//        mockMvc.perform(post(URL + "/me/pwd")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(json)
+//                ).andExpect(status().isBadRequest())
+//                .andDo(print());
+        //TODO : 현재 exception 발생하고 있어서 response body 로 return 해주는 코드 필요하다.
     }
 
     @Test

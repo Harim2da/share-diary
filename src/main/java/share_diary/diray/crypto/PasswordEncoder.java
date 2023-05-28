@@ -13,6 +13,7 @@ public class PasswordEncoder{
         return encoder.encode(password);
     }
 
+    //(평문 패스워드,암호화된 패스워드)
     public boolean match(String rowPassword,String encryptPassword){
         return encoder.matches(rowPassword,encryptPassword);
     }
