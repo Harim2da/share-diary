@@ -19,11 +19,6 @@ public class DailyDiary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 일기방
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diary_room_id", referencedColumnName = "id")
-    private DiaryRoom diaryRoom;
-
     // 일기 내용
     @Column
     private String content;
@@ -43,6 +38,11 @@ public class DailyDiary {
 
     @Column
     private String modifyBy;
+
+    // 일기방
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diary_room_id", referencedColumnName = "id")
+    private DiaryRoom diaryRoom;
 
     // 이모지
     @OneToMany(mappedBy = "dailyDiary")
