@@ -8,6 +8,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'share_diary'
@@ -59,8 +60,8 @@ dependencies {
 //  QueryDSL
     implementation "com.querydsl:querydsl-core:5.0.0"
     implementation "com.querydsl:querydsl-jpa:5.0.0"
-    implementation "com.querydsl:querydsl-sql:5.0.0"
     implementation "com.querydsl:querydsl-apt:5.0.0"
+    implementation "com.querydsl:querydsl-sql:5.0.0"
 }
 
 tasks.named('test') {
@@ -116,5 +117,27 @@ task installReact(type: Exec) {
         commandLine "npm", "audit", "fix"
         commandLine 'npm', 'install'
     }
+}
+
+def querydslDir = "$projectDir/build/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
 
