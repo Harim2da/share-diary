@@ -22,6 +22,10 @@ public class AuthController {
     private final AuthService authService;
 
 //    https://medium.com/@uk960214/refresh-token-%EB%8F%84%EC%9E%85%EA%B8%B0-f12-dd79de9fb0f0
+
+    /**
+     * 로그인
+     */
     @NoAuth
     @PostMapping("/login")
     public ResponseEntity<AccessToken> login(@RequestBody LoginRequestDTO loginRequestDTO){
@@ -51,6 +55,9 @@ public class AuthController {
 
     }
 
+    /**
+     * accessToken 갱신
+     */
     @NoAuth
     @GetMapping("/token")
     public ResponseEntity<AccessToken> renewAccessToken(@CookieValue("refreshToken") String refreshToken){
@@ -61,4 +68,6 @@ public class AuthController {
         return ResponseEntity.ok()
                 .body(AccessToken.of(accessToken));
     }
+
+    //TODO: 로그아웃 API
 }

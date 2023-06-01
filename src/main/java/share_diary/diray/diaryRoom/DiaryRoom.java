@@ -36,9 +36,9 @@ public class DiaryRoom {
     @Column
     private String modifyBy;
 
-    @OneToMany(mappedBy = "diary_room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "diaryRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<MemberDiaryRoom> memberDiaryRooms = new HashSet<>();
 
-    @OneToMany(mappedBy = "diary_room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "diaryRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<MemberInviteHistory> memberInviteHistories = new HashSet<>();
 }

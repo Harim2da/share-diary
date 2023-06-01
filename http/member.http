@@ -17,27 +17,25 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjQ1MzAzLCJleHAiOjE2
 ### 비밀번호 확인 - 성공
 POST http://localhost:8080/api/member/me/pwd
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2ODUyNjQ0MTZ9.wY3cNzKNVfuZeBUjfUgPnyKImZviU1W2_yP4RtjCwOs
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2ODU2MjExMjh9.LwDHZ2nBL71OpHfsrNtrLsRwQhaUNl5MGlHQZD7xgH4
 
 {
-  "memberId" : "jipdol2",
   "password" : "1234"
 }
 
 ### 비밀번호 확인 - 실패
 POST http://localhost:8080/api/member/me/pwd
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjY1MjY0LCJleHAiOjE2ODUyNjU4NjR9.WeJAUYS478UA1G9rAJgi5m_6X_5aMIh1k1rdNMJC1zM
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2ODU2MjExMjh9.LwDHZ2nBL71OpHfsrNtrLsRwQhaUNl5MGlHQZD7xgH4
 
 {
-  "memberId" : "jipdol2",
   "password" : "4444"
 }
 
 ### 회원 수정
 PATCH http://localhost:8080/api/member/me
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2ODUyNjQ0MTZ9.wY3cNzKNVfuZeBUjfUgPnyKImZviU1W2_yP4RtjCwOs
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2ODU2MjExMjh9.LwDHZ2nBL71OpHfsrNtrLsRwQhaUNl5MGlHQZD7xgH4
 
 {
   "email" : "jipdol2@gmail.com",
