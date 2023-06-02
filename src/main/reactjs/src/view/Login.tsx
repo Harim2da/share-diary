@@ -48,7 +48,7 @@ function Login() {
                     </StyledFormItem>
 
                     <StyledTextContain color={colors.darkgrey} justifyContent="center" marginBottom="0px">
-                        <Text>회원가입</Text>
+                        <Text onClick={() => navigate('/signup')}>회원가입</Text>
                         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                         <Text>아이디/비밀번호 찾기</Text>
                     </StyledTextContain>
