@@ -10,4 +10,13 @@ public class LoginRequestDTO {
     private String memberId;
 
     private String password;
+
+    public LoginRequestDTO(String memberId, String password) {
+        this.memberId = memberId;
+        this.password = password;
+    }
+
+    public static LoginRequestDTO from(String memberId, String password){
+        return new LoginRequestDTO(memberId,password);
+    }
 }

@@ -1,4 +1,4 @@
-package share_diary.diray.memberDiaryRoom.domain;
+package share_diary.diray.member.domain;
 
 public enum Role {
     HOST,

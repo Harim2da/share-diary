@@ -10,6 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import share_diary.diray.auth.AuthService;
+import share_diary.diray.auth.domain.LoginSession;
+import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.config.WebMvcConfig;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
@@ -40,6 +43,8 @@ class MemberControllerTest {
     private MemberService memberService;
     @MockBean
     private MemberRepository memberRepository;
+    @MockBean
+    private AuthService authService;
 
     private static final String URL = "/api/member";
 
@@ -100,7 +105,7 @@ class MemberControllerTest {
                 "jipdol2"
         );
         memberRepository.save(member);
-        MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.of("jipdol2", "1234");
+        MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.from("1234");
         String json = objectMapper.writeValueAsString(memberPasswordRequestDTO);
 
         //expected
@@ -123,10 +128,10 @@ class MemberControllerTest {
                 "jipdol2"
         );
         memberRepository.save(member);
-        MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.of("jipdol2", "4444");
+        MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.from("4444");
         String json = objectMapper.writeValueAsString(memberPasswordRequestDTO);
 
-        doThrow(new PasswordNotCoincide()).when(memberService).passwordCheck(any(MemberPasswordRequestDTO.class));
+        doThrow(new PasswordNotCoincide()).when(memberService).passwordCheck(any(LoginSession.class),any(MemberPasswordRequestDTO.class));
 
         //expected
 //        mockMvc.perform(post(URL + "/me/pwd")
