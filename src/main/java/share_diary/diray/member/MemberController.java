@@ -14,6 +14,8 @@ import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class MemberController {
     /**
      * 아이디 찾기
      */
-//    @NoAuth
+    @NoAuth
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/me/id")
     public MemberResponseDTO findMemberId(@RequestParam("email") String email){
@@ -63,7 +65,7 @@ public class MemberController {
 //    @NoAuth
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/me")
-    public MemberResponseDTO updateMember(@RequestBody MemberUpdateRequestDTO memberUpdateRequestDTO){
+    public MemberResponseDTO updateMember(@RequestBody @Valid MemberUpdateRequestDTO memberUpdateRequestDTO){
         log.info("memberUpdateDTO={}",memberUpdateRequestDTO.toString());
         if(!memberUpdateRequestDTO.validationPassword()){
             throw new UpdatePasswordNotCoincide();

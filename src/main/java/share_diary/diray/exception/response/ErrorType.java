@@ -1,5 +1,6 @@
 package share_diary.diray.exception.response;
 
+import lombok.Getter;
 import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.jwt.AccessTokenRenewException;
 import share_diary.diray.exception.jwt.TokenExpiredException;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public enum ErrorType {
 
     A001("A001","토큰이 유효하지 않습니다.", TokenIsNotValidException.class),

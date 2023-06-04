@@ -45,3 +45,15 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2
   "validationPassword" : "4321",
   "nickName" : "jipsun2"
 }
+
+### 회원 수정 - 실패
+PATCH http://localhost:8080/api/member/me
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2ODUyNjQ0MTZ9.wY3cNzKNVfuZeBUjfUgPnyKImZviU1W2_yP4RtjCwOs
+
+{
+  "email" : "",
+  "password" : "4321",
+  "validationPassword" : "4321",
+  "nickName" : "jipsun2"
+}
