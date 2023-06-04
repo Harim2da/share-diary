@@ -16,6 +16,8 @@ import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -39,7 +41,7 @@ public class MemberController {
     /**
      * 아이디 찾기
      */
-//    @NoAuth
+    @NoAuth
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/me/id")
     public MemberResponseDTO findMemberId(@RequestParam("email") String email){
