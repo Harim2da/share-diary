@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.member.*;
 import share_diary.diray.member.domain.Member;
@@ -48,11 +49,11 @@ public class MemberService {
         return memberResponseDTO;
     }
 
-    public void passwordCheck(MemberPasswordRequestDTO memberPasswordRequestDTO){
-        String memberId = memberPasswordRequestDTO.getMemberId();
+    public void passwordCheck(LoginSession loginSession, MemberPasswordRequestDTO memberPasswordRequestDTO){
+        Long id = loginSession.getId();
         String password = memberPasswordRequestDTO.getPassword();
 
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException());
 
         if(!passwordEncoder.match(password,member.getPassword())){

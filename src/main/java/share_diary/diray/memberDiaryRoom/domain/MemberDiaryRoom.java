@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.member.domain.Member;
+import share_diary.diray.member.domain.Role;
 
 import javax.persistence.*;
 

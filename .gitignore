@@ -37,3 +37,4 @@ out/
 .vscode/
 
 */main/reactjs/node_modules/
+.DS_Store

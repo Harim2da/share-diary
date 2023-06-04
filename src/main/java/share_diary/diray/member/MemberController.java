@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import share_diary.diray.auth.domain.AuthenticationPrincipal;
+import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.common.dto.EmptyJsonDTO;
 import share_diary.diray.exception.member.PasswordNotCoincide;
@@ -53,9 +55,9 @@ public class MemberController {
      */
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/me/pwd")
-    public EmptyJsonDTO passwordCheck(@RequestBody MemberPasswordRequestDTO memberPasswordRequestDTO){
+    public EmptyJsonDTO passwordCheck(@AuthenticationPrincipal LoginSession loginSession, @RequestBody MemberPasswordRequestDTO memberPasswordRequestDTO){
         log.info("memberPasswordRequestDTO={}",memberPasswordRequestDTO.toString());
-        memberService.passwordCheck(memberPasswordRequestDTO);
+        memberService.passwordCheck(loginSession,memberPasswordRequestDTO);
         return new EmptyJsonDTO();
     }
 
@@ -65,7 +67,7 @@ public class MemberController {
 //    @NoAuth
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/me")
-    public MemberResponseDTO updateMember(@RequestBody @Valid MemberUpdateRequestDTO memberUpdateRequestDTO){
+    public MemberResponseDTO updateMember(@AuthenticationPrincipal LoginSession loginSession, @RequestBody MemberUpdateRequestDTO memberUpdateRequestDTO){
         log.info("memberUpdateDTO={}",memberUpdateRequestDTO.toString());
         if(!memberUpdateRequestDTO.validationPassword()){
             throw new UpdatePasswordNotCoincide();
