@@ -6,20 +6,23 @@ import {
   faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 function MenuList(props: { isMenuOpen: boolean }) {
+  const navigate = useNavigate();
+
   return (
     <ListWrap display={props.isMenuOpen ? "block" : "none"}>
       <div className="search">
         <FontAwesomeIcon icon={faMagnifyingGlass} />
         <input type="text" placeholder="검색" />
       </div>
-      <div className="ranking-tab">
+      <div className="ranking-tab" onClick={() => navigate("/ranking")}>
         일기방 랭킹
         <FontAwesomeIcon icon={faMedal} />
       </div>
       <ul>
-        <li className="focus">
+        <li className="focus" onClick={() => navigate("/")}>
           <FontAwesomeIcon icon={faRightLong} />
           클라이밍 일기
         </li>
@@ -42,6 +45,8 @@ const ListWrap = styled.div<{ display: string }>`
     padding: 0px 12px;
     border-radius: 20px;
     border: 1px solid #d6d6d6;
+    display: flex;
+    align-items: center;
 
     svg {
       margin-bottom: -2px;

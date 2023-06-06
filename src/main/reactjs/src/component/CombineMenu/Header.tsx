@@ -2,13 +2,23 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
+import { isMenuOpenState } from "../../atom/uiAtom";
 
 function Header() {
+  const setIsMenuOpen = useSetRecoilState(isMenuOpenState);
   let navigate = useNavigate();
+
   return (
     <HeaderWrap>
       <div>
+        <FontAwesomeIcon
+          icon={faBars}
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          style={{ cursor: "pointer" }}
+        />
         <h1>잇츠 다이어리</h1>
       </div>
       <div>
@@ -16,7 +26,14 @@ function Header() {
           <FontAwesomeIcon icon={faBell} />
           <span className="red" />
         </span>
-        <span className="login-btn" onClick={() => {navigate("/login");}}>로그인</span>
+        <span
+          className="login-btn"
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          로그아웃
+        </span>
       </div>
     </HeaderWrap>
   );
@@ -36,7 +53,8 @@ const HeaderWrap = styled.div`
   h1 {
     font-weight: bold;
     display: inline-block;
-    padding-left: 1.875rem;
+    padding-left: 1rem;
+    margin-top: 1px;
   }
 
   span {
