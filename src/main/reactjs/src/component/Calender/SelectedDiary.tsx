@@ -21,9 +21,21 @@ function SelectedDiary() {
           <span className="date">{selectDate} 오늘의 일기</span>
           <span>
             <span className="emoji">
-              <span>😊 </span>
-              <span>😥 </span>
-              <span>🥰 </span>
+              <span>
+                ❤️<span className="num">0</span>
+              </span>
+              <span>
+                👍<span className="num">0</span>
+              </span>
+              <span>
+                🎉<span className="num">0</span>
+              </span>
+              <span>
+                🎂<span className="num">0</span>
+              </span>
+              <span>
+                😈<span className="num">0</span>
+              </span>
             </span>
             <span
               className="isPrivate"
@@ -49,7 +61,7 @@ export default SelectedDiary;
 
 const Wrap = styled.div`
   width: 70%;
-  margin: 0 auto;
+  margin: 0 auto 5rem;
   display: flex;
   justify-content: space-evenly;
 
@@ -79,6 +91,22 @@ const Wrap = styled.div`
     font-size: 15px;
     span {
       cursor: pointer;
+      background: #dfdfdf;
+      padding: 0.5rem;
+      font-size: 20px;
+      margin-left: 1rem;
+      border-radius: 5px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      .num {
+        border: none;
+        font-size: 12px;
+        padding: 0;
+        margin-left: 0;
+      }
     }
   }
 
@@ -98,7 +126,7 @@ const Wrap = styled.div`
     border: 2px solid #d6d4e6;
     border-radius: 10px;
     padding: 1rem;
-    min-height: 100px;
+    min-height: 300px;
   }
 
   .right {
@@ -117,6 +145,33 @@ const Wrap = styled.div`
       :first-child {
         background: #d6d4e6;
       }
+    }
+  }
+
+  @media (max-width: 1520px) {
+    .emoji {
+      span {
+        font-size: 16px;
+      }
+    }
+
+    .num {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1330px) {
+    .top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .date {
+      margin-bottom: 1.5rem;
+    }
+
+    .emoji {
+      padding-left: 0;
     }
   }
 `;
