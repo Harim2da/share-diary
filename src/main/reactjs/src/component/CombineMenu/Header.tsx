@@ -5,9 +5,11 @@ import styled from "styled-components";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { isMenuOpenState } from "../../atom/recoil";
 import { useSetRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const setIsMenuOpen = useSetRecoilState(isMenuOpenState);
+  let navigate = useNavigate();
 
   return (
     <HeaderWrap>
@@ -24,7 +26,14 @@ function Header() {
           <FontAwesomeIcon icon={faBell} />
           <span className="red" />
         </span>
-        <span className="login-btn">로그인</span>
+        <span
+          className="login-btn"
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          로그인
+        </span>
       </div>
     </HeaderWrap>
   );
