@@ -22,7 +22,7 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BaseException.class})
     protected ResponseEntity<Object> handlerBaseException(BaseException ex,WebRequest request){
-        ErrorResponse errorResponse = ErrorResponse.of(ex, null);
+        ErrorResponse errorResponse = ErrorResponse.of(ex);
         return handleExceptionInternal(ex,errorResponse,null,ex.getStatus(),request);
     }
 

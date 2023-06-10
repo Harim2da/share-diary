@@ -6,3 +6,6 @@ Content-Type: application/json
   "memberId" : "jipdol2",
   "password" : "1234"
 }
+
+### RefreshToken 확인
+GET http://localhost:8080/api/auth/GetRedis?token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg2NDA3ODE2LCJleHAiOjE2ODY0MDkwMTZ9.EOeYr4N5C_jxLX-SJU5pH3kkwdIgrq2dIUy9CbM1U3A

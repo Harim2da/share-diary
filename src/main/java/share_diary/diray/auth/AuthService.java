@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import share_diary.diray.auth.domain.token.RefreshToken;
+import share_diary.diray.auth.domain.token.TokenRepository;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
@@ -19,6 +21,7 @@ import share_diary.diray.member.domain.MemberRepository;
 public class AuthService {
 
     private final JwtManager jwtManager;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
@@ -40,7 +43,15 @@ public class AuthService {
     }
 
     public String makeRefreshToken(Long id){
-        return jwtManager.makeRefreshToken(id);
+        String token = jwtManager.makeRefreshToken(id);
+        RefreshToken refreshToken = RefreshToken.of(token, id);
+        tokenRepository.save(refreshToken);
+        return token;
+    }
+
+    //TODO : 로그아웃 시에 refreshToken 삭제
+    public void removeRefreshToken(){
+
     }
 
     public Long extractIdByToken(String token){
@@ -53,5 +64,13 @@ public class AuthService {
 
     public String renewAccessToken(Long id){
         return jwtManager.makeAccessToken(id);
+    }
+
+    public RefreshToken getRefreshToken(String token){
+        RefreshToken refreshToken = tokenRepository.findById(token)
+                .orElseThrow(() -> new IllegalArgumentException());
+        System.out.println(refreshToken.getRefreshToken());
+        System.out.println(refreshToken.getMemberId());
+        return null;
     }
 }
