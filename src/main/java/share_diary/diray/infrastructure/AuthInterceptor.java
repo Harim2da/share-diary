@@ -1,4 +1,4 @@
-package share_diary.diray.config;
+package share_diary.diray.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.method.HandlerMethod;

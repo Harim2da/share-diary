@@ -1,4 +1,4 @@
-package share_diary.diray.config;
+package share_diary.diray.infrastructure;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

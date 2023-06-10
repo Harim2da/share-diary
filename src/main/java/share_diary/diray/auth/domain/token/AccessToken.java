@@ -1,4 +1,4 @@
-package share_diary.diray.auth.domain;
+package share_diary.diray.auth.domain.token;
 
 import lombok.Getter;
 

@@ -25,12 +25,11 @@ public class ErrorResponse {
         validation.put(fieldName,errorMessage);
     }
 
-    public static ErrorResponse of(Exception ex,Map<String,String> validation){
+    public static ErrorResponse of(Exception ex){
         ErrorType errorType = ErrorType.of((Class<? extends BaseException>) ex.getClass());
         return ErrorResponse.builder()
                 .code(errorType.getCode())
                 .message(errorType.getMessage())
-                .validation(validation)
                 .build();
     }
 

@@ -11,6 +11,9 @@ public class LoginRequestDTO {
 
     private String password;
 
+    public LoginRequestDTO() {
+    }
+
     public LoginRequestDTO(String memberId, String password) {
         this.memberId = memberId;
         this.password = password;
