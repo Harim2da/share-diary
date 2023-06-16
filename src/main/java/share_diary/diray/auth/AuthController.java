@@ -23,7 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-//    https://medium.com/@uk960214/refresh-token-%EB%8F%84%EC%9E%85%EA%B8%B0-f12-dd79de9fb0f0
+//    RefreshToken 에 관하여 : https://medium.com/@uk960214/refresh-token-%EB%8F%84%EC%9E%85%EA%B8%B0-f12-dd79de9fb0f0
 
     /**
      * 로그인
@@ -43,13 +43,13 @@ public class AuthController {
                 .body(AccessToken.of(accessToken));
     }
 
-    //TODO: 로그아웃 API
-
+    /**
+     * 로그아웃
+     */
     //    @NoAuth
     @PostMapping("/logout")
-    public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession){
-        //TODO: refreshToken 삭제
-
+    public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession, @CookieValue("refreshToken") String refreshToken){
+        authService.removeRefreshToken(refreshToken);
         ResponseCookie cookie = expiredResponseCookie();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,cookie.toString())
