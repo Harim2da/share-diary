@@ -8,6 +8,7 @@ import share_diary.diray.auth.domain.token.RefreshToken;
 import share_diary.diray.auth.domain.token.TokenRepository;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.crypto.PasswordEncoder;
+import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.jwt.JwtManager;
@@ -49,9 +50,14 @@ public class AuthService {
         return token;
     }
 
-    //TODO : 로그아웃 시에 refreshToken 삭제
-    public void removeRefreshToken(){
+    public void removeRefreshToken(String refreshToken){
+        RefreshToken token = findByRefreshToken(refreshToken);
+        tokenRepository.delete(token);
+    }
 
+    public RefreshToken findByRefreshToken(String refreshToken){
+        return tokenRepository.findById(refreshToken)
+                .orElseThrow(()->new TokenExpiredException());
     }
 
     public Long extractIdByToken(String token){
