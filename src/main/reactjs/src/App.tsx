@@ -7,6 +7,7 @@ import Login from "./view/Login";
 import SignUp from "./view/SignUp";
 import FindIdPw from "./view/FindIdPw";
 import ResetRecoil from "./component/Common/ResetRecoil";
+import MyPage from "./view/MyPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/find" element={<FindIdPw />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </Router>
   );
