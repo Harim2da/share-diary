@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
 import ComponentsWrapper from "../styles/ComponentsWrapper";
-import { useRecoilValue } from "recoil";
 import { Tabs } from 'antd';
-import { useNavigate } from "react-router-dom";
-import EditInfo from '../component/Mypage/EditInfo';
 import MyProfile from '../component/Mypage/MyProfile';
 import NotiList from '../component/Mypage/NotiList';
-import { height } from '@mui/system';
 
 function MyPage() {
+  const [tabBarGutter, setTabBarGutter] = useState(200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setTabBarGutter(100);
+      } else {
+        setTabBarGutter(250);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const items = [
     {
@@ -19,11 +30,6 @@ function MyPage() {
     },
     {
       key: '2',
-      label: '정보 수정',
-      children: <EditInfo />,
-    },
-    {
-      key: '3',
       label: '알림 내역',
       children: <NotiList />,
     },
@@ -31,7 +37,7 @@ function MyPage() {
 
   return (
     <ComponentsWrapper>
-      <Tabs centered tabBarGutter={500} defaultActiveKey="1" items={items} />
+      <Tabs centered tabBarGutter={tabBarGutter} defaultActiveKey="1" items={items} style={{ height: '100%', overflow: 'auto' }} />
     </ComponentsWrapper>
   );
 }
