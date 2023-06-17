@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { Card, Mentions, Button, Select } from 'antd';
 
@@ -103,49 +102,31 @@ function MyProfile() {
                 />
             </Card>
         </Container >
-=======
-import { Card } from 'antd';
-
-function MyProfile() {
-    return (
-        <Card style={{ width: '90%', margin: '0 auto' }}>
-            <ImgBox>
-                <ProfileImg src='img/profile.jpeg' />
-            </ImgBox>
-        </Card>
->>>>>>> b5fd4ec1114f4051be1495e35aad30324c9a83eb
     );
 }
 
 export default MyProfile;
 
-<<<<<<< HEAD
 const Container = styled.div`
     height: 100%;
     overflow: auto;
 `
 
-=======
->>>>>>> b5fd4ec1114f4051be1495e35aad30324c9a83eb
 const ImgBox = styled.div`
     width: 100px;
     height: 100px; 
     border-radius: 70%;
     overflow: hidden;
-<<<<<<< HEAD
     margin: 0 auto;
     border-style: solid;
     border-width: 1px;
     color: #c8c8c8;
-=======
->>>>>>> b5fd4ec1114f4051be1495e35aad30324c9a83eb
 `
 const ProfileImg = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
 `
-<<<<<<< HEAD
 
 const ProfileText = styled.div`
     font-size: 20px;
@@ -172,5 +153,3 @@ const LinkText = styled.span`
 `
 
 
-=======
->>>>>>> b5fd4ec1114f4051be1495e35aad30324c9a83eb

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-<<<<<<< HEAD
 import { Card, Button } from 'antd';
 import { useMediaQuery } from 'react-responsive'
 
@@ -98,15 +97,3 @@ const MyButton = styled(Button)`
     padding: 0 30px;
     float: right;
 `
-
-=======
-
-function NotiList() {
-    return (
-      <>
-      </>
-    );
-  }
-  
-  export default NotiList;
->>>>>>> b5fd4ec1114f4051be1495e35aad30324c9a83eb
