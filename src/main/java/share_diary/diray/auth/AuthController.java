@@ -57,8 +57,8 @@ public class AuthController {
     }
 
     private ResponseCookie makeRefreshTokenCookie(Long id){
-        String refreshToken = authService.makeRefreshToken(id);
-
+//        String refreshToken = authService.makeRefreshToken(id);
+        String refreshToken = authService.makeRefreshTokenToDB(id);
         return ResponseCookie.from("REFRESH_TOKEN",refreshToken)
                 .path("/")
                 .domain("localhost")
