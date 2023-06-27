@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.auth.domain.token.RefreshToken;
+import share_diary.diray.auth.domain.token.RefreshTokenDB;
+import share_diary.diray.auth.domain.token.TokenDbRepository;
 import share_diary.diray.auth.domain.token.TokenRepository;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.crypto.PasswordEncoder;
@@ -23,6 +25,7 @@ public class AuthService {
 
     private final JwtManager jwtManager;
     private final TokenRepository tokenRepository;
+    private final TokenDbRepository tokenDbRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
@@ -47,6 +50,13 @@ public class AuthService {
         String token = jwtManager.makeRefreshToken(id);
         RefreshToken refreshToken = RefreshToken.of(token, id);
         tokenRepository.save(refreshToken);
+        return token;
+    }
+
+    public String makeRefreshTokenToDB(Long id){
+        String token = jwtManager.makeRefreshToken(id);
+        RefreshTokenDB refreshTokenDB = RefreshTokenDB.of(token,id);
+        tokenDbRepository.save(refreshTokenDB);
         return token;
     }
 
