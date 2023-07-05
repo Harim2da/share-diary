@@ -2,17 +2,24 @@ package share_diary.diray.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.crypto.PasswordEncoder;
-import share_diary.diray.exception.member.*;
+import share_diary.diray.exception.member.MemberNotFoundException;
+import share_diary.diray.exception.member.PasswordNotCoincide;
+import share_diary.diray.exception.member.ValidationMemberEmailException;
+import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.member.dto.request.MemberEmailRequestDTO;
 import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -56,7 +63,7 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException());
 
-        if(!passwordEncoder.match(password,member.getPassword())){
+        if(!passwordEncoder.matches(password,member.getPassword())){
             throw new PasswordNotCoincide();
         }
     }
@@ -67,5 +74,15 @@ public class MemberService {
         String encode = passwordEncoder.encode(memberUpdateRequestDTO.getPassword());
         member.updateMember(encode,memberUpdateRequestDTO.getNickName());
         return MemberResponseDTO.from(member);
+    }
+
+    public boolean validationMemberEmail(MemberEmailRequestDTO emailDTO){
+        Long size = memberRepository.countByEmail(emailDTO.getEmail());
+
+        if(size<=0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

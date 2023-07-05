@@ -2,6 +2,7 @@ package share_diary.diray.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.auth.domain.token.RefreshToken;
@@ -9,6 +10,7 @@ import share_diary.diray.auth.domain.token.RefreshTokenDB;
 import share_diary.diray.auth.domain.token.TokenDbRepository;
 import share_diary.diray.auth.domain.token.TokenRepository;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
+
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
@@ -40,7 +42,7 @@ public class AuthService {
     }
 
     public void validatedPassword(String loginPassword,String memberPassword){
-        boolean match = passwordEncoder.match(loginPassword, memberPassword);
+        boolean match = passwordEncoder.matches(loginPassword, memberPassword);
         if(!match){
             throw new MemberIdOrPasswordErrorException();
         }
