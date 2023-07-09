@@ -33,7 +33,7 @@ public class MemberController {
      */
     @NoAuth
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping
+    @PostMapping("/signUp")
     public EmptyJsonDTO signUp(@RequestBody MemberSignUpRequestDTO signUpRequestDTO){
         log.info("signUpRequestDTO = {}",signUpRequestDTO.toString());
         memberService.joinMember(signUpRequestDTO);
