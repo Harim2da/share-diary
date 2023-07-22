@@ -11,10 +11,12 @@ import share_diary.diray.common.dto.EmptyJsonDTO;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
+import share_diary.diray.member.dto.request.MemberEmailRequestDTO;
 import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
+import share_diary.diray.member.dto.response.MemberValidationEmailResponseDTO;
 
 import javax.validation.Valid;
 
@@ -31,7 +33,7 @@ public class MemberController {
      */
     @NoAuth
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping
+    @PostMapping("/signUp")
     public EmptyJsonDTO signUp(@RequestBody MemberSignUpRequestDTO signUpRequestDTO){
         log.info("signUpRequestDTO = {}",signUpRequestDTO.toString());
         memberService.joinMember(signUpRequestDTO);
@@ -75,6 +77,15 @@ public class MemberController {
         return memberService.updateMember(memberUpdateRequestDTO);
     }
 
-    //TODO: 비밀번호 재설정 -> 등록된 email 로 인증번호 발송 -> 해당 인증번호를 입력 -> 비밀번호 입력
+    /**
+     * 이메일 중복 체크
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/email/validation")
+    public MemberValidationEmailResponseDTO validationEmail(@RequestBody MemberEmailRequestDTO email){
+        log.info("memberEmail={}",email.toString());
+        return new MemberValidationEmailResponseDTO(memberService.validationMemberEmail(email));
+    }
 
+    //TODO: 비밀번호 재설정 -> 등록된 email 로 인증번호 발송 -> 해당 인증번호를 입력 -> 비밀번호 입력
 }
