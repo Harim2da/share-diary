@@ -2,6 +2,7 @@ package share_diary.diray.exception.response;
 
 import lombok.Getter;
 import share_diary.diray.exception.BaseException;
+import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
 import share_diary.diray.exception.jwt.AccessTokenRenewException;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.jwt.TokenIsNotValidException;
@@ -24,6 +25,8 @@ public enum ErrorType {
     M004("M004","이미 등록된 이메일이 존재합니다.", ValidationMemberEmailException.class),
     M005("M005","비밀번호가 일치하지 않습니다.", PasswordNotCoincide.class),
     M006("M006","수정하려는 비밀번호가 일치하지 않습니다.", UpdatePasswordNotCoincide.class),
+
+    D001("D001", "존재하지 않는 일기방입니다.", DiaryRoomNotFoundException.class),
     ;
 
     private final String code;
