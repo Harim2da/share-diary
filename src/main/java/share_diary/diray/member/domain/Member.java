@@ -66,4 +66,12 @@ public class Member{
         this.password = password;
         this.nickName = nickName;
     }
+
+    public static Member ofCreateInviteMember(String email) {
+        Member instance = new Member();
+        instance.email = email;
+        // 논의 필요 - Enum 아니었나?
+//        instance.joinStatus
+        return instance;
+    }
 }
