@@ -6,5 +6,6 @@ import lombok.Getter;
 public enum InviteAcceptStatus {
     INVITE,
     ACCEPT,
-    DENY
+    DENY,
+    RE_INVITE
 }

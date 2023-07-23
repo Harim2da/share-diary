@@ -5,7 +5,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>,
+        MemberRepositoryCustom {
 
     Optional<Member> findByLoginId(@Param("loginId")String loginId);
 
