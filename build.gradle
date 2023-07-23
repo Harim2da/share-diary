@@ -71,6 +71,8 @@ dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-security-test'
 }
 
+ext['spring-security.version']='5.8.4'
+
 tasks.named('test') {
     useJUnitPlatform()
 }

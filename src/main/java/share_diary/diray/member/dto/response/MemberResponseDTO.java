@@ -1,6 +1,5 @@
 package share_diary.diray.member.dto.response;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import share_diary.diray.member.domain.Member;
@@ -21,7 +20,7 @@ public class MemberResponseDTO {
 
     public static MemberResponseDTO from(Member member){
         return new MemberResponseDTO(
-                member.getMemberId(),
+                member.getLoginId(),
                 member.getEmail(),
                 member.getNickName());
     }

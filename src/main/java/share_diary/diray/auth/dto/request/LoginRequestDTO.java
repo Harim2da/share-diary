@@ -3,12 +3,15 @@ package share_diary.diray.auth.dto.request;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @ToString
 public class LoginRequestDTO {
 
+    @NotEmpty(message = "Id 정보가 올바르지 않습니다.")
     private String memberId;
-
+    @NotEmpty(message = "password 정보가 올바르지 않습니다.")
     private String password;
 
     public LoginRequestDTO() {

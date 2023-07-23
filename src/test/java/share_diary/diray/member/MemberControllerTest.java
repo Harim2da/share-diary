@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import share_diary.diray.auth.AuthService;
 import share_diary.diray.auth.domain.LoginSession;
-import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.config.WebMvcConfig;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
@@ -29,7 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = MemberController.class)
-@MockBean({JpaMetamodelMappingContext.class, WebMvcConfig.class})
+@MockBean({JpaMetamodelMappingContext.class})
+/**
+ * JpaMetamodelMappingContext.class 를 mock 으로 지정해야하는 이유
+ * https://velog.io/@cjh8746/%EC%97%90%EB%9F%AC-JPA-metamodel-must-not-be-empty-%ED%95%B4%EA%B2%B0%EA%B8%B0
+ */
 class MemberControllerTest {
 
     @Autowired
@@ -61,7 +64,7 @@ class MemberControllerTest {
         String json = objectMapper.writeValueAsString(member);
 
         //expect
-        mockMvc.perform(post(URL)
+        mockMvc.perform(post(URL+"/signUp")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isOk())
@@ -78,7 +81,7 @@ class MemberControllerTest {
                 "1234",
                 "jipdol2"
         );
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
         MemberResponseDTO from = MemberResponseDTO.from(member);
         when(memberService.findMemberByEmail(any())).thenReturn(from);
@@ -104,7 +107,7 @@ class MemberControllerTest {
                 "1234",
                 "jipdol2"
         );
-        memberRepository.save(member);
+//        memberRepository.save(member);
         MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.from("1234");
         String json = objectMapper.writeValueAsString(memberPasswordRequestDTO);
 
@@ -127,19 +130,21 @@ class MemberControllerTest {
                 "1234",
                 "jipdol2"
         );
-        memberRepository.save(member);
+//        memberRepository.save(member);
         MemberPasswordRequestDTO memberPasswordRequestDTO = MemberPasswordRequestDTO.from("4444");
         String json = objectMapper.writeValueAsString(memberPasswordRequestDTO);
 
         doThrow(new PasswordNotCoincide()).when(memberService).passwordCheck(any(LoginSession.class),any(MemberPasswordRequestDTO.class));
 
         //expected
-//        mockMvc.perform(post(URL + "/me/pwd")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(json)
-//                ).andExpect(status().isBadRequest())
-//                .andDo(print());
-        //TODO : 현재 exception 발생하고 있어서 response body 로 return 해주는 코드 필요하다.
+        mockMvc.perform(post(URL + "/me/pwd")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                ).andExpect(status().isBadRequest())
+                .andExpect(
+                        (rslt)-> Assertions.assertTrue(rslt.getResolvedException().getClass().isAssignableFrom(PasswordNotCoincide.class))
+                )
+                .andDo(print());
     }
 
     @Test
@@ -152,7 +157,7 @@ class MemberControllerTest {
                 "1234",
                 "jipdol2"
         );
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
         MemberUpdateRequestDTO memberUpdateRequestDTO = MemberUpdateRequestDTO.of(
                 "jipdol2@gmail.com",
@@ -177,13 +182,13 @@ class MemberControllerTest {
     }
 
     private Member createMember(
-            String memberId,
+            String loginId,
             String email,
             String password,
             String nickName
     ) {
         return Member.builder()
-                .memberId(memberId)
+                .loginId(loginId)
                 .email(email)
                 .password(password)
                 .nickName(nickName)
@@ -191,11 +196,11 @@ class MemberControllerTest {
     }
 
     private MemberSignUpRequestDTO createMemberDTO(
-            String memberId,
+            String loginId,
             String email,
             String password,
             String nickName
     ) {
-        return MemberSignUpRequestDTO.of(memberId, email, password, nickName);
+        return MemberSignUpRequestDTO.of(loginId, email, password, nickName);
     }
 }
