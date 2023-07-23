@@ -24,7 +24,7 @@ public class Member{
     @Id @GeneratedValue
     private Long id;
 
-    private String memberId;
+    private String loginId;
 
     private String email;
 
@@ -49,8 +49,8 @@ public class Member{
     private List<Emoji> emojis = new ArrayList<>();
 
     @Builder
-    public Member(String memberId, String email, String password, String nickName, String joinStatus, LocalDateTime joinTime) {
-        this.memberId = memberId;
+    public Member(String loginId, String email, String password, String nickName, String joinStatus, LocalDateTime joinTime) {
+        this.loginId = loginId;
         this.email = email;
         this.password = password;
         this.nickName = nickName;

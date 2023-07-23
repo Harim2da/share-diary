@@ -13,13 +13,8 @@ import share_diary.diray.exception.member.ValidationMemberEmailException;
 import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
-import share_diary.diray.member.dto.request.MemberEmailRequestDTO;
-import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
-import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
-import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
+import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -39,12 +34,12 @@ public class MemberService {
     }
 
     private void validationMember(Member member){
-        long count = memberRepository.countByMemberId(member.getMemberId());
-        if(count>0){
+        boolean flag = memberRepository.existsByLoginId(member.getLoginId());
+        if(flag){
             throw new ValidationMemberIdException();
         }
-        count = memberRepository.countByEmail(member.getEmail());
-        if(count>0){
+        flag = memberRepository.existsByEmail(member.getEmail());
+        if(flag){
             throw new ValidationMemberEmailException();
         }
     }
@@ -76,13 +71,11 @@ public class MemberService {
         return MemberResponseDTO.from(member);
     }
 
-    public boolean validationMemberEmail(MemberEmailRequestDTO emailDTO){
-        Long size = memberRepository.countByEmail(emailDTO.getEmail());
+    public boolean validationMemberLoginId(MemberLoginIdRequestDTO loginIdDTO){
+        return memberRepository.existsByLoginId(loginIdDTO.getLoginId());
+    }
 
-        if(size<=0){
-            return true;
-        }else{
-            return false;
-        }
+    public boolean validationMemberEmail(MemberEmailRequestDTO emailDTO){
+        return memberRepository.existsByEmail(emailDTO.getEmail());
     }
 }

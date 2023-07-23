@@ -8,15 +8,11 @@ import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.common.dto.EmptyJsonDTO;
-import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
-import share_diary.diray.member.domain.Member;
-import share_diary.diray.member.dto.request.MemberEmailRequestDTO;
-import share_diary.diray.member.dto.request.MemberPasswordRequestDTO;
-import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
-import share_diary.diray.member.dto.request.MemberUpdateRequestDTO;
+import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 import share_diary.diray.member.dto.response.MemberValidationEmailResponseDTO;
+import share_diary.diray.member.dto.response.MemberValidationLoginIdResponseDTO;
 
 import javax.validation.Valid;
 
@@ -34,7 +30,7 @@ public class MemberController {
     @NoAuth
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/signUp")
-    public EmptyJsonDTO signUp(@RequestBody MemberSignUpRequestDTO signUpRequestDTO){
+    public EmptyJsonDTO signUp(@RequestBody @Valid MemberSignUpRequestDTO signUpRequestDTO){
         log.info("signUpRequestDTO = {}",signUpRequestDTO.toString());
         memberService.joinMember(signUpRequestDTO);
         return new EmptyJsonDTO();
@@ -78,13 +74,23 @@ public class MemberController {
     }
 
     /**
+     * 아이디 중복 체크
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/loginId/validation")
+    public MemberValidationLoginIdResponseDTO validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO loginIdDTO){
+        log.info("memberEmail={}",loginIdDTO.toString());
+        return new MemberValidationLoginIdResponseDTO(memberService.validationMemberLoginId(loginIdDTO));
+    }
+
+    /**
      * 이메일 중복 체크
      */
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/email/validation")
-    public MemberValidationEmailResponseDTO validationEmail(@RequestBody MemberEmailRequestDTO email){
-        log.info("memberEmail={}",email.toString());
-        return new MemberValidationEmailResponseDTO(memberService.validationMemberEmail(email));
+    public MemberValidationEmailResponseDTO validationEmail(@RequestBody @Valid MemberEmailRequestDTO emailDTO){
+        log.info("memberEmail={}",emailDTO.toString());
+        return new MemberValidationEmailResponseDTO(memberService.validationMemberEmail(emailDTO));
     }
 
     //TODO: 비밀번호 재설정 -> 등록된 email 로 인증번호 발송 -> 해당 인증번호를 입력 -> 비밀번호 입력

@@ -31,9 +31,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/login")
     public ResponseEntity<AccessToken> login(@RequestBody LoginRequestDTO loginRequestDTO){
-
         log.info("signInDto = {}", loginRequestDTO.toString());
-
         String accessToken = authService.makeAccessToken(loginRequestDTO);
         Long id = authService.extractIdByToken(accessToken);
         ResponseCookie cookie = makeRefreshTokenCookie(id);
@@ -49,7 +47,8 @@ public class AuthController {
     //    @NoAuth
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession, @CookieValue("refreshToken") String refreshToken){
-        authService.removeRefreshToken(refreshToken);
+//        authService.removeRefreshToken(refreshToken);
+        authService.removeRefreshTokenToDB(refreshToken);
         ResponseCookie cookie = expiredResponseCookie();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,cookie.toString())
@@ -80,8 +79,6 @@ public class AuthController {
                 .build();
         return cookie;
     }
-
-
 
     /**
      * accessToken 갱신

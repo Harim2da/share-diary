@@ -33,7 +33,7 @@ public class AuthService {
 
     public String makeAccessToken(LoginRequestDTO loginRequestDTO){
 
-        Member member = memberRepository.findByMemberId(loginRequestDTO.getMemberId())
+        Member member = memberRepository.findByLoginId(loginRequestDTO.getMemberId())
                 .orElseThrow(MemberNotFoundException::new);
 
         validatedPassword(loginRequestDTO.getPassword(),member.getPassword());
@@ -47,18 +47,11 @@ public class AuthService {
             throw new MemberIdOrPasswordErrorException();
         }
     }
-
+/** ------------------------------------------Redis------------------------------------------**/
     public String makeRefreshToken(Long id){
         String token = jwtManager.makeRefreshToken(id);
         RefreshToken refreshToken = RefreshToken.of(token, id);
         tokenRepository.save(refreshToken);
-        return token;
-    }
-
-    public String makeRefreshTokenToDB(Long id){
-        String token = jwtManager.makeRefreshToken(id);
-        RefreshTokenDB refreshTokenDB = RefreshTokenDB.of(token,id);
-        tokenDbRepository.save(refreshTokenDB);
         return token;
     }
 
@@ -72,6 +65,24 @@ public class AuthService {
                 .orElseThrow(()->new TokenExpiredException());
     }
 
+/**  ------------------------------------------DB------------------------------------------**/
+    public String makeRefreshTokenToDB(Long id){
+        String token = jwtManager.makeRefreshToken(id);
+        RefreshTokenDB refreshTokenDB = RefreshTokenDB.of(token,id);
+        tokenDbRepository.save(refreshTokenDB);
+        return token;
+    }
+
+    public void removeRefreshTokenToDB(String refreshToken){
+        RefreshTokenDB token = findByRefreshTokenToDB(refreshToken);
+        tokenDbRepository.delete(token);
+    }
+
+    public RefreshTokenDB findByRefreshTokenToDB(String refreshToken){
+        return tokenDbRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(()->new TokenExpiredException());
+    }
+/** ---------------------------------------------------------------------------------------**/
     public Long extractIdByToken(String token){
         return jwtManager.getIdFromPayLoad(token);
     }
