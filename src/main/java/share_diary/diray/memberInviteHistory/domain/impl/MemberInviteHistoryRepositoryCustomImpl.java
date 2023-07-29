@@ -5,6 +5,7 @@ import static share_diary.diray.memberInviteHistory.domain.QMemberInviteHistory.
 import static share_diary.diray.diaryRoom.QDiaryRoom.diaryRoom;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepositoryCustom;
@@ -27,5 +28,16 @@ public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositoryS
                                 .and(member.email.in(emails)))
                 .distinct()
                 .fetch();
+    }
+
+    @Override
+    public Optional<MemberInviteHistory> findByIdWithMemberAndDiaryRoom(Long historyId) {
+        return Optional.ofNullable(
+                from(memberInviteHistory)
+                        .join(memberInviteHistory.member).fetchJoin()
+                        .join(memberInviteHistory.diaryRoom).fetchJoin()
+                        .where(memberInviteHistory.id.eq(historyId))
+                        .fetchOne()
+        );
     }
 }

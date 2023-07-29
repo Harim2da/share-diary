@@ -56,4 +56,12 @@ public class MemberDiaryRoom {
         this.diaryRoom = diaryRoom;
         diaryRoom.getMemberDiaryRooms().add(this);
     }
+
+    public static MemberDiaryRoom of(Member member, DiaryRoom diaryRoom) {
+        MemberDiaryRoom instance = new MemberDiaryRoom();
+        instance.addMember(member);
+        instance.addDiaryRoom(diaryRoom);
+        instance.role = Role.USER;
+        return instance;
+    }
 }

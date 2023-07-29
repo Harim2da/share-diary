@@ -11,6 +11,7 @@ import share_diary.diray.exception.member.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 
 @Getter
 public enum ErrorType {
@@ -27,6 +28,8 @@ public enum ErrorType {
     M006("M006","수정하려는 비밀번호가 일치하지 않습니다.", UpdatePasswordNotCoincide.class),
 
     D001("D001", "존재하지 않는 일기방입니다.", DiaryRoomNotFoundException.class),
+
+    H001("H001", "유효하지 않은 초대 이력입니다.", InvalidInviteHistoryIdException.class)
     ;
 
     private final String code;

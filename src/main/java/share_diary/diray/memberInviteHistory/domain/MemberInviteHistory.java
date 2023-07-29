@@ -56,4 +56,12 @@ public class MemberInviteHistory {
         return of(member, beforeHistory.getDiaryRoom(), member.getEmail());
     }
 
+    public MemberInviteHistory updateAcceptStatus(InviteAcceptStatus status) {
+        this.status = status;
+        return this;
+    }
+
+    public boolean canUpdateStatus() {
+        return this.status == InviteAcceptStatus.INVITE || this.status == InviteAcceptStatus.RE_INVITE;
+    }
 }

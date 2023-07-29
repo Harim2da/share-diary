@@ -5,16 +5,20 @@ import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.common.email.EmailSenderComponent;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.diaryRoom.DiaryRoomRepository;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
+import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
+import share_diary.diray.memberInviteHistory.event.InviteAcceptEvent;
 
 @Slf4j
 @Service
@@ -25,6 +29,7 @@ public class MemberInviteHistoryService {
     private final MemberRepository memberRepository;
     private final MemberInviteHistoryRepository memberInviteHistoryRepository;
     private final EmailSenderComponent emailSenderComponent;
+    private final ApplicationEventPublisher publisher;
 
     public void inviteRoomMembers(MemberInviteRequest request) {
         // 일기방 검증
@@ -75,6 +80,18 @@ public class MemberInviteHistoryService {
                     .addCallback(result -> {
                         log.info("email : {} 로 메일 발송 성공", email);
                     }, ex -> log.info("email : {}로 메일 발송 실패", email));
+        }
+    }
+
+    public void updateInviteHistory(Long historyId, InviteAcceptStatus acceptStatus) {
+        MemberInviteHistory history = memberInviteHistoryRepository.findByIdWithMemberAndDiaryRoom(historyId)
+                .filter(MemberInviteHistory::canUpdateStatus)
+                .orElseThrow(InvalidInviteHistoryIdException::new);
+
+        history.updateAcceptStatus(acceptStatus);
+
+        if(InviteAcceptStatus.ACCEPT.equals(acceptStatus)) {
+            publisher.publishEvent(new InviteAcceptEvent(history.getMember(), history.getDiaryRoom()));
         }
     }
 }
