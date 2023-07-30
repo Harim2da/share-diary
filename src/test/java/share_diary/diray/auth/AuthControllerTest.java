@@ -66,7 +66,7 @@ class AuthControllerTest {
         Long id = getClaims(accessToken).get("id", Long.class);
         String refreshToken = makeToken(id,REFRESH_TIME);
 
-        when(authService.makeAccessToken(any())).thenReturn(accessToken);
+        when(authService.makeAccessToken(any(),any())).thenReturn(accessToken);
         when(authService.makeRefreshTokenToDB(any())).thenReturn(refreshToken);
 //        when(authService.makeRefreshToken(any())).thenReturn(refreshToken);
 

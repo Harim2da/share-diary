@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/shareDiary
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: itsdiaryservice@gmail.com
+    password: rvbaoetaqfbwtghn
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+
+#  redis:
+#    host: localhost
+#    port: 6379
+
+logging.level:
+  org.hibernate.SQL: debug
+# org.hibernate.type: trace
+
+jwt:
+  secret: YSOSeNbBPqDe1KYSDoNLy18DRCHalQ3ev+IpDOsMUDU=
+
+github:
+  client:
+    id: 189505605f083d3c6449
+    secret: 42125c8c0e29a55f46bff3abb3f74def876705ab
+  url:
+    access-token: https://github.com/login/oauth/access_token
+    profile: https://api.github.com/user

@@ -25,11 +25,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void joinMember(MemberSignUpRequestDTO signUpRequestDTO){
-        Member member = MemberSignUpRequestDTO.fromToMember(signUpRequestDTO);
-        String encode = passwordEncoder.encode(signUpRequestDTO.getPassword());
+    public void joinMember(MemberSignUpRequestDTO requestDTO){
+        Member member = MemberSignUpRequestDTO.fromToMember(requestDTO);
+        String encode = passwordEncoder.encode(requestDTO.getPassword());
         member.encryptPassword(encode);
         validationMember(member);
+        memberRepository.save(member);
+    }
+
+    // - review
+    public void joinMemberSocial(MemberSignUpSocialRequestDTO requestDTO){
+        Member member = MemberSignUpSocialRequestDTO.fromToMember(requestDTO);
         memberRepository.save(member);
     }
 
@@ -51,9 +57,9 @@ public class MemberService {
         return memberResponseDTO;
     }
 
-    public void passwordCheck(LoginSession loginSession, MemberPasswordRequestDTO memberPasswordRequestDTO){
+    public void passwordCheck(LoginSession loginSession, MemberPasswordRequestDTO requestDTO){
         Long id = loginSession.getId();
-        String password = memberPasswordRequestDTO.getPassword();
+        String password = requestDTO.getPassword();
 
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException());
@@ -63,19 +69,19 @@ public class MemberService {
         }
     }
 
-    public MemberResponseDTO updateMember(MemberUpdateRequestDTO memberUpdateRequestDTO) {
-        Member member = memberRepository.findByEmail(memberUpdateRequestDTO.getEmail())
+    public MemberResponseDTO updateMember(MemberUpdateRequestDTO requestDTO) {
+        Member member = memberRepository.findByEmail(requestDTO.getEmail())
                 .orElseThrow(() -> new MemberNotFoundException());
-        String encode = passwordEncoder.encode(memberUpdateRequestDTO.getPassword());
-        member.updateMember(encode,memberUpdateRequestDTO.getNickName());
+        String encode = passwordEncoder.encode(requestDTO.getPassword());
+        member.updateMember(encode,requestDTO.getNickName());
         return MemberResponseDTO.from(member);
     }
 
-    public boolean validationMemberLoginId(MemberLoginIdRequestDTO loginIdDTO){
-        return memberRepository.existsByLoginId(loginIdDTO.getLoginId());
+    public boolean validationMemberLoginId(MemberLoginIdRequestDTO requestDTO){
+        return memberRepository.existsByLoginId(requestDTO.getLoginId());
     }
 
-    public boolean validationMemberEmail(MemberEmailRequestDTO emailDTO){
-        return memberRepository.existsByEmail(emailDTO.getEmail());
+    public boolean validationMemberEmail(MemberEmailRequestDTO requestDTO){
+        return memberRepository.existsByEmail(requestDTO.getEmail());
     }
 }
