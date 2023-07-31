@@ -1,14 +1,20 @@
-package share_diary.diray.memberInviteHistory;
+package share_diary.diray.memberInviteHistory.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import share_diary.diray.auth.domain.NoAuth;
+import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
+import share_diary.diray.memberInviteHistory.MemberInviteRequest;
+import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
+import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +37,17 @@ public class MemberInviteHistoryController {
     ) {
         //TODO [하림] : 초대하는 사람이 방장인지 체크하는 로직 필요 (프론트와 논의), 보낸 사람 이름도 뽑아낼 방법 확인 (논의)
         memberInviteHistoryService.inviteRoomMembers(request);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{historyId}")
+    @NoAuth
+    public ResponseEntity<HttpStatus> updateInviteHistory(
+            @PathVariable Long historyId,
+            @RequestBody InviteUpdateRequest request
+            // 계정 토큰값 활용
+    ) {
+        memberInviteHistoryService.updateInviteHistory(historyId, request.getStatus());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
