@@ -2,7 +2,6 @@ package share_diary.diray.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.auth.domain.token.RefreshToken;
@@ -10,7 +9,10 @@ import share_diary.diray.auth.domain.token.RefreshTokenDB;
 import share_diary.diray.auth.domain.token.TokenDbRepository;
 import share_diary.diray.auth.domain.token.TokenRepository;
 import share_diary.diray.auth.dto.request.LoginRequestDTO;
-
+import share_diary.diray.auth.oauth.OAuthManager;
+import share_diary.diray.auth.oauth.OAuthManagerFinder;
+import share_diary.diray.auth.oauth.SocialType;
+import share_diary.diray.common.utils.StringUtil;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
@@ -30,23 +32,53 @@ public class AuthService {
     private final TokenDbRepository tokenDbRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final OAuthManagerFinder oAuthManagerFinder;
 
-    public String makeAccessToken(LoginRequestDTO loginRequestDTO){
+/*    public String makeAccessToken(LoginRequestDTO loginRequestDTO){
 
-        Member member = memberRepository.findByLoginId(loginRequestDTO.getMemberId())
+        Member member = memberRepository.findByLoginId(loginRequestDTO.getLoginId())
                 .orElseThrow(MemberNotFoundException::new);
 
-        validatedPassword(loginRequestDTO.getPassword(),member.getPassword());
+        validatedPassword(loginRequestDTO.getPassword(), member.getPassword());
+        return jwtManager.makeAccessToken(member.getId());
+    }*/
+
+    // - review
+    public String makeAccessToken(String provider,LoginRequestDTO loginRequestDTO){
+
+        String loginId = null;
+
+        //provider 가 존재하지 않을때는 일반 로그인, 존재하면 소셜 로그인
+        if(StringUtil.isNullAndBlank(provider)){
+            loginId = loginRequestDTO.getLoginId();
+        }else {
+            Member oAuthUser = getOAuthUser(provider,loginRequestDTO.getCode());
+            loginId = oAuthUser.getLoginId();
+        }
+
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        if(StringUtil.isNullAndBlank(provider)){
+            validatedPassword(loginRequestDTO.getPassword(), member.getPassword());
+        }
 
         return jwtManager.makeAccessToken(member.getId());
     }
 
-    public void validatedPassword(String loginPassword,String memberPassword){
+    private Member getOAuthUser(String provider,String code){
+        SocialType socialType = SocialType.getSocialType(provider);
+        OAuthManager oAuthManager = oAuthManagerFinder.findByOAuthManager(socialType);
+        return oAuthManager.getMemberInfo(code);
+    }
+
+    private void validatedPassword(String loginPassword,String memberPassword){
         boolean match = passwordEncoder.matches(loginPassword, memberPassword);
         if(!match){
             throw new MemberIdOrPasswordErrorException();
         }
     }
+
 /** ------------------------------------------Redis------------------------------------------**/
     public String makeRefreshToken(Long id){
         String token = jwtManager.makeRefreshToken(id);

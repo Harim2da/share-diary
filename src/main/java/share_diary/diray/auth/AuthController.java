@@ -26,13 +26,29 @@ public class AuthController {
 //    RefreshToken 에 관하여 : https://medium.com/@uk960214/refresh-token-%EB%8F%84%EC%9E%85%EA%B8%B0-f12-dd79de9fb0f0
 
     /**
-     * 로그인
+     * 로그인(일반)
+     */
+/*    @NoAuth
+    @PostMapping("/login")
+    public ResponseEntity<AccessToken> login(@RequestBody LoginRequestDTO requestDTO){
+//        log.info("requestDTO = {}", requestDTO.toString());
+        String accessToken = authService.makeAccessToken(requestDTO);
+        Long id = authService.extractIdByToken(accessToken);
+        ResponseCookie cookie = makeRefreshTokenCookie(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE,cookie.toString())
+                .body(AccessToken.of(accessToken));
+    }*/
+
+    /**
+     * 로그인(소셜) - review
      */
     @NoAuth
-    @PostMapping("/login")
-    public ResponseEntity<AccessToken> login(@RequestBody LoginRequestDTO loginRequestDTO){
-        log.info("signInDto = {}", loginRequestDTO.toString());
-        String accessToken = authService.makeAccessToken(loginRequestDTO);
+    @PostMapping(value = {"/login","/login/{provider}"})
+    public ResponseEntity<AccessToken> loginSocial(@PathVariable String provider,@RequestBody LoginRequestDTO requestDTO){
+//        log.info("requestDTO = {}", requestDTO.toString());
+        String accessToken = authService.makeAccessToken(provider,requestDTO);
         Long id = authService.extractIdByToken(accessToken);
         ResponseCookie cookie = makeRefreshTokenCookie(id);
 
@@ -86,7 +102,6 @@ public class AuthController {
     @NoAuth
     @GetMapping("/token")
     public ResponseEntity<AccessToken> renewAccessToken(@CookieValue("refreshToken") String refreshToken){
-
         authService.validateToken(refreshToken);
         Long id = authService.extractIdByToken(refreshToken);
         String accessToken = authService.renewAccessToken(id);

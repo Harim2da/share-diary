@@ -22,6 +22,9 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        //만약 oauth 로그인 후 redirect 된 uri 라면 그냥 true
+        //interceptor 에 대해 학습 더 필요
+
         if(handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             NoAuth noAuth = handlerMethod.getMethodAnnotation(NoAuth.class);
