@@ -20,6 +20,7 @@
     "@types/react-dom": "^18.0.10",
     "@types/react-responsive": "^8.0.5",
     "antd": "^5.4.6",
+    "axios": "^1.4.0",
     "framer-motion": "^10.0.1",
     "react": "^18.2.0",
     "react-calendar": "^4.2.1",
@@ -29,6 +30,7 @@
     "react-router-dom": "^6.8.2",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.6",
+    "recoil-persist": "^5.1.0",
     "styled-components": "^5.3.6",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
