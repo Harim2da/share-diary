@@ -30,7 +30,6 @@ public class DiaryRoomController {
      * - 일기방 만들 수 있는지 여부는 member controller에서 뽑아내기
      * */
     @PostMapping
-    @NoAuth
     public ResponseEntity<HttpStatus> createDiaryRoom(
             @RequestBody DiaryRoomCreateRequest request,
             @AuthenticationPrincipal LoginSession session

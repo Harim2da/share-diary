@@ -3,6 +3,7 @@ package share_diary.diray.member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.auth.domain.LoginSession;
@@ -13,8 +14,14 @@ import share_diary.diray.exception.member.ValidationMemberEmailException;
 import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.member.domain.Role;
 import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
+import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
+import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,6 +31,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberDiaryRoomRepository memberDiaryRoomRepository;
 
     public void joinMember(MemberSignUpRequestDTO requestDTO){
         Member member = MemberSignUpRequestDTO.fromToMember(requestDTO);
@@ -83,5 +91,15 @@ public class MemberService {
 
     public boolean validationMemberEmail(MemberEmailRequestDTO requestDTO){
         return memberRepository.existsByEmail(requestDTO.getEmail());
+    }
+
+    public Boolean validateCreateDiaryRoom(Long memberId) {
+
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(memberId)
+                .stream()
+                .filter(md -> Role.HOST.equals(md.getRole()))
+                .collect(Collectors.toList());
+
+        return memberDiaryRooms.size() < 3;
     }
 }
