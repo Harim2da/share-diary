@@ -57,6 +57,6 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2
 }
 
 ### 비밀번호 변경 : 등록된 email 로 인증번호 전송
-POST localhost:8080/api/member//certification-number
+POST localhost:8080/api/member/certification-number
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjkxOTA3NzI4LCJleHAiOjE2OTE5MDk1Mjh9.wKD2zxkE3jSmJQtxTAW1_XIKhAkY8cuiKeaFtLpF1dk
