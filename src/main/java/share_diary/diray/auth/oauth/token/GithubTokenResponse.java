@@ -2,8 +2,9 @@ package share_diary.diray.auth.oauth.token;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class GithubTokenResponse {
     @JsonProperty(value = "access_token")

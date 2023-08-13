@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, Form, Input, Modal } from 'antd';
+import axios from "axios";
 
 interface EmailAuthProps {
     isFindId: boolean;
@@ -9,10 +10,31 @@ interface EmailAuthProps {
 
 const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
     const [activeTabKey, setActiveTabKey] = useState<string>('findId');
-    // 시간을 담을 변수
-    const [count, setCount] = useState<number | null>(null);
+    const [count, setCount] = useState<number | null>(null);    // 시간을 담을 변수
+    const [text, setText] = useState("");
 
-    //인증번호 발송 알림 모달s
+    const onChange = (e: any) => {
+        setText(e.target.value);
+    };
+
+    //아이디 찾기, 비밀번호 재설정 버튼 클릭
+    const clickFindBtn = () => {
+        if (isFindId) {
+            axios({
+                method: "POST",
+                url: "/api/member/loginId/validation",
+                data: {
+                    loginId: text,
+                },
+            }).then((res) => {
+                console.log(res)
+            }).catch(function (error) {
+                console.log(error.toJSON());
+            });
+        }
+    };
+
+    //인증번호 발송 알림 모달
     const sendCertNumber = () => {
         Modal.success({
             content: '인증번호를 발송했습니다',
@@ -34,6 +56,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
         return `${min} : ${sec}`;
     };
 
+
     useEffect(() => {
         if (count !== null && count > 0) {
             const id = setInterval(() => {
@@ -46,41 +69,41 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
 
     return (
         <Form name="form_item_path" layout="vertical">
-            {isFindId ? 
-                 <Form.Item
-                 name="email"
-                 label="이메일"
-                 rules={[
-                    {
-                        type: 'email',
-                        message: '유효하지 않은 이메일 형식입니다',
-                    },
-                    {
-                        required: true,
-                        message: '이메일을 입력해주세요',
-                    },
-                ]}
-             >
-                 <div style={{ display: "flex" }}>
-                     <Input />
-                 </div>
-             </Form.Item>
-             : 
-             <>
-            <Form.Item
-                name="id"
-                label="아이디"
-                rules={[
-                    {
-                        required: true,
-                        message: '아이디를 입력해주세요',
-                    }
-                ]}
-            >
-                <div style={{ display: "flex" }}>
-                    <Input />
-                </div>
-            </Form.Item>
+            {isFindId ?
+                <Form.Item
+                    name="email"
+                    label="이메일"
+                    rules={[
+                        {
+                            type: 'email',
+                            message: '유효하지 않은 이메일 형식입니다',
+                        },
+                        {
+                            required: true,
+                            message: '이메일을 입력해주세요',
+                        },
+                    ]}
+                >
+                    <div style={{ display: "flex" }}>
+                        <Input onChange={onChange} />
+                    </div>
+                </Form.Item>
+                :
+                <>
+                    <Form.Item
+                        name="id"
+                        label="아이디"
+                        rules={[
+                            {
+                                required: true,
+                                message: '아이디를 입력해주세요',
+                            }
+                        ]}
+                    >
+                        <div style={{ display: "flex" }}>
+                            <Input />
+                        </div>
+                    </Form.Item>
                     <Form.Item
                         name="email"
                         label="이메일"
@@ -119,7 +142,7 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
                     </Form.Item>
                 </>}
 
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={clickFindBtn}>
                 {btnText}
             </Button>
         </Form>
@@ -131,4 +154,3 @@ const Timer = styled.span`
   font-size: 12px;
   margin-left: 8px;
 `;
-

@@ -26,27 +26,11 @@ public class AuthController {
 //    RefreshToken 에 관하여 : https://medium.com/@uk960214/refresh-token-%EB%8F%84%EC%9E%85%EA%B8%B0-f12-dd79de9fb0f0
 
     /**
-     * 로그인(일반)
-     */
-/*    @NoAuth
-    @PostMapping("/login")
-    public ResponseEntity<AccessToken> login(@RequestBody LoginRequestDTO requestDTO){
-//        log.info("requestDTO = {}", requestDTO.toString());
-        String accessToken = authService.makeAccessToken(requestDTO);
-        Long id = authService.extractIdByToken(accessToken);
-        ResponseCookie cookie = makeRefreshTokenCookie(id);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,cookie.toString())
-                .body(AccessToken.of(accessToken));
-    }*/
-
-    /**
-     * 로그인(소셜) - review
+     * 로그인(일반/소셜)
      */
     @NoAuth
-    @PostMapping(value = {"/login","/login/{provider}"})
-    public ResponseEntity<AccessToken> loginSocial(@PathVariable String provider,@RequestBody LoginRequestDTO requestDTO){
+    @PostMapping(value = {"/login","/social/{provider}"})
+    public ResponseEntity<AccessToken> loginSocial(@PathVariable(required = false) String provider,@RequestBody LoginRequestDTO requestDTO){
 //        log.info("requestDTO = {}", requestDTO.toString());
         String accessToken = authService.makeAccessToken(provider,requestDTO);
         Long id = authService.extractIdByToken(accessToken);
