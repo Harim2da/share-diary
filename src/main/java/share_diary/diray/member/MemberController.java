@@ -79,6 +79,7 @@ public class MemberController {
     /**
      * 아이디 중복 체크
      */
+    @NoAuth
     @PostMapping("/loginId/validation")
     public MemberValidationLoginIdResponseDTO validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
 //        log.info("requestDTO={}",requestDTO.toString());
