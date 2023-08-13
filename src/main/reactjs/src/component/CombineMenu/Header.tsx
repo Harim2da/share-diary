@@ -15,11 +15,15 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   let navigate = useNavigate();
 
-  //로그아웃
+//로그아웃
   const handleLogout = () => {
     axios({
       method: "POST",
-      url: "/api/users/logout"
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.getItem('login-token'),
+      },
+      url: "/api/auth/logout"
     }).then(response => {
       setIsLoggedIn(false);
       console.log(response)

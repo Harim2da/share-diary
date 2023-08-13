@@ -62,7 +62,7 @@ public class AuthController {
      */
     //    @NoAuth
     @PostMapping("/logout")
-    public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession, @CookieValue("refreshToken") String refreshToken){
+    public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession, @CookieValue("REFRESH_TOKEN") String refreshToken){
 //        authService.removeRefreshToken(refreshToken);
         authService.removeRefreshTokenToDB(refreshToken);
         ResponseCookie cookie = expiredResponseCookie();
