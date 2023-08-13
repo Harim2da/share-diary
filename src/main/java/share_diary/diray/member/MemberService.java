@@ -5,8 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.concurrent.FailureCallback;
+import org.springframework.util.concurrent.SuccessCallback;
+import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
+import share_diary.diray.common.email.CertificationNumber;
+import share_diary.diray.common.email.CertificationNumberRepository;
+import share_diary.diray.common.email.EmailSenderComponent;
 import share_diary.diray.crypto.PasswordEncoder;
+import share_diary.diray.exception.certification.CertificationNotFoundException;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.ValidationMemberEmailException;
@@ -16,6 +23,9 @@ import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
+import java.util.Random;
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,6 +34,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailSenderComponent emailSenderComponent;
+    private final CertificationNumberRepository certificationNumberRepository;
 
     public void joinMember(MemberSignUpRequestDTO requestDTO){
         Member member = MemberSignUpRequestDTO.fromToMember(requestDTO);
@@ -33,7 +45,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    // - review
     public void joinMemberSocial(MemberSignUpSocialRequestDTO requestDTO){
         Member member = MemberSignUpSocialRequestDTO.fromToMember(requestDTO);
         memberRepository.save(member);
@@ -83,5 +94,42 @@ public class MemberService {
 
     public boolean validationMemberEmail(MemberEmailRequestDTO requestDTO){
         return memberRepository.existsByEmail(requestDTO.getEmail());
+    }
+
+    public void sendCertificationNumber(LoginSession session){
+        String email = memberRepository.findById(session.getId())
+                .orElseThrow(() -> new MemberNotFoundException())
+                .getEmail();
+
+        int certificationNumber = (int)(Math.random()*(int)1e8);
+
+        //redis 에 저장
+        certificationNumberRepository.save(CertificationNumber.of(certificationNumber,session.getId()));
+
+        emailSenderComponent.sendCertificationNumber(certificationNumber,email)
+                .addCallback(result -> log.info("email : {} 로 발송 성공",email), ex -> {
+                    //TODO: email 실패 exception 생성
+                    throw new IllegalArgumentException();
+                });
+    }
+
+    public void validationCertificationNumber(int certificationNumber){
+
+        certificationNumberRepository.findById(certificationNumber)
+                .orElseThrow(()->new CertificationNotFoundException());
+    }
+
+    public void resetPasswordAndSendEmailToMember(LoginSession session){
+        String email = memberRepository.findById(session.getId())
+                .orElseThrow(() -> new MemberNotFoundException())
+                .getEmail();
+
+        String tempPassword = UUID.randomUUID().toString().substring(0,8);
+
+        emailSenderComponent.sendTempPasswordMail(tempPassword,email)
+                .addCallback(result -> log.info("email : {} 로 발송 성공",email),ex->{
+                    //TODO: email 실패 exception 생성
+                    throw new IllegalArgumentException();
+                });
     }
 }

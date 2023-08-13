@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.emoji.domain.Emoji;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
@@ -19,7 +20,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
-public class Member{
+public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long id;
