@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
 import share_diary.diray.diaryRoom.event.DiaryRoomCreateEvent;
 import share_diary.diray.exception.member.MemberNotFoundException;
@@ -45,7 +46,7 @@ public class DiaryRoomService {
         memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.HOST));
 
         // 만들어지고 나면 이벤트 처리로 멤버 초대 메일 발송하도록 하기
-        if(Objects.nonNull(request.getEmails())) {
+        if(!CollectionUtils.isEmpty(request.getEmails())) {
             publisher.publishEvent(new DiaryRoomCreateEvent(diaryRoom.getId(), request.getEmails()));
         }
     }

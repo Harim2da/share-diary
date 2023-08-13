@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
-import share_diary.diray.auth.domain.NoAuth;
-import share_diary.diray.auth.domain.token.AccessToken;
-import share_diary.diray.auth.domain.token.RefreshToken;
 import share_diary.diray.diaryRoom.DiaryRoomService;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
 

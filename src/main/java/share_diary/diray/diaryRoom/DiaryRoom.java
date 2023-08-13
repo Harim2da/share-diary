@@ -7,13 +7,14 @@ import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Getter;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 
 @Table(name = "diary_room")
 @Entity
 @Getter
-public class DiaryRoom {
+public class DiaryRoom extends BaseTimeEntity {
 
     @Id
     @Column(nullable = false)
@@ -24,20 +25,12 @@ public class DiaryRoom {
     @Column
     private String name;
 
-    // 생성일자
-    @Column
-    private LocalDateTime createDate;
-    // 생성자 - 확인 필요
     @Column
     private String createBy;
-    // 수정일자
-    @Column
-    private LocalDateTime modifyDate;
-    // 수정자 - 확인 필요
+
     @Column
     private String modifyBy;
 
-//    @OneToMany(mappedBy = "diary_room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OneToMany(mappedBy = "diaryRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<MemberDiaryRoom> memberDiaryRooms = new HashSet<>();
 
@@ -47,9 +40,7 @@ public class DiaryRoom {
     public static DiaryRoom of(String name, String createBy) {
         DiaryRoom instance = new DiaryRoom();
         instance.name = name;
-        instance.createDate = LocalDateTime.now(Clock.systemDefaultZone());
         instance.createBy = createBy;
-        instance.modifyDate = LocalDateTime.now(Clock.systemDefaultZone());
         instance.modifyBy = createBy;
         return instance;
     }
