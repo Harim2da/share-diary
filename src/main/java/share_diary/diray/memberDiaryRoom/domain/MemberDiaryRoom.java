@@ -57,11 +57,11 @@ public class MemberDiaryRoom {
         diaryRoom.getMemberDiaryRooms().add(this);
     }
 
-    public static MemberDiaryRoom of(Member member, DiaryRoom diaryRoom) {
+    public static MemberDiaryRoom of(Member member, DiaryRoom diaryRoom, Role role) {
         MemberDiaryRoom instance = new MemberDiaryRoom();
         instance.addMember(member);
         instance.addDiaryRoom(diaryRoom);
-        instance.role = Role.USER;
+        instance.role = role;
         return instance;
     }
 }
