@@ -1,5 +1,6 @@
 package share_diary.diray.memberDiaryRoom.domain.impl;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
@@ -22,5 +23,12 @@ public class MemberDiaryRoomRepositoryCustomImpl extends QuerydslRepositorySuppo
                                 .and(memberDiaryRoom.member.id.eq(memberId)))
                         .fetchOne()
         );
+    }
+
+    @Override
+    public List<MemberDiaryRoom> findAllByMemberId(Long memberId) {
+        return from(memberDiaryRoom)
+                .where(memberDiaryRoom.member.id.eq(memberId))
+                .fetch();
     }
 }

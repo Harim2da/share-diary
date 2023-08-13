@@ -2,7 +2,7 @@ package share_diary.diray.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
@@ -125,5 +125,18 @@ public class MemberController {
     @PostMapping("/tempPassword")
     public void sendToTempPassword(@AuthenticationPrincipal LoginSession session){
         memberService.resetPasswordAndSendEmailToMember(session);
+    }
+
+    //TODO: 비밀번호 재설정 -> 등록된 email 로 인증번호 발송 -> 해당 인증번호를 입력 -> 비밀번호 입력
+
+    /**
+     * 일기방 만들기 전, 해당 계정이 신규 일기방을 만들 수 있는지
+     * 체크 API
+     * */
+    @GetMapping("/diary-room/validation")
+    public ResponseEntity<Boolean> validateCreateDiaryRoom(
+            @AuthenticationPrincipal LoginSession auth
+    ) {
+        return ResponseEntity.ok(memberService.validateCreateDiaryRoom(auth.getId()));
     }
 }

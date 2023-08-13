@@ -6,10 +6,25 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { isMenuOpenState } from "../../atom/uiAtom";
+import { useRecoilState } from 'recoil';
+import { loginState } from '../../atom/loginState';
+import axios from "axios";
 
 function Header() {
   const setIsMenuOpen = useSetRecoilState(isMenuOpenState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   let navigate = useNavigate();
+
+  //로그아웃
+  const handleLogout = () => {
+    axios({
+      method: "POST",
+      url: "/api/users/logout"
+    }).then(response => {
+      setIsLoggedIn(false);
+      console.log(response)
+    })
+  };
 
   return (
     <HeaderWrap>
@@ -22,18 +37,19 @@ function Header() {
         <h1>잇츠 다이어리</h1>
       </div>
       <div>
-        <span className="bell">
-          <FontAwesomeIcon icon={faBell} />
-          <span className="red" />
-        </span>
-        <span
-          className="login-btn"
-          onClick={() => {
-            navigate("/login");
-          }}
-        >
-          로그아웃
-        </span>
+        {isLoggedIn ?
+          <><span className="bell">
+            <FontAwesomeIcon icon={faBell} />
+            <span className="red" />
+          </span>
+            <span
+              className="login-btn"
+              onClick={handleLogout}>로그아웃</span>
+          </> : <span
+            className="login-btn"
+            onClick={() => {
+              navigate("/login");
+            }}>로그인</span>}
       </div>
     </HeaderWrap>
   );
