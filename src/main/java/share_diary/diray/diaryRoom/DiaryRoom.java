@@ -1,5 +1,6 @@
 package share_diary.diray.diaryRoom;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,4 +43,14 @@ public class DiaryRoom {
 
     @OneToMany(mappedBy = "diaryRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<MemberInviteHistory> memberInviteHistories = new HashSet<>();
+
+    public static DiaryRoom of(String name, String createBy) {
+        DiaryRoom instance = new DiaryRoom();
+        instance.name = name;
+        instance.createDate = LocalDateTime.now(Clock.systemDefaultZone());
+        instance.createBy = createBy;
+        instance.modifyDate = LocalDateTime.now(Clock.systemDefaultZone());
+        instance.modifyBy = createBy;
+        return instance;
+    }
 }
