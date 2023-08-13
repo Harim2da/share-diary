@@ -21,10 +21,10 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
     const clickFindBtn = () => {
         if (isFindId) {
             axios({
-                method: "POST",
-                url: "/api/member/loginId/validation",
-                data: {
-                    loginId: text,
+                method: "GET",
+                url: "/api/member/me/id",
+                params: {
+                    email: text,
                 },
             }).then((res) => {
                 console.log(res)
