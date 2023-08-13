@@ -41,6 +41,51 @@ public class EmailSenderComponent {
         return new AsyncResult<>(send(subject, sendTo, messageBody));
     }
 
+    /**
+     * 인증번호 이메일로 발송
+     * certificationNumber : 인증번호
+     * sendTo : 수신 이메일
+     */
+    @Async
+    public ListenableFuture<Boolean> sendCertificationNumber(int certificationNumber, String sendTo){
+
+        String subject = new StringBuilder().append("[itsDiary] ")
+                .append(" 인증번호가 발송되었습니다")
+                .toString();
+
+        String messageBody = new StringBuilder()
+                .append("인증번호 : ")
+                .append(String.valueOf(certificationNumber))
+                .toString();
+
+        return new AsyncResult<>(send(subject,sendTo,messageBody));
+    }
+
+    /**
+     * 임시 비밀번호 전송
+     * tempPassword : 임시 비밀번호
+     * sendTo : 수신 이메일
+     */
+    @Async
+    public ListenableFuture<Boolean> sendTempPasswordMail(String tempPassword, String sendTo){
+
+        String subject = new StringBuilder().append("[itsDiary] ")
+                .append(" 임시 비밀번호가 발급되었습니다")
+                .toString();
+
+        String messageBody = new StringBuilder()
+                .append("임시 비밀번호 : ")
+                .append(tempPassword)
+                .toString();
+        return new AsyncResult<>(send(subject,sendTo,messageBody));
+    }
+
+    /**
+     * 메일 전송 내용
+     * subject : 메일 제목
+     * sendTo : 수신 이메일
+     * messageBody : 메일 내용
+     */
     private boolean send(String subject, String sendTo, String messageBody) {
 
         try {
