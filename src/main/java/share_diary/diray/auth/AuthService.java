@@ -34,16 +34,6 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final OAuthManagerFinder oAuthManagerFinder;
 
-/*    public String makeAccessToken(LoginRequestDTO loginRequestDTO){
-
-        Member member = memberRepository.findByLoginId(loginRequestDTO.getLoginId())
-                .orElseThrow(MemberNotFoundException::new);
-
-        validatedPassword(loginRequestDTO.getPassword(), member.getPassword());
-        return jwtManager.makeAccessToken(member.getId());
-    }*/
-
-    // - review
     public String makeAccessToken(String provider,LoginRequestDTO loginRequestDTO){
 
         String loginId = null;
