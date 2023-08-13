@@ -37,7 +37,8 @@ function Login() {
             method: "POST",
             url: "/api/auth/login",
             data: {
-                memberId: id,
+                // memberId: id,
+                loginId: id,
                 password: password,
             },
         }).then((res) => {
