@@ -33,7 +33,7 @@ public class Member extends BaseTimeEntity {
 
     private String nickName;
 
-    private String joinStatus;
+    private JoinStatus joinStatus;
 
     private LocalDateTime joinTime;
 
@@ -50,7 +50,7 @@ public class Member extends BaseTimeEntity {
     private List<Emoji> emojis = new ArrayList<>();
 
     @Builder
-    public Member(String loginId, String email, String password, String nickName, String joinStatus, LocalDateTime joinTime) {
+    public Member(String loginId, String email, String password, String nickName, JoinStatus joinStatus, LocalDateTime joinTime) {
         this.loginId = loginId;
         this.email = email;
         this.password = password;
