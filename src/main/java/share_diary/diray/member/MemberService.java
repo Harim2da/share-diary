@@ -3,12 +3,8 @@ package share_diary.diray.member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.concurrent.FailureCallback;
-import org.springframework.util.concurrent.SuccessCallback;
-import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.common.email.CertificationNumber;
 import share_diary.diray.common.email.CertificationNumberRepository;
@@ -30,7 +26,6 @@ import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -48,7 +43,7 @@ public class MemberService {
     public void joinMember(MemberSignUpRequestDTO requestDTO){
         Member member = MemberSignUpRequestDTO.fromToMember(requestDTO);
         String encode = passwordEncoder.encode(requestDTO.getPassword());
-        member.encryptPassword(encode);
+        member.updatePassword(encode);
         validationMember(member);
         memberRepository.save(member);
     }
@@ -76,16 +71,29 @@ public class MemberService {
         return memberResponseDTO;
     }
 
-    public void passwordCheck(LoginSession loginSession, MemberPasswordRequestDTO requestDTO){
-        Long id = loginSession.getId();
-        String password = requestDTO.getPassword();
-
-        Member member = memberRepository.findById(id)
+    public void passwordCheck(LoginSession session, MemberPasswordRequestDTO requestDTO){
+        Member member = memberRepository.findById(session.getId())
                 .orElseThrow(() -> new MemberNotFoundException());
+
+        String password = requestDTO.getPassword();
 
         if(!passwordEncoder.matches(password,member.getPassword())){
             throw new PasswordNotCoincide();
         }
+    }
+
+    public void updatePassword(LoginSession session, MemberPasswordUpdateDTO requestDTO){
+        Member member = memberRepository.findById(session.getId())
+                .orElseThrow(() -> new MemberNotFoundException());
+
+        String password = requestDTO.getPassword();
+
+        if(!passwordEncoder.matches(password,member.getPassword())){
+            throw new PasswordNotCoincide();
+        }
+
+        String encode = passwordEncoder.encode(requestDTO.getUpdatePassword());
+        member.updatePassword(encode);
     }
 
     public MemberResponseDTO updateMember(MemberUpdateRequestDTO requestDTO) {
