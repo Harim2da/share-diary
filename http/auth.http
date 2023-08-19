@@ -29,3 +29,13 @@ Content-Type: application/json
 ### 소셜 로그인 - user get
 GET https://api.github.com/user
 Authorization: Bearer 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
+
+### 패스워드 변경
+POST http://localhost:8080/api/member/pwd
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjkyNDU2MTgwLCJleHAiOjE2OTI0NTc5ODB9.hNmhpDUS5V2vAWxygji9Zn5hqW7VFRimU0mVIsytMrc
+Content-Type: application/json
+
+{
+  "password" : "1234",
+  "updatePassword" : "4321"
+}
