@@ -129,15 +129,6 @@ public class MemberController {
     }
 
     /**
-     * 비밀번호 초기화 : 임시비밀번호 발송
-     * - 임시 비밀번호를 발송하면 해당 유저는 비밀번호를 재설정 해야하는 상태값을 가지고 있어야 한다
-     */
-    @PostMapping("/tempPassword")
-    public void sendToTempPassword(@AuthenticationPrincipal LoginSession session){
-        memberService.resetPasswordAndSendEmailToMember(session);
-    }
-
-    /**
      * 일기방 만들기 전, 해당 계정이 신규 일기방을 만들 수 있는지
      * 체크 API
      * */
