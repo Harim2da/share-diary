@@ -35,7 +35,7 @@ public class MemberController {
     }
 
     /**
-     * 소셜 로그인 시도 - 회원가입 - review
+     * 소셜 로그인 시도 - 회원가입
      */
     @NoAuth
     @PostMapping("/signUp/social")
@@ -119,16 +119,6 @@ public class MemberController {
 //        log.info("request={}", requestDTO.toString());
         memberService.validationCertificationNumber(requestDTO.getCertificationNumber());
     }
-
-    /**
-     * 비밀번호 초기화 : 임시비밀번호 발송
-     */
-    @PostMapping("/tempPassword")
-    public void sendToTempPassword(@AuthenticationPrincipal LoginSession session){
-        memberService.resetPasswordAndSendEmailToMember(session);
-    }
-
-    //TODO: 비밀번호 재설정 -> 등록된 email 로 인증번호 발송 -> 해당 인증번호를 입력 -> 비밀번호 입력
 
     /**
      * 일기방 만들기 전, 해당 계정이 신규 일기방을 만들 수 있는지
