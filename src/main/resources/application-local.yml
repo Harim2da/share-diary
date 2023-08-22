@@ -46,3 +46,15 @@ github:
   url:
     access-token: https://github.com/login/oauth/access_token
     profile: https://api.github.com/user
+
+#Authorization url :
+#  https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/login/oauth2/callback&response_type=code&client_id=225651924488-oq3i2bo15p16qvnmad43hpabphts956u.apps.googleusercontent.com
+google:
+  client:
+    id: 225651924488-oq3i2bo15p16qvnmad43hpabphts956u.apps.googleusercontent.com
+    secret: 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
+  redirect-uri: http://localhost:8080/login/oauth2/callback
+  grant-type: authorization_code
+  url:
+    access-token: https://oauth2.googleapis.com/token
+    profile: https://www.googleapis.com/oauth2/v2/userinfo
