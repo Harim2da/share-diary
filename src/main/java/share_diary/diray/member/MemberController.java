@@ -56,12 +56,20 @@ public class MemberController {
     }
 
     /**
-     * 회원 수정 전 비밀번호 확인
+     * 비밀번호 확인
      */
     @PostMapping("/me/pwd")
-    public void passwordCheck(@AuthenticationPrincipal LoginSession loginSession, @RequestBody MemberPasswordRequestDTO requestDTO){
+    public void passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
 //        log.info("requestDTO={}",requestDTO.toString());
-        memberService.passwordCheck(loginSession,requestDTO);
+        memberService.passwordCheck(session,requestDTO);
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PostMapping("/pwd")
+    public void updatePassword(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordUpdateDTO requestDTO){
+        memberService.updatePassword(session,requestDTO);
     }
 
     /**
@@ -69,7 +77,7 @@ public class MemberController {
      */
 //    @NoAuth
     @PatchMapping("/me")
-    public MemberResponseDTO updateMember(@AuthenticationPrincipal LoginSession loginSession, @RequestBody MemberUpdateRequestDTO requestDTO){
+    public MemberResponseDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
 //        log.info("requestDTO={}",requestDTO.toString());
         if(!requestDTO.validationPassword()){
             throw new UpdatePasswordNotCoincide();
@@ -104,7 +112,7 @@ public class MemberController {
      */
 
     /**
-     * 비밀번호 변경 : 인증번호 email 로 전송
+     * 비밀번호 초기화 : 인증번호 email 로 전송
      */
     @PostMapping("/certification-number")
     public void sendToCertificationNumber(@AuthenticationPrincipal LoginSession session){
@@ -112,7 +120,7 @@ public class MemberController {
     }
 
     /**
-     * 비밀번호 변경 : 입력된 인증번호 유효성 검증
+     * 비밀번호 초기화 : 입력된 인증번호 유효성 검증
      */
     @PostMapping("/validation-certification-number")
     public void validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
