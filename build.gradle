@@ -66,9 +66,8 @@ dependencies {
 //    redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-//    security
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.boot:spring-boot-starter-security-test'
+//    sql logging
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
 }
 
 ext['spring-security.version']='5.8.4'
