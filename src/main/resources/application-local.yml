@@ -12,10 +12,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    properties:
-      hibernate:
+#    properties:
+#      hibernate:
         # show_sql: true
-        format_sql: true
+#        format_sql: true
 
   mail:
     host: smtp.gmail.com
@@ -38,6 +38,11 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
 
 jwt:
   secret: YSOSeNbBPqDe1KYSDoNLy18DRCHalQ3ev+IpDOsMUDU=
