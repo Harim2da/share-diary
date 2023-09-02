@@ -1,18 +1,26 @@
 package share_diary.diray.member;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.crypto.PasswordEncoder;
+import share_diary.diray.exception.member.MemberNotFoundException;
+import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
-import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
+import share_diary.diray.member.dto.request.*;
+import share_diary.diray.member.dto.response.MemberResponseDTO;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class MemberServiceTest {
 
     @Autowired
@@ -26,7 +34,8 @@ class MemberServiceTest {
     @DisplayName("회원가입 후 저장 - 성공")
     void joinMemberTest() {
         //given
-        MemberSignUpRequestDTO dto = new MemberSignUpRequestDTO("jipdol2", "jipdol2@gmail.com", "1234", "jipdol2");
+        MemberSignUpRequestDTO dto =
+                new MemberSignUpRequestDTO("jipdol2", "jipdol2@gmail.com", "1234", "jipdol2");
 
         //when
         memberService.joinMember(dto);
@@ -37,10 +46,151 @@ class MemberServiceTest {
 
         boolean matches = passwordEncoder.matches(dto.getPassword(), findByMember.getPassword());
 
-        assertThat(dto.getLoginId()).isEqualTo(findByMember.getLoginId());
-        assertThat(dto.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(findByMember.getLoginId()).isEqualTo(dto.getLoginId());
+        assertThat(findByMember.getEmail()).isEqualTo(dto.getEmail());
         assertThat(matches).isTrue();
-        assertThat(dto.getNickName()).isEqualTo(findByMember.getNickName());
+        assertThat(findByMember.getNickName()).isEqualTo(dto.getNickName());
+    }
+
+    @Test
+    @DisplayName("회원가입 후 저장(소셜) - 성공")
+    void joinSocialMemberTest(){
+        //given
+        MemberSignUpSocialRequestDTO dto =
+                new MemberSignUpSocialRequestDTO("177123","jipdol2@gmail.com","github_jipdol2");
+        //when
+        memberService.joinMemberSocial(dto);
+
+        //then
+        Member findByMember = memberRepository.findByLoginId("177123")
+                .orElse(null);
+
+        assertThat(findByMember.getLoginId()).isEqualTo(dto.getId());
+        assertThat(findByMember.getEmail()).isEqualTo(dto.getEmail());
+        assertThat(findByMember.getNickName()).isEqualTo(dto.getNickname());
+    }
+
+    @Test
+    @DisplayName("이메일로 회원정보 조회")
+    void findByMemberToEmailTest(){
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "password123",
+                "jipdol2");
+
+        //when
+        Member findByMember = memberRepository.save(member);
+        //then
+        MemberResponseDTO memberByEmail = memberService.findMemberByEmail(member.getEmail());
+
+        assertThat(memberByEmail.getLoginId()).isEqualTo(findByMember.getLoginId());
+        assertThat(memberByEmail.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(memberByEmail.getNickName()).isEqualTo(findByMember.getNickName());
+    }
+
+    @Test
+    @DisplayName("비밀번호 체킹 - 성공")
+    void passwordEncoderSuccessTest(){
+
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                passwordEncoder.encode("password123"),
+                "jipdol2");
+
+        Member saveMember = memberRepository.save(member);
+        LoginSession session = new LoginSession(saveMember.getId());
+        MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password123");
+
+        //then
+        memberService.passwordCheck(session,dto);
+    }
+
+    @Test
+    @DisplayName("비밀번호 체킹 - 실패")
+    void passwordEncoderFailTest(){
+
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                passwordEncoder.encode("password123"),
+                "jipdol2");
+
+        Member saveMember = memberRepository.save(member);
+        LoginSession session = new LoginSession(saveMember.getId());
+        MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password111");
+
+        //expected
+        assertThatThrownBy(()-> memberService.passwordCheck(session,dto))
+                .isInstanceOf(PasswordNotCoincide.class);
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 체킹")
+    void passwordUpdateSuccessTest(){
+
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                passwordEncoder.encode("password123"),
+                "jipdol2");
+        Member saveMember = memberRepository.save(member);
+
+        LoginSession session = new LoginSession(saveMember.getId());
+        MemberPasswordUpdateDTO dto = new MemberPasswordUpdateDTO("password123","password111");
+
+        //when
+        memberService.updatePassword(session,dto);
+
+        //then
+        Member findByMember = memberRepository.findById(saveMember.getId())
+                .orElseThrow(()->new MemberNotFoundException());
+
+        assertThat(passwordEncoder.matches(dto.getUpdatePassword(),findByMember.getPassword())).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("회원 아이디 중복 체크")
+    void memberLoginIdValidationCheckTest(){
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                passwordEncoder.encode("password123"),
+                "jipdol2");
+
+        memberRepository.save(member);
+
+        MemberLoginIdRequestDTO dto = new MemberLoginIdRequestDTO("jipdol2");
+        //when
+        boolean flag = memberService.validationMemberLoginId(dto);
+
+        //then
+        assertThat(flag).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("회원 이메일 중복 체크")
+    void memberEmailValidationCheckTest(){
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                passwordEncoder.encode("password123"),
+                "jipdol2");
+        memberRepository.save(member);
+
+        //when
+        MemberEmailRequestDTO dto = new MemberEmailRequestDTO("jipdol2@gmail.com");
+        boolean flag = memberService.validationMemberEmail(dto);
+
+        //then
+        assertThat(flag).isEqualTo(true);
     }
 
     private Member createMember(
