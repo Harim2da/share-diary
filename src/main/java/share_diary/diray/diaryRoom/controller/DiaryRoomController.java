@@ -38,11 +38,11 @@ public class DiaryRoomController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    // TODO : 일기방 정렬 방식 논의 필요
     @GetMapping
     public ResponseEntity<List<DiaryRoomDTO>> getDiaryRooms(
             @AuthenticationPrincipal LoginSession session
     ) {
-
         return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId()));
     }
 
