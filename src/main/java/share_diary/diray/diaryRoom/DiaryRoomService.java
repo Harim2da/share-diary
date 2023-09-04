@@ -1,5 +1,6 @@
 package share_diary.diray.diaryRoom;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
+import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
 import share_diary.diray.diaryRoom.event.DiaryRoomCreateEvent;
+import share_diary.diray.diaryRoom.mapper.DiaryRoomMapper;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
@@ -27,6 +30,7 @@ public class DiaryRoomService {
     private final DiaryRoomRepository diaryRoomRepository;
     private final ApplicationEventPublisher publisher;
     private final MemberRepository memberRepository;
+    private final DiaryRoomMapper diaryRoomMapper;
 
     public void joinNewMember(Member member, DiaryRoom diaryRoom) {
         Optional<MemberDiaryRoom> memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId());
@@ -49,5 +53,15 @@ public class DiaryRoomService {
         if(!CollectionUtils.isEmpty(request.getEmails())) {
             publisher.publishEvent(new DiaryRoomCreateEvent(diaryRoom.getId(), request.getEmails()));
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<DiaryRoomDTO> getDiaryRooms(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId());
+
+        return diaryRoomMapper.asDTOList(diaryRooms);
     }
 }

@@ -1,5 +1,7 @@
 package share_diary.diray.member.domain;
 
+import static javax.persistence.EnumType.STRING;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +35,7 @@ public class Member extends BaseTimeEntity {
 
     private String nickName;
 
+    @Enumerated(value = STRING)
     private JoinStatus joinStatus;
 
     private LocalDateTime joinTime;
@@ -71,8 +74,7 @@ public class Member extends BaseTimeEntity {
     public static Member ofCreateInviteMember(String email) {
         Member instance = new Member();
         instance.email = email;
-        // 논의 필요 - Enum 아니었나?
-//        instance.joinStatus
+        instance.joinStatus = JoinStatus.WAITING;
         return instance;
     }
 }
