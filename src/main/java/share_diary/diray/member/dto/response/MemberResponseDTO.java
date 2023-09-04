@@ -8,12 +8,12 @@ import share_diary.diray.member.domain.Member;
 @ToString
 public class MemberResponseDTO {
 
-    private String memberId;
+    private String loginId;
     private String email;
     private String nickName;
 
-    public MemberResponseDTO(String memberId, String email, String nickName) {
-        this.memberId = memberId;
+    public MemberResponseDTO(String loginId, String email, String nickName) {
+        this.loginId = loginId;
         this.email = email;
         this.nickName = nickName;
     }

@@ -59,7 +59,7 @@ public class Member extends BaseTimeEntity {
         this.joinTime = joinTime;
     }
 
-    public void encryptPassword(String encryptPassword){
+    public void updatePassword(String encryptPassword){
         this.password = encryptPassword;
     }
 
