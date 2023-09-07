@@ -11,7 +11,8 @@ import java.util.Map;
 @Getter
 public enum SocialType {
     GITHUB("GITHUB"),
-    GOOGLE("GOOGLE")
+    GOOGLE("GOOGLE"),
+    KAKAO("KAKAO")
     ;
 
     private final static Map<String,SocialType> codeMap = new HashMap<>();
