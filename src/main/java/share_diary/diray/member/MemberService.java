@@ -15,11 +15,14 @@ import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.ValidationMemberEmailException;
 import share_diary.diray.exception.member.ValidationMemberIdException;
+import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.domain.Role;
+import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
+import share_diary.diray.member.mapper.MemberMapper;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
 
@@ -27,6 +30,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import java.util.UUID;
+import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
+import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
 
 @Slf4j
 @Service
@@ -39,6 +44,8 @@ public class MemberService {
     private final EmailSenderComponent emailSenderComponent;
     private final CertificationNumberRepository certificationNumberRepository;
     private final MemberDiaryRoomRepository memberDiaryRoomRepository;
+    private final MemberMapper memberMapper;
+    private final MemberInviteHistoryRepository memberInviteHistoryRepository;
 
     public void joinMember(MemberSignUpRequestDTO requestDTO){
         Member member = MemberSignUpRequestDTO.fromToMember(requestDTO);
@@ -66,14 +73,14 @@ public class MemberService {
 
     public MemberResponseDTO findMemberByEmail(String email){
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(MemberNotFoundException::new);
         MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(member);
         return memberResponseDTO;
     }
 
     public void passwordCheck(LoginSession session, MemberPasswordRequestDTO requestDTO){
         Member member = memberRepository.findById(session.getId())
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(MemberNotFoundException::new);
 
         String password = requestDTO.getPassword();
 
@@ -84,7 +91,7 @@ public class MemberService {
 
     public void updatePassword(LoginSession session, MemberPasswordUpdateDTO requestDTO){
         Member member = memberRepository.findById(session.getId())
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(MemberNotFoundException::new);
 
         String password = requestDTO.getPassword();
 
@@ -98,7 +105,7 @@ public class MemberService {
 
     public MemberResponseDTO updateMember(MemberUpdateRequestDTO requestDTO) {
         Member member = memberRepository.findByEmail(requestDTO.getEmail())
-                .orElseThrow(() -> new MemberNotFoundException());
+                .orElseThrow(MemberNotFoundException::new);
         String encode = passwordEncoder.encode(requestDTO.getPassword());
         member.updateMember(encode,requestDTO.getNickName());
         return MemberResponseDTO.from(member);
@@ -111,10 +118,10 @@ public class MemberService {
     public boolean validationMemberEmail(MemberEmailRequestDTO requestDTO){
         return memberRepository.existsByEmail(requestDTO.getEmail());
     }
-  
+
     public void sendCertificationNumber(LoginSession session){
         String email = memberRepository.findById(session.getId())
-                .orElseThrow(() -> new MemberNotFoundException())
+                .orElseThrow(MemberNotFoundException::new)
                 .getEmail();
 
         int certificationNumber = (int)(Math.random()*(int)1e8);
@@ -132,12 +139,12 @@ public class MemberService {
     public void validationCertificationNumber(int certificationNumber){
 
         certificationNumberRepository.findById(certificationNumber)
-                .orElseThrow(()->new CertificationNotFoundException());
+                .orElseThrow(CertificationNotFoundException::new);
     }
 
     public void resetPasswordAndSendEmailToMember(LoginSession session){
         String email = memberRepository.findById(session.getId())
-                .orElseThrow(() -> new MemberNotFoundException())
+                .orElseThrow(MemberNotFoundException::new)
                 .getEmail();
 
         String tempPassword = UUID.randomUUID().toString().substring(0,8);
@@ -148,7 +155,7 @@ public class MemberService {
                     throw new IllegalArgumentException();
                 });
     }
-  
+
     public Boolean validateCreateDiaryRoom(Long memberId) {
 
         List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(memberId)
@@ -157,5 +164,13 @@ public class MemberService {
                 .collect(Collectors.toList());
 
         return memberDiaryRooms.size() < 3;
+    }
+
+    public MemberDTO validateMember(String uuid) {
+
+        MemberInviteHistory memberInviteHistory = memberInviteHistoryRepository.findByUuidWithMember(uuid)
+                .orElseThrow(InvalidInviteUuidException::new); // uuid가 없는 경우
+        memberInviteHistory.validateUuid();
+        return memberMapper.asDTO(memberInviteHistory.getMember());
     }
 }

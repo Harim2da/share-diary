@@ -12,7 +12,9 @@ import share_diary.diray.exception.member.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import share_diary.diray.exception.memberInviteHistory.AlreadyCheckedInviteException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
+import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
 
 @Getter
 public enum ErrorType {
@@ -32,7 +34,9 @@ public enum ErrorType {
 
     D001("D001", "존재하지 않는 일기방입니다.", DiaryRoomNotFoundException.class),
 
-    H001("H001", "유효하지 않은 초대 이력입니다.", InvalidInviteHistoryIdException.class)
+    H001("H001", "유효하지 않은 초대 이력입니다.", InvalidInviteHistoryIdException.class),
+    H002("H002", "유효하지 않은 초대 코드입니다.", InvalidInviteUuidException.class),
+    HOO3("H003", "이미 수락/거절한 초대 링크입니다.", AlreadyCheckedInviteException.class)
     ;
 
     private final String code;

@@ -40,4 +40,14 @@ public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositoryS
                         .fetchOne()
         );
     }
+
+    @Override
+    public Optional<MemberInviteHistory> findByUuidWithMember(String uuid) {
+        return Optional.ofNullable(
+                from(memberInviteHistory)
+                        .join(memberInviteHistory.member).fetchJoin()
+                        .where(memberInviteHistory.uuid.eq(uuid))
+                        .fetchOne()
+        );
+    }
 }
