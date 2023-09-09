@@ -2,6 +2,9 @@ package share_diary.diray.auth.oauth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -10,6 +13,9 @@ import share_diary.diray.auth.oauth.token.KakaoTokenResponse;
 import share_diary.diray.auth.oauth.userInfo.KakaoUserInfoResponse;
 import share_diary.diray.member.domain.Member;
 
+import java.nio.charset.Charset;
+
+@Component
 public class KakaoOAuthManager implements OAuthManager {
 
     @Value("${kakao.client.id}")
@@ -59,13 +65,15 @@ public class KakaoOAuthManager implements OAuthManager {
 
     @Override
     public String getAccessToken(String code) {
-        KakaoTokenRequest requestEntity = KakaoTokenRequest.builder()
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .code(code)
-                .redirectUri(redirectUri)
-                .grantType(grantType)
-                .build();
+
+        //x-www-formdata-urlencoded 는 MultiValueMap 을 사용해야 한다.
+        //https://okky.kr/questions/717506
+        MultiValueMap<String,String> requestEntity = new LinkedMultiValueMap<>();
+        requestEntity.add("client_id",clientId);
+        requestEntity.add("client_secret",clientSecret);
+        requestEntity.add("code",code);
+        requestEntity.add("redirect_uri",redirectUri);
+        requestEntity.add("grant_type",grantType);
 
         UriComponents uri = UriComponentsBuilder
                 .fromUriString(accessTokenUrl)
@@ -74,10 +82,9 @@ public class KakaoOAuthManager implements OAuthManager {
         //header 생성 : application/x-www-form-urlencoded;charset=utf-8
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("charset","utf-8");
 
         //HttpEntity 생성
-        HttpEntity<KakaoTokenRequest> entity = new HttpEntity<>(requestEntity,headers);
+        HttpEntity<Object> entity = new HttpEntity<>(requestEntity,headers);
 
         ResponseEntity<KakaoTokenResponse> responseEntity =
                 restTemplate.postForEntity(uri.toString(), entity, KakaoTokenResponse.class);
