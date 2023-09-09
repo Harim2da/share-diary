@@ -7,6 +7,10 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import share_diary.diray.diaryRoom.DiaryRoom;
+import share_diary.diray.exception.BaseException;
+import share_diary.diray.exception.memberInviteHistory.AlreadyCheckedInviteException;
+import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
+import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
 import share_diary.diray.member.domain.Member;
 
 import java.util.UUID;
@@ -63,5 +67,13 @@ public class MemberInviteHistory {
 
     public boolean canUpdateStatus() {
         return this.status == InviteAcceptStatus.INVITE || this.status == InviteAcceptStatus.RE_INVITE;
+    }
+
+    public void validateUuid() {
+        if (status.equals(InviteAcceptStatus.ACCEPT) || status.equals(InviteAcceptStatus.DENY)) {
+            throw new AlreadyCheckedInviteException();
+        } else if(status.equals(InviteAcceptStatus.RE_INVITE) || status.equals(InviteAcceptStatus.CANCEL)){
+            throw new InvalidInviteUuidException();
+        }
     }
 }

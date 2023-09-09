@@ -8,13 +8,13 @@ import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
+import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 import share_diary.diray.member.dto.response.MemberValidationEmailResponseDTO;
 import share_diary.diray.member.dto.response.MemberValidationLoginIdResponseDTO;
 
 import javax.validation.Valid;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -137,5 +137,16 @@ public class MemberController {
             @AuthenticationPrincipal LoginSession auth
     ) {
         return ResponseEntity.ok(memberService.validateCreateDiaryRoom(auth.getId()));
+    }
+
+    /**
+     * 멤버 초대 uuid 유효성 체크 API
+     * */
+    @GetMapping("/uuid/{uuid}")
+    @NoAuth
+    public ResponseEntity<MemberDTO> validateMember(
+            @PathVariable String uuid
+    ) {
+        return ResponseEntity.ok(memberService.validateMember(uuid));
     }
 }
