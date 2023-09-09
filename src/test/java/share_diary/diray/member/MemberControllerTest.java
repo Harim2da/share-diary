@@ -90,7 +90,7 @@ class MemberControllerTest {
         //expect
         mockMvc.perform(get(URL + "/me/id")
                         .param("email", email)
-                ).andExpect(jsonPath("$.memberId").value("jipdol2"))
+                ).andExpect(jsonPath("$.loginId").value("jipdol2"))
                 .andExpect(jsonPath("$.email").value("jipdol2@gmail.com"))
                 .andExpect(jsonPath("$.nickName").value("jipdol2"))
                 .andExpect(status().isOk())
