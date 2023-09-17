@@ -94,4 +94,13 @@ public class MemberInviteHistoryService {
             publisher.publishEvent(new InviteAcceptEvent(history.getMember(), history.getDiaryRoom()));
         }
     }
+
+    public void findByLoginUserInviteHistory(Long loginId){
+        List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
+
+        if(inviteHistories.isEmpty()){
+            //추후 custom exception 추가
+            throw new IllegalArgumentException();
+        }
+    }
 }

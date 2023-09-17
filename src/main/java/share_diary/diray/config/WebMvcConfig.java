@@ -5,8 +5,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import share_diary.diray.auth.AuthService;
-import share_diary.diray.infrastructure.AuthInterceptor;
-import share_diary.diray.infrastructure.AuthenticationPrincipalArgumentResolver;
+import share_diary.diray.auth.AuthInterceptor;
+import share_diary.diray.auth.AuthenticationPrincipalArgumentResolver;
 
 import java.util.List;
 

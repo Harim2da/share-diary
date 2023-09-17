@@ -2,6 +2,7 @@ package share_diary.diray.member.dto.request;
 
 import lombok.Getter;
 import lombok.ToString;
+import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.domain.Member;
 
 import javax.validation.constraints.NotEmpty;
@@ -39,6 +40,7 @@ public class MemberSignUpRequestDTO {
                 .email(signUpRequestDTO.getEmail())
                 .password(signUpRequestDTO.getPassword())
                 .nickName(signUpRequestDTO.getNickName())
+                .joinStatus(JoinStatus.USER)
                 .build();
     }
 }
