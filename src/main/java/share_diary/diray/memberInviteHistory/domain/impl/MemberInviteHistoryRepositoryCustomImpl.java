@@ -50,4 +50,16 @@ public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositoryS
                         .fetchOne()
         );
     }
+
+    /**
+     * 23/09/17
+     * 로그인 유저 알림 내역 조회
+     * @author jipdol2
+     */
+    @Override
+    public List<MemberInviteHistory> findAllByMemberInviteHistories(Long loginId) {
+        return from(memberInviteHistory)
+                .where(memberInviteHistory.member.id.eq(loginId))
+                .fetch();
+    }
 }

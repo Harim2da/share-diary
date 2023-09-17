@@ -10,4 +10,6 @@ public interface MemberInviteHistoryRepositoryCustom {
     Optional<MemberInviteHistory> findByIdWithMemberAndDiaryRoom(Long historyId);
 
     Optional<MemberInviteHistory> findByUuidWithMember(String uuid);
+
+    List<MemberInviteHistory> findAllByMemberInviteHistories(Long loginId);
 }
