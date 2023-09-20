@@ -13,6 +13,9 @@ import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
 import share_diary.diray.memberInviteHistory.MemberInviteRequest;
 import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
+import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,9 +60,9 @@ public class MemberInviteHistoryController {
     @GetMapping
     @NoAuth
     //TODO[jipdol2] : MemberInviteHistory Entity 에 '누가' 초대를 했는지 알 수 있도록 필드 추가 필요...
-    public ResponseEntity<HttpStatus> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
-        memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<List<MemberInviteHistoryDTO>> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
+        List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
+        return ResponseEntity.ok(byLoginUserInviteHistory);
     }
 
 }

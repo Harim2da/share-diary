@@ -36,6 +36,9 @@ public class MemberInviteHistory {
     @Enumerated(value = STRING)
     private InviteAcceptStatus status;
 
+    @Column
+    private String hostUserId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;

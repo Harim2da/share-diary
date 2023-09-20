@@ -18,7 +18,9 @@ import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
+import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
 import share_diary.diray.memberInviteHistory.event.InviteAcceptEvent;
+import share_diary.diray.memberInviteHistory.mapper.MemberInviteHistoryMapper;
 
 @Slf4j
 @Service
@@ -30,6 +32,7 @@ public class MemberInviteHistoryService {
     private final MemberInviteHistoryRepository memberInviteHistoryRepository;
     private final EmailSenderComponent emailSenderComponent;
     private final ApplicationEventPublisher publisher;
+    private final MemberInviteHistoryMapper inviteHistoryMapper;
 
     public void inviteRoomMembers(MemberInviteRequest request) {
         // 일기방 검증
@@ -95,12 +98,14 @@ public class MemberInviteHistoryService {
         }
     }
 
-    public void findByLoginUserInviteHistory(Long loginId){
+    public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId){
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
 
         if(inviteHistories.isEmpty()){
             //추후 custom exception 추가
             throw new IllegalArgumentException();
         }
+        List<MemberInviteHistoryDTO> dtoList = inviteHistoryMapper.asDTOList(inviteHistories);
+        return dtoList;
     }
 }

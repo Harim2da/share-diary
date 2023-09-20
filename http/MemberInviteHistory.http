@@ -1,0 +1,4 @@
+### 알림 조회 api
+
+GET http://localhost:8080/api/v0/member-invite-histories
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjk1MjIwMDg3LCJleHAiOjE2OTUyMjE4ODd9.bYS6n4xmJkvflLVZ11Uh-GG9WnrmNnuU1QvpKD_Ap-U
