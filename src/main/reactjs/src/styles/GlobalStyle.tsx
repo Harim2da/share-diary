@@ -33,6 +33,10 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	-webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
 }
 ol, ul {
 	list-style: none;
