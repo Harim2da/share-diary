@@ -14,7 +14,9 @@ function App() {
     <Router>
       <ResetRecoil />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Main />}>
+          <Route path="/:diaryRoom" element={<Main />} />
+        </Route>
         <Route path="/write" element={<WriteDiary />} />
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/login" element={<Login />} />
