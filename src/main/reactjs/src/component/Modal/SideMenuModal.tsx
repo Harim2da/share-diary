@@ -69,7 +69,11 @@ function SideMenuModal(props: IModalProps) {
   const CreateDiaryRoom = () => {
     // 일기방 3개 이하 체크 500 에러
     axios
-      .get("/api/member/diary-room/validation")
+      .get("/api/member/diary-room/validation", {
+        headers: {
+          Authorization: localStorage.getItem("login-token"),
+        },
+      })
       .then((res) => console.log(res, "ss"));
     // axios
     //   .post("/api/v0/diary-rooms", {

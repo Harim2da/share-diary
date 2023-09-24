@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -6,10 +6,52 @@ import {
   faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { loginState } from "../../atom/loginState";
+import { useRecoilValue } from "recoil";
+
+const dummy = [
+  {
+    id: 1,
+    name: "클라이밍 일기",
+    createBy: "만든사람",
+    modifyBy: "수정한 사람",
+  },
+  {
+    id: 2,
+    name: "농구 일기",
+    createBy: "만든사람2",
+    modifyBy: "수정한 사람2",
+  },
+];
+
+interface IDiaryList {
+  id: number;
+  name: string;
+  createBy: string;
+  modifyBy: string;
+}
 
 function MenuList(props: { isMenuOpen: boolean }) {
   const navigate = useNavigate();
+  const isLoggedIn = useRecoilValue(loginState);
+  const [diaryList, setDiaryList] = useState<IDiaryList[]>([]);
+  const { diaryRoom } = useParams();
+
+  useEffect(() => {
+    const data = () => {
+      axios
+        .get("/api/v0/diary-rooms", {
+          headers: { Authorization: localStorage.getItem("login-token") },
+        })
+        .then((res) => console.log(res));
+    };
+
+    if (isLoggedIn) {
+      data();
+    }
+  }, [isLoggedIn]);
 
   return (
     <ListWrap display={props.isMenuOpen ? "block" : "none"}>
@@ -22,13 +64,16 @@ function MenuList(props: { isMenuOpen: boolean }) {
         <FontAwesomeIcon icon={faMedal} />
       </div>
       <ul>
-        <li className="focus" onClick={() => navigate("/")}>
-          <FontAwesomeIcon icon={faRightLong} />
-          클라이밍 일기
-        </li>
-        <li>농구 일기</li>
-        <li>공부 일기</li>
-        <li>반려견 일기</li>
+        {dummy.map((i) => (
+          <li className={String(i.id) === diaryRoom ? "focus" : ""} key={i.id}>
+            <Link to={String(i.id)}>
+              {/* {String(i.id) === diaryRoom && (
+                <FontAwesomeIcon icon={faRightLong} />
+              )} */}
+              {i.name}
+            </Link>
+          </li>
+        ))}
       </ul>
     </ListWrap>
   );
@@ -74,6 +119,11 @@ const ListWrap = styled.div<{ display: string }>`
     padding: 9px 0;
     cursor: pointer;
 
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
     svg {
       padding: 0 6px;
     }
@@ -81,6 +131,10 @@ const ListWrap = styled.div<{ display: string }>`
     &.focus {
       font-weight: bold;
       background: #eeeeee;
+
+      a {
+        color: #8685ef;
+      }
     }
   }
 `;
