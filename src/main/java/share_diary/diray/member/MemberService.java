@@ -9,6 +9,7 @@ import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.common.email.CertificationNumber;
 import share_diary.diray.common.email.CertificationNumberRepository;
 import share_diary.diray.common.email.EmailSenderComponent;
+import share_diary.diray.common.mapper.GenericMapper;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.certification.CertificationNotFoundException;
 import share_diary.diray.exception.member.MemberNotFoundException;
@@ -21,6 +22,7 @@ import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.domain.Role;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
+import share_diary.diray.member.dto.response.MemberMyPageDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 import share_diary.diray.member.mapper.MemberMapper;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
@@ -39,12 +41,19 @@ import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepositor
 @Transactional
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailSenderComponent emailSenderComponent;
-    private final CertificationNumberRepository certificationNumberRepository;
-    private final MemberDiaryRoomRepository memberDiaryRoomRepository;
+    //mapper
     private final MemberMapper memberMapper;
+
+    //passwordEncoder
+    private final PasswordEncoder passwordEncoder;
+
+    //emailSend
+    private final EmailSenderComponent emailSenderComponent;
+
+    //repository
+    private final MemberRepository memberRepository;
+    private final MemberDiaryRoomRepository memberDiaryRoomRepository;
+    private final CertificationNumberRepository certificationNumberRepository;
     private final MemberInviteHistoryRepository memberInviteHistoryRepository;
 
     public void joinMember(MemberSignUpRequestDTO requestDTO){
@@ -71,11 +80,16 @@ public class MemberService {
         }
     }
 
+    public MemberMyPageDTO findMemberById(Long loginId){
+        Member member = memberRepository.findById(loginId)
+                .orElseThrow(MemberNotFoundException::new);
+        return MemberMyPageDTO.toDto(member);
+    }
+
     public MemberResponseDTO findMemberByEmail(String email){
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(MemberNotFoundException::new);
-        MemberResponseDTO memberResponseDTO = MemberResponseDTO.from(member);
-        return memberResponseDTO;
+        return MemberResponseDTO.from(member);
     }
 
     public void passwordCheck(LoginSession session, MemberPasswordRequestDTO requestDTO){

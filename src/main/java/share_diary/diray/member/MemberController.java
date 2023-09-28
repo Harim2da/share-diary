@@ -10,6 +10,7 @@ import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
+import share_diary.diray.member.dto.response.MemberMyPageDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 import share_diary.diray.member.dto.response.MemberValidationEmailResponseDTO;
 import share_diary.diray.member.dto.response.MemberValidationLoginIdResponseDTO;
@@ -148,5 +149,17 @@ public class MemberController {
             @PathVariable String uuid
     ) {
         return ResponseEntity.ok(memberService.validateMember(uuid));
+    }
+
+    /**
+     * 마이페이지 조회 API
+     * - 이메일, 닉네임
+     * - 추후 : 나의 랭킹, 그 동안 쓴 일기, 메달 획득 개수
+     */
+    @GetMapping("/myPage")
+    public MemberMyPageDTO findByMyInfo(
+            @AuthenticationPrincipal LoginSession session
+    ){
+        return memberService.findMemberById(session.getId());
     }
 }

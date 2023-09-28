@@ -13,6 +13,7 @@ import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.dto.request.*;
+import share_diary.diray.member.dto.response.MemberMyPageDTO;
 import share_diary.diray.member.dto.response.MemberResponseDTO;
 
 import javax.transaction.Transactional;
@@ -68,6 +69,25 @@ class MemberServiceTest {
         assertThat(findByMember.getLoginId()).isEqualTo(dto.getId());
         assertThat(findByMember.getEmail()).isEqualTo(dto.getEmail());
         assertThat(findByMember.getNickName()).isEqualTo(dto.getNickname());
+    }
+
+    @Test
+    @DisplayName("회원 아이디로 회원정보 조회")
+    void findByMemberToIdTest(){
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "password123",
+                "jipdol2");
+
+        //when
+        Member findByMember = memberRepository.save(member);
+        //then
+        MemberMyPageDTO myPageDTO = memberService.findMemberById(member.getId());
+
+        assertThat(myPageDTO.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(myPageDTO.getNickName()).isEqualTo(findByMember.getNickName());
     }
 
     @Test
