@@ -36,8 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberControllerTest {
 
     @Autowired
-    private MemberController memberController;
-    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;

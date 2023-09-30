@@ -2,6 +2,7 @@ package share_diary.diray.memberInviteHistory;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,10 +103,13 @@ public class MemberInviteHistoryService {
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
 
         if(inviteHistories.isEmpty()){
-            //추후 custom exception 추가
+            //TODO : 추후 custom exception 추가
             throw new IllegalArgumentException();
         }
-        List<MemberInviteHistoryDTO> dtoList = inviteHistoryMapper.asDTOList(inviteHistories);
-        return dtoList;
+
+        List<MemberInviteHistoryDTO> collect = inviteHistories.stream()
+                .map(entity -> inviteHistoryMapper.toDto(entity))
+                .collect(Collectors.toList());
+        return collect;
     }
 }
