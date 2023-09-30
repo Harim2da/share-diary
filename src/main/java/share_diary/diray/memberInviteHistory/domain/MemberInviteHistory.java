@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.memberInviteHistory.AlreadyCheckedInviteException;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Slf4j
-public class MemberInviteHistory {
+public class MemberInviteHistory extends BaseTimeEntity {
 
     @Id
     @Column

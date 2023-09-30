@@ -2,7 +2,6 @@ package share_diary.diray.memberInviteHistory.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +11,8 @@ import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
 import share_diary.diray.memberInviteHistory.MemberInviteRequest;
 import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
-import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
+import share_diary.diray.common.response.ResultList;
 
 import java.util.List;
 
@@ -60,9 +59,9 @@ public class MemberInviteHistoryController {
     @GetMapping
     @NoAuth
     //TODO[jipdol2] : MemberInviteHistory Entity 에 '누가' 초대를 했는지 알 수 있도록 필드 추가 필요...
-    public ResponseEntity<List<MemberInviteHistoryDTO>> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
+    public ResponseEntity<ResultList> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
         List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
-        return ResponseEntity.ok(byLoginUserInviteHistory);
+        return ResponseEntity.ok(new ResultList<>(byLoginUserInviteHistory));
     }
 
 }
