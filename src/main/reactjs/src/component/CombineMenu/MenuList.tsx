@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faMedal,
-  faRightLong,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faMedal } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { loginState } from "../../atom/loginState";
 import { useRecoilValue } from "recoil";
-
-const dummy = [
-  {
-    id: 1,
-    name: "클라이밍 일기",
-    createBy: "만든사람",
-    modifyBy: "수정한 사람",
-  },
-  {
-    id: 2,
-    name: "농구 일기",
-    createBy: "만든사람2",
-    modifyBy: "수정한 사람2",
-  },
-];
 
 interface IDiaryList {
   id: number;
@@ -45,12 +26,17 @@ function MenuList(props: { isMenuOpen: boolean }) {
         .get("/api/v0/diary-rooms", {
           headers: { Authorization: localStorage.getItem("login-token") },
         })
-        .then((res) => console.log(res));
+        .then((res) => {
+          if (res.status === 200) {
+            if (isLoggedIn) return setDiaryList(res.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error, "menuList");
+        });
     };
 
-    if (isLoggedIn) {
-      data();
-    }
+    data();
   }, [isLoggedIn]);
 
   return (
@@ -64,16 +50,18 @@ function MenuList(props: { isMenuOpen: boolean }) {
         <FontAwesomeIcon icon={faMedal} />
       </div>
       <ul>
-        {dummy.map((i) => (
-          <li className={String(i.id) === diaryRoom ? "focus" : ""} key={i.id}>
-            <Link to={String(i.id)}>
-              {/* {String(i.id) === diaryRoom && (
-                <FontAwesomeIcon icon={faRightLong} />
-              )} */}
-              {i.name}
-            </Link>
-          </li>
-        ))}
+        {diaryList.length !== 0 ? (
+          diaryList.map((i) => (
+            <li
+              className={String(i.id) === diaryRoom ? "focus" : ""}
+              key={i.id}
+            >
+              <Link to={String(i.id)}>{i.name}</Link>
+            </li>
+          ))
+        ) : (
+          <li>하루를 공유해 보아요</li>
+        )}
       </ul>
     </ListWrap>
   );
