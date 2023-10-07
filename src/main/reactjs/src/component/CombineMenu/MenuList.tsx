@@ -1,15 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faMedal,
-  faRightLong,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faMedal } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { loginState } from "../../atom/loginState";
+import { useRecoilValue } from "recoil";
+import { diaryUpdateState } from "../../atom/recoil";
+
+interface IDiaryList {
+  id: number;
+  name: string;
+  createBy: string;
+  modifyBy: string;
+}
 
 function MenuList(props: { isMenuOpen: boolean }) {
   const navigate = useNavigate();
+  const isLoggedIn = useRecoilValue(loginState);
+  const diaryUpdate = useRecoilValue(diaryUpdateState);
+  const [diaryList, setDiaryList] = useState<IDiaryList[]>([]);
+  const { diaryRoom } = useParams();
+
+  useEffect(() => {
+    const data = () => {
+      axios
+        .get("/api/v0/diary-rooms", {
+          headers: { Authorization: localStorage.getItem("login-token") },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            if (isLoggedIn) return setDiaryList(res.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error, "menuList");
+        });
+    };
+
+    data();
+  }, [isLoggedIn, diaryUpdate]);
 
   return (
     <ListWrap display={props.isMenuOpen ? "block" : "none"}>
@@ -22,13 +52,18 @@ function MenuList(props: { isMenuOpen: boolean }) {
         <FontAwesomeIcon icon={faMedal} />
       </div>
       <ul>
-        <li className="focus" onClick={() => navigate("/")}>
-          <FontAwesomeIcon icon={faRightLong} />
-          클라이밍 일기
-        </li>
-        <li>농구 일기</li>
-        <li>공부 일기</li>
-        <li>반려견 일기</li>
+        {diaryList.length !== 0 ? (
+          diaryList.map((i) => (
+            <li
+              className={String(i.id) === diaryRoom ? "focus" : ""}
+              key={i.id}
+            >
+              <Link to={`/room/${String(i.id)}`}>{i.name}</Link>
+            </li>
+          ))
+        ) : (
+          <li>하루를 공유해 보아요</li>
+        )}
       </ul>
     </ListWrap>
   );
@@ -74,6 +109,11 @@ const ListWrap = styled.div<{ display: string }>`
     padding: 9px 0;
     cursor: pointer;
 
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
     svg {
       padding: 0 6px;
     }
@@ -81,6 +121,10 @@ const ListWrap = styled.div<{ display: string }>`
     &.focus {
       font-weight: bold;
       background: #eeeeee;
+
+      a {
+        color: #8685ef;
+      }
     }
   }
 `;

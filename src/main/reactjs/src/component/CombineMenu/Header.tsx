@@ -6,8 +6,8 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { isMenuOpenState } from "../../atom/uiAtom";
-import { useRecoilState } from 'recoil';
-import { loginState } from '../../atom/loginState';
+import { useRecoilState } from "recoil";
+import { loginState } from "../../atom/loginState";
 import axios from "axios";
 
 function Header() {
@@ -15,19 +15,19 @@ function Header() {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   let navigate = useNavigate();
 
-//로그아웃
+  //로그아웃
   const handleLogout = () => {
     axios({
       method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: localStorage.getItem('login-token'),
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("login-token"),
       },
-      url: "/api/auth/logout"
-    }).then(response => {
+      url: "/api/auth/logout",
+    }).then((response) => {
       setIsLoggedIn(false);
-      console.log(response)
-    })
+      console.log(response);
+    });
   };
 
   return (
@@ -38,22 +38,29 @@ function Header() {
           onClick={() => setIsMenuOpen((prev) => !prev)}
           style={{ cursor: "pointer" }}
         />
-        <h1>잇츠 다이어리</h1>
+        <h1 onClick={() => navigate("/")}>잇츠 다이어리</h1>
       </div>
       <div>
-        {isLoggedIn ?
-          <><span className="bell">
-            <FontAwesomeIcon icon={faBell} />
-            <span className="red" />
-          </span>
-            <span
-              className="login-btn"
-              onClick={handleLogout}>로그아웃</span>
-          </> : <span
+        {isLoggedIn ? (
+          <>
+            <span className="bell">
+              <FontAwesomeIcon icon={faBell} />
+              <span className="red" />
+            </span>
+            <span className="login-btn" onClick={handleLogout}>
+              로그아웃
+            </span>
+          </>
+        ) : (
+          <span
             className="login-btn"
             onClick={() => {
               navigate("/login");
-            }}>로그인</span>}
+            }}
+          >
+            로그인
+          </span>
+        )}
       </div>
     </HeaderWrap>
   );
@@ -75,6 +82,7 @@ const HeaderWrap = styled.div`
     display: inline-block;
     padding-left: 1rem;
     margin-top: 1px;
+    cursor: pointer;
   }
 
   span {

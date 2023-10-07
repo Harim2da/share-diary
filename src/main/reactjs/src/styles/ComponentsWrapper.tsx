@@ -13,7 +13,7 @@ function ComponentsWrapper(props: { children: React.ReactNode }) {
       <CombineMenu />
       <div className="wrap-right">
         <Header />
-        {props.children}
+        <div className="cont">{props.children}</div>
       </div>
     </Wrap>
   );
@@ -33,6 +33,11 @@ const Wrap = styled.div<{ isMenuOpen: boolean }>`
     float: left;
     height: 100vh;
     position: relative;
+  }
+
+  .cont {
+    height: 100%;
+    overflow-y: scroll;
   }
 
   @media (max-width: 860px) {
