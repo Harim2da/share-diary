@@ -68,31 +68,38 @@ function SideMenuModal(props: IModalProps) {
   };
 
   const CreateDiaryRoom = () => {
-    // 일기방 3개 이하 체크 500 에러
     axios
       .get("/api/member/diary-room/validation", {
         headers: {
           Authorization: localStorage.getItem("login-token"),
         },
       })
-      .then((res) => console.log(res, "ss"));
-
-    // 위에 먼저 확인
-    // axios
-    //   .post("/api/v0/diary-rooms", {
-    //     name: form.getFieldValue("diaryName"),
-    //     emails: form.getFieldValue("diaryInvite"),
-    //   })
-    //   .then((res) => {
-    //     const message =
-    //       res.status === 200 ? "일기방이 생성되었습니다" : res.data.message;
-    //     alert(message);
-    //   })
-    //   .catch((error) => {
-    //     alert(error.response.data.error);
-    //     console.log(error, "일기방 생성하기");
-    //   })
-    //   .finally(() => handleCancel());
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data) {
+            axios
+              .post("/api/v0/diary-rooms", {
+                name: form.getFieldValue("diaryName"),
+                emails: form.getFieldValue("diaryInvite"),
+              })
+              .then((res) => {
+                const message =
+                  res.status === 200
+                    ? "일기방이 생성되었습니다"
+                    : res.data.message;
+                alert(message);
+              })
+              .catch((error) => {
+                alert(error.response.data.error);
+                console.log(error, "일기방 생성하기");
+              })
+              .finally(() => handleCancel());
+          } else {
+            alert("일기방은 최대 3개까지 생성 가능합니다.");
+          }
+        }
+      })
+      .catch((error) => console.log(error, "CreateDiaryRoom"));
   };
 
   const onClickBtn = () => {
