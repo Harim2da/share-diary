@@ -4,6 +4,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { loginState } from "../../atom/loginState";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const formItemLayout = {
   labelCol: {
@@ -33,6 +34,7 @@ function SideMenuModal(props: IModalProps) {
   const [fieldsLength, setFieldsLength] = useState(1);
   const [form] = Form.useForm();
   const isLoggedIn = useRecoilValue(loginState);
+  const { diaryRoom } = useParams();
 
   //작성 취소 시 form의 내용 초기화
   const handleCancel = () => {
@@ -48,8 +50,7 @@ function SideMenuModal(props: IModalProps) {
 
     axios
       .post("/api/v0/member-invite-histories", {
-        // 임시
-        diaryRoomId: 1,
+        diaryRoomId: Number(diaryRoom),
         emails: form.getFieldValue("diaryInvite"),
       })
       .then((res) => {
@@ -75,6 +76,8 @@ function SideMenuModal(props: IModalProps) {
         },
       })
       .then((res) => console.log(res, "ss"));
+
+    // 위에 먼저 확인
     // axios
     //   .post("/api/v0/diary-rooms", {
     //     name: form.getFieldValue("diaryName"),
@@ -93,11 +96,11 @@ function SideMenuModal(props: IModalProps) {
   };
 
   const onClickBtn = () => {
-    // if (!isLoggedIn) {
-    //   alert("로그인이 필요한 서비스입니다");
-    //   handleCancel();
-    //   return;
-    // }
+    if (!isLoggedIn) {
+      alert("로그인이 필요한 서비스입니다");
+      handleCancel();
+      return;
+    }
 
     if (props.isCreate) {
       // 일기방 만들기
