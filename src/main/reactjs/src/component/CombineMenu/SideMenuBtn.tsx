@@ -33,9 +33,10 @@ function SideMenuBtn(props: { isMenuOpen: boolean }) {
         >
           오늘의 일기쓰기
         </button>
-        {diaryRoom !== null && (
-          <button onClick={() => showModal(false)}>일기방 초대하기</button>
-        )}
+        {diaryRoom !== null ||
+          (diaryRoom !== undefined && (
+            <button onClick={() => showModal(false)}>일기방 초대하기</button>
+          ))}
         <button onClick={() => showModal(true)}>일기방 만들기</button>
       </BtnsWrap>
     </>
