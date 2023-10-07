@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Modal, Button, Checkbox, Form, Input } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { loginState } from "../../atom/loginState";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { diaryUpdateState } from "../../atom/recoil";
 
 const formItemLayout = {
   labelCol: {
@@ -34,6 +35,7 @@ function SideMenuModal(props: IModalProps) {
   const [fieldsLength, setFieldsLength] = useState(1);
   const [form] = Form.useForm();
   const isLoggedIn = useRecoilValue(loginState);
+  const setDiaryUpdate = useSetRecoilState(diaryUpdateState);
   const { diaryRoom } = useParams();
 
   //작성 취소 시 form의 내용 초기화
@@ -96,12 +98,18 @@ function SideMenuModal(props: IModalProps) {
                     ? "일기방이 생성되었습니다"
                     : res.data.message;
                 alert(message);
+                if (res.status === 200) {
+                  setDiaryUpdate(true);
+                }
               })
               .catch((error) => {
                 alert(error.response.data.error);
                 console.log(error, "일기방 생성하기");
               })
-              .finally(() => handleCancel());
+              .finally(() => {
+                setDiaryUpdate(false);
+                handleCancel();
+              });
           } else {
             alert("일기방은 최대 3개까지 생성 가능합니다.");
           }

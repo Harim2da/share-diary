@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { loginState } from "../../atom/loginState";
 import { useRecoilValue } from "recoil";
+import { diaryUpdateState } from "../../atom/recoil";
 
 interface IDiaryList {
   id: number;
@@ -17,6 +18,7 @@ interface IDiaryList {
 function MenuList(props: { isMenuOpen: boolean }) {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(loginState);
+  const diaryUpdate = useRecoilValue(diaryUpdateState);
   const [diaryList, setDiaryList] = useState<IDiaryList[]>([]);
   const { diaryRoom } = useParams();
 
@@ -37,7 +39,7 @@ function MenuList(props: { isMenuOpen: boolean }) {
     };
 
     data();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, diaryUpdate]);
 
   return (
     <ListWrap display={props.isMenuOpen ? "block" : "none"}>
