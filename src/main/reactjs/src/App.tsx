@@ -8,15 +8,15 @@ import SignUp from "./view/SignUp";
 import FindIdPw from "./view/FindIdPw";
 import ResetRecoil from "./component/Common/ResetRecoil";
 import MyPage from "./view/MyPage";
+import DiaryRoom from "./view/DiaryRoom";
 
 function App() {
   return (
     <Router>
       <ResetRecoil />
       <Routes>
-        <Route path="/" element={<Main />}>
-          <Route path="/:diaryRoom" element={<Main />} />
-        </Route>
+        <Route path="/" element={<Main />} />
+        <Route path="/room/:diaryRoom" element={<DiaryRoom />} />
         <Route path="/write" element={<WriteDiary />} />
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/login" element={<Login />} />

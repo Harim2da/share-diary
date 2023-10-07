@@ -56,7 +56,7 @@ function MenuList(props: { isMenuOpen: boolean }) {
               className={String(i.id) === diaryRoom ? "focus" : ""}
               key={i.id}
             >
-              <Link to={String(i.id)}>{i.name}</Link>
+              <Link to={`/room/${String(i.id)}`}>{i.name}</Link>
             </li>
           ))
         ) : (
