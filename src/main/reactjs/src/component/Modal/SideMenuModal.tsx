@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Checkbox, Form, Input } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { loginState } from "../../atom/loginState";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { diaryUpdateState } from "../../atom/recoil";
@@ -35,7 +35,7 @@ function SideMenuModal(props: IModalProps) {
   const [fieldsLength, setFieldsLength] = useState(1);
   const [form] = Form.useForm();
   const isLoggedIn = useRecoilValue(loginState);
-  const setDiaryUpdate = useSetRecoilState(diaryUpdateState);
+  const [diaryUpdate, setDiaryUpdate] = useRecoilState(diaryUpdateState);
   const { diaryRoom } = useParams();
 
   //작성 취소 시 form의 내용 초기화
@@ -97,10 +97,8 @@ function SideMenuModal(props: IModalProps) {
                   res.status === 200
                     ? "일기방이 생성되었습니다"
                     : res.data.message;
+                setDiaryUpdate(true);
                 alert(message);
-                if (res.status === 200) {
-                  setDiaryUpdate(true);
-                }
               })
               .catch((error) => {
                 alert(error.response.data.error);
@@ -141,7 +139,13 @@ function SideMenuModal(props: IModalProps) {
       open={props.visible}
       onCancel={handleCancel}
       footer={[
-        <Button key="submit" type="primary" onClick={onClickBtn}>
+        <Button
+          key="submit"
+          type="primary"
+          onClick={onClickBtn}
+          loading={diaryUpdate}
+          disabled={diaryUpdate}
+        >
           {props.isCreate ? "방만들기" : "초대하기"}
         </Button>,
       ]}
