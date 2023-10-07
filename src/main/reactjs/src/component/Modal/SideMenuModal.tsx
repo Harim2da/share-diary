@@ -78,10 +78,18 @@ function SideMenuModal(props: IModalProps) {
         if (res.status === 200) {
           if (res.data) {
             axios
-              .post("/api/v0/diary-rooms", {
-                name: form.getFieldValue("diaryName"),
-                emails: form.getFieldValue("diaryInvite"),
-              })
+              .post(
+                "/api/v0/diary-rooms",
+                {
+                  name: form.getFieldValue("diaryName"),
+                  emails: form.getFieldValue("diaryInvite"),
+                },
+                {
+                  headers: {
+                    Authorization: localStorage.getItem("login-token"),
+                  },
+                }
+              )
               .then((res) => {
                 const message =
                   res.status === 200
