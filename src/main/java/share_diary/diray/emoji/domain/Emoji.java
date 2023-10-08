@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
 import share_diary.diray.member.domain.Member;
 
@@ -13,9 +14,9 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "emoji")
-public class Emoji {
+public class Emoji extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private int angryEmojiNumber;
@@ -42,12 +43,12 @@ public class Emoji {
 
     //회원
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="member_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
     //일기
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="daily_diary_id")
+    @JoinColumn(name="daily_diary_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DailyDiary dailyDiary;
 
     @Builder

@@ -2,6 +2,7 @@ package share_diary.diray.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
@@ -30,9 +31,9 @@ public class MemberController {
      */
     @NoAuth
     @PostMapping("/signUp")
-    public void signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
+    public ResponseEntity<Void> signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
         memberService.joinMember(requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -40,9 +41,9 @@ public class MemberController {
      */
     @NoAuth
     @PostMapping("/signUp/social")
-    public void signUpSocial(@RequestBody MemberSignUpSocialRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
+    public ResponseEntity<Void> signUpSocial(@RequestBody MemberSignUpSocialRequestDTO requestDTO){
         memberService.joinMemberSocial(requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -51,7 +52,6 @@ public class MemberController {
     @NoAuth
     @GetMapping("/me/id")
     public MemberResponseDTO findMemberId(@RequestParam("email") String email){
-//        log.info("email={}",email);
         MemberResponseDTO memberResponseDTO = memberService.findMemberByEmail(email);
         return memberResponseDTO;
     }
@@ -60,17 +60,18 @@ public class MemberController {
      * 비밀번호 확인
      */
     @PostMapping("/me/pwd")
-    public void passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
-        memberService.passwordCheck(session,requestDTO);
+    public ResponseEntity<Void> passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
+        memberService.passwordCheck(session.getId(),requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 비밀번호 변경
      */
     @PostMapping("/pwd")
-    public void updatePassword(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordUpdateDTO requestDTO){
-        memberService.updatePassword(session,requestDTO);
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordUpdateDTO requestDTO){
+        memberService.updatePassword(session.getId(),requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -79,7 +80,6 @@ public class MemberController {
 //    @NoAuth
     @PatchMapping("/me")
     public MemberResponseDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
         if(!requestDTO.validationPassword()){
             throw new UpdatePasswordNotCoincide();
         }
@@ -92,7 +92,6 @@ public class MemberController {
     @NoAuth
     @PostMapping("/loginId/validation")
     public MemberValidationLoginIdResponseDTO validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
         return new MemberValidationLoginIdResponseDTO(memberService.validationMemberLoginId(requestDTO));
     }
 
@@ -101,7 +100,6 @@ public class MemberController {
      */
     @PostMapping("/email/validation")
     public MemberValidationEmailResponseDTO validationEmail(@RequestBody @Valid MemberEmailRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
         return new MemberValidationEmailResponseDTO(memberService.validationMemberEmail(requestDTO));
     }
 
@@ -116,17 +114,18 @@ public class MemberController {
      * 비밀번호 초기화 : 인증번호 email 로 전송
      */
     @PostMapping("/certification-number")
-    public void sendToCertificationNumber(@AuthenticationPrincipal LoginSession session){
+    public ResponseEntity<Void> sendToCertificationNumber(@AuthenticationPrincipal LoginSession session){
         memberService.sendCertificationNumber(session);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 비밀번호 초기화 : 입력된 인증번호 유효성 검증
      */
     @PostMapping("/validation-certification-number")
-    public void validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
-//        log.info("request={}", requestDTO.toString());
+    public ResponseEntity<Void> validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
         memberService.validationCertificationNumber(requestDTO.getCertificationNumber());
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -162,4 +161,5 @@ public class MemberController {
     ){
         return memberService.findMemberById(session.getId());
     }
+
 }

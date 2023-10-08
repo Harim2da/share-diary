@@ -92,8 +92,8 @@ public class MemberService {
         return MemberResponseDTO.from(member);
     }
 
-    public void passwordCheck(LoginSession session, MemberPasswordRequestDTO requestDTO){
-        Member member = memberRepository.findById(session.getId())
+    public void passwordCheck(Long loginId, MemberPasswordRequestDTO requestDTO){
+        Member member = memberRepository.findById(loginId)
                 .orElseThrow(MemberNotFoundException::new);
 
         String password = requestDTO.getPassword();
@@ -103,8 +103,8 @@ public class MemberService {
         }
     }
 
-    public void updatePassword(LoginSession session, MemberPasswordUpdateDTO requestDTO){
-        Member member = memberRepository.findById(session.getId())
+    public void updatePassword(Long loginId, MemberPasswordUpdateDTO requestDTO){
+        Member member = memberRepository.findById(loginId)
                 .orElseThrow(MemberNotFoundException::new);
 
         String password = requestDTO.getPassword();
@@ -175,7 +175,7 @@ public class MemberService {
         List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(memberId)
                 .stream()
                 .filter(md -> Role.HOST.equals(md.getRole()))
-                .collect(Collectors.toList());
+                .toList();
 
         return memberDiaryRooms.size() < 3;
     }

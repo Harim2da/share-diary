@@ -102,11 +102,6 @@ public class MemberInviteHistoryService {
     public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId){
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
 
-        if(inviteHistories.isEmpty()){
-            //TODO : 추후 custom exception 추가
-            throw new IllegalArgumentException();
-        }
-
         List<MemberInviteHistoryDTO> collect = inviteHistories.stream()
                 .map(entity -> inviteHistoryMapper.toDto(entity))
                 .collect(Collectors.toList());

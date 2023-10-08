@@ -22,7 +22,7 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
-    public static LoginRequestDTO from(String loginId, String password){
+    public static LoginRequestDTO of(String loginId, String password){
         return new LoginRequestDTO(loginId,password);
     }
 }
