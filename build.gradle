@@ -13,7 +13,7 @@ plugins {
 
 group = 'share_diary'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "11"
 
 configurations {
     compileOnly {
@@ -68,6 +68,11 @@ dependencies {
 
 //    sql logging
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
+//    rest assured
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+//    guava
+    implementation 'com.google.guava:guava:11.0.2'
 }
 
 ext['spring-security.version']='5.8.4'
@@ -149,3 +154,4 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 
+targetCompatibility = JavaVersion.VERSION_16

@@ -1,5 +1,6 @@
 package share_diary.diray.memberInviteHistory.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
