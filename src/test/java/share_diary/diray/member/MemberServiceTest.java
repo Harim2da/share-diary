@@ -126,7 +126,7 @@ class MemberServiceTest {
         MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password123");
 
         //then
-        memberService.passwordCheck(session,dto);
+        memberService.passwordCheck(session.getId(),dto);
     }
 
     @Test
@@ -145,7 +145,7 @@ class MemberServiceTest {
         MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password111");
 
         //expected
-        assertThatThrownBy(()-> memberService.passwordCheck(session,dto))
+        assertThatThrownBy(()-> memberService.passwordCheck(session.getId(),dto))
                 .isInstanceOf(PasswordNotCoincide.class);
     }
 
@@ -165,7 +165,7 @@ class MemberServiceTest {
         MemberPasswordUpdateDTO dto = new MemberPasswordUpdateDTO("password123","password111");
 
         //when
-        memberService.updatePassword(session,dto);
+        memberService.updatePassword(session.getId(),dto);
 
         //then
         Member findByMember = memberRepository.findById(saveMember.getId())
