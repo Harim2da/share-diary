@@ -30,6 +30,7 @@ public class MemberInviteHistoryController {
      * - 초대는 방장만 가능
      * - 재초대 횟수 제한 없음 (상대 거절 여부 무관)
      * - 수락, 거절 이력은 계속 보임
+     * @author harim
      * */
     @PostMapping
     @NoAuth // 수정 예정
@@ -41,6 +42,10 @@ public class MemberInviteHistoryController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     *
+     * @author harim
+     */
     @PatchMapping("/{historyId}")
     @NoAuth
     public ResponseEntity<HttpStatus> updateInviteHistory(

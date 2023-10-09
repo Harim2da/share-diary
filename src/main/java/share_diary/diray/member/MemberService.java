@@ -149,7 +149,6 @@ public class MemberService {
     }
 
     public void validationCertificationNumber(int certificationNumber) {
-
         certificationNumberRepository.findById(certificationNumber)
                 .orElseThrow(CertificationNotFoundException::new);
     }

@@ -21,9 +21,7 @@ public class AuthSteps {
                 .log().all().extract();
     }
 
-    public static LoginRequestDTO 회원로그인요청_생성(String name){
-        final String loginId = name;
-        final String password = "1234";
+    public static LoginRequestDTO 회원로그인요청_생성(String loginId,String password){
         return LoginRequestDTO.of(loginId, password);
     }
 

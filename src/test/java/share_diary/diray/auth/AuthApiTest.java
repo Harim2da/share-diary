@@ -17,8 +17,8 @@ class AuthApiTest extends ApiTest {
     @DisplayName("로그인 테스트")
     void loginTest() throws Exception {
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2"));
-        LoginRequestDTO request = AuthSteps.회원로그인요청_생성("jipdol2");
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        LoginRequestDTO request = AuthSteps.회원로그인요청_생성("jipdol2","1234");
 
         //expected
         final var response = AuthSteps.회원로그인요청(request);
@@ -32,8 +32,8 @@ class AuthApiTest extends ApiTest {
     @DisplayName("로그아웃 테스트")
     void logoutTest(){
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2"));
-        final var loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2"));
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        final var loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"));
         String token = loginResponse.body().jsonPath().getString("accessToken");
         String refreshToken = loginResponse.cookie("REFRESH_TOKEN");
 
