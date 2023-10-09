@@ -51,8 +51,19 @@ public class Emoji extends BaseTimeEntity {
     @JoinColumn(name="daily_diary_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DailyDiary dailyDiary;
 
-    @Builder
-    public Emoji(int angryEmojiNumber, int badEmojiNumber, int boringEmojiNumber, int goodEmojiNumber, int refreshEmojiNumber, int funEmojiNumber, int heartEmojiNumber, int thumbSupEmojiNumber, int partyPopperEmojiNumber, int cakeEmojiNumber, int devilEmojiNumber) {
+    public Emoji(
+            int angryEmojiNumber,
+            int badEmojiNumber,
+            int boringEmojiNumber,
+            int goodEmojiNumber,
+            int refreshEmojiNumber,
+            int funEmojiNumber,
+            int heartEmojiNumber,
+            int thumbSupEmojiNumber,
+            int partyPopperEmojiNumber,
+            int cakeEmojiNumber,
+            int devilEmojiNumber
+    ) {
         this.angryEmojiNumber = angryEmojiNumber;
         this.badEmojiNumber = badEmojiNumber;
         this.boringEmojiNumber = boringEmojiNumber;

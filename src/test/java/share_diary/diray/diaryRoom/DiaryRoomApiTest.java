@@ -18,8 +18,8 @@ public class DiaryRoomApiTest extends ApiTest {
     @DisplayName("일기방 생성 테스트")
     void createDiaryRoomTest(){
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2"));
-        final String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2"))
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        final String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"))
                 .body().jsonPath().getString("accessToken");
         DiaryRoomCreateRequest request = DiaryRoomSteps.일기방생성요청_생성();
 

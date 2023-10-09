@@ -32,8 +32,8 @@ class MemberInviteHistoryApiTest extends ApiTest {
     @DisplayName("일기방 초대")
     void inviteDiaryRoomToMember(){
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2"));
-        String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2"))
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"))
                 .body().jsonPath().getString("accessToken");
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
         MemberInviteRequest request = MemberInvitesHistorySteps.일기방초대요청_생성();
@@ -48,8 +48,8 @@ class MemberInviteHistoryApiTest extends ApiTest {
     @DisplayName("알림 내역 조회 API TEST - empty")
     void findByInviteHistoryEmptyTest() throws Exception {
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2"));
-        String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2"))
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"))
                 .body().jsonPath().getString("accessToken");
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
 
@@ -68,22 +68,27 @@ class MemberInviteHistoryApiTest extends ApiTest {
     @DisplayName("알림 내역 조회 API TEST")
     void findByInviteHistoryTest() throws Exception {
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2"));
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("somin2"));
 
-        var loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2"));
+        //회원가입
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("somin2","somin2@gmail.com","1234","소민2"));
+
+        //로그인
+        var loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"));
         String token = loginResponse
                 .body().jsonPath().getString("accessToken");
         String refreshToken = loginResponse
                 .cookie("REFRESH_TOKEN");
 
+        //일기방생성
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
-
+        //일기방 초대
         MemberInvitesHistorySteps.일기방초대요청(token,MemberInvitesHistorySteps.일기방초대요청_생성());
-
+        //로그아웃
         AuthSteps.로그아웃요청(token,refreshToken);
 
-        loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("somin2"));
+        //로그인
+        loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("somin2","1234"));
         token = loginResponse
                 .body().jsonPath().getString("accessToken");
 

@@ -19,11 +19,7 @@ public class MemberSteps {
                 .then().log().all().extract();
     }
 
-    public static MemberSignUpRequestDTO 회원가입요청_생성(String name) {
-        final String loginId = name;
-        final String email = name + "@gmail.com";
-        final String password = "1234";
-        final String nickName = name;
+    public static MemberSignUpRequestDTO 회원가입요청_생성(String loginId,String email,String password,String nickName) {
         return MemberSignUpRequestDTO.of(loginId, email, password, nickName);
     }
 }

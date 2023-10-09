@@ -35,7 +35,7 @@ public class DatabaseCleanup implements InitializingBean {
         final List<String> entityNames = entities.stream()
                 .filter(e -> isEntity(e) && !hasTableAnnotation(e))
                 .map(e -> CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, e.getName()))
-                .toList();
+                .collect(Collectors.toList());
 
         tableNames.addAll(entityNames);
     }

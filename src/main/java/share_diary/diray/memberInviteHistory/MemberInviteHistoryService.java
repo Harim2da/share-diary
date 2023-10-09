@@ -101,10 +101,6 @@ public class MemberInviteHistoryService {
 
     public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId){
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
-
-        List<MemberInviteHistoryDTO> collect = inviteHistories.stream()
-                .map(entity -> inviteHistoryMapper.toDto(entity))
-                .collect(Collectors.toList());
-        return collect;
+        return inviteHistoryMapper.asDTOList(inviteHistories);
     }
 }

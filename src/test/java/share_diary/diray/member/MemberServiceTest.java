@@ -2,8 +2,6 @@ package share_diary.diray.member;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import share_diary.diray.auth.domain.LoginSession;
@@ -12,9 +10,8 @@ import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
-import share_diary.diray.member.dto.response.MemberMyPageDTO;
-import share_diary.diray.member.dto.response.MemberResponseDTO;
 
 import javax.transaction.Transactional;
 
@@ -84,10 +81,10 @@ class MemberServiceTest {
         //when
         Member findByMember = memberRepository.save(member);
         //then
-        MemberMyPageDTO myPageDTO = memberService.findMemberById(member.getId());
+        MemberDTO response = memberService.findMemberById(member.getId());
 
-        assertThat(myPageDTO.getEmail()).isEqualTo(findByMember.getEmail());
-        assertThat(myPageDTO.getNickName()).isEqualTo(findByMember.getNickName());
+        assertThat(response.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(response.getNickName()).isEqualTo(findByMember.getNickName());
     }
 
     @Test
@@ -103,11 +100,11 @@ class MemberServiceTest {
         //when
         Member findByMember = memberRepository.save(member);
         //then
-        MemberResponseDTO memberByEmail = memberService.findMemberByEmail(member.getEmail());
+        MemberDTO response = memberService.findMemberByEmail(member.getEmail());
 
-        assertThat(memberByEmail.getLoginId()).isEqualTo(findByMember.getLoginId());
-        assertThat(memberByEmail.getEmail()).isEqualTo(findByMember.getEmail());
-        assertThat(memberByEmail.getNickName()).isEqualTo(findByMember.getNickName());
+        assertThat(response.getLoginId()).isEqualTo(findByMember.getLoginId());
+        assertThat(response.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(response.getNickName()).isEqualTo(findByMember.getNickName());
     }
 
     @Test
