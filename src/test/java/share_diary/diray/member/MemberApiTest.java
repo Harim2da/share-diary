@@ -77,6 +77,8 @@ class MemberApiTest extends ApiTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
+    //TODO : password change
+
     @Test
     @DisplayName("회원 수정 테스트")
     void updateMemberTest() throws Exception {
@@ -105,4 +107,9 @@ class MemberApiTest extends ApiTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("nickName")).isEqualTo("집순2");
     }
+
+
+    //TODO : loginId validation check
+
+    //TODO : email validation check
 }

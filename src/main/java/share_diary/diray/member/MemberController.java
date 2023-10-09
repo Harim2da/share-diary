@@ -2,7 +2,6 @@ package share_diary.diray.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
@@ -11,10 +10,6 @@ import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
-import share_diary.diray.member.dto.response.MemberMyPageDTO;
-import share_diary.diray.member.dto.response.MemberResponseDTO;
-import share_diary.diray.member.dto.response.MemberValidationEmailResponseDTO;
-import share_diary.diray.member.dto.response.MemberValidationLoginIdResponseDTO;
 
 import javax.validation.Valid;
 
@@ -51,9 +46,8 @@ public class MemberController {
      */
     @NoAuth
     @GetMapping("/me/id")
-    public MemberResponseDTO findMemberId(@RequestParam("email") String email){
-        MemberResponseDTO memberResponseDTO = memberService.findMemberByEmail(email);
-        return memberResponseDTO;
+    public MemberDTO findMemberId(@RequestParam("email") String email){
+        return memberService.findMemberByEmail(email);
     }
 
     /**
@@ -79,7 +73,7 @@ public class MemberController {
      */
 //    @NoAuth
     @PatchMapping("/me")
-    public MemberResponseDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
+    public MemberDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
         if(!requestDTO.validationPassword()){
             throw new UpdatePasswordNotCoincide();
         }
@@ -91,16 +85,16 @@ public class MemberController {
      */
     @NoAuth
     @PostMapping("/loginId/validation")
-    public MemberValidationLoginIdResponseDTO validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
-        return new MemberValidationLoginIdResponseDTO(memberService.validationMemberLoginId(requestDTO));
+    public ResponseEntity<Boolean> validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
+        return ResponseEntity.ok(memberService.validationMemberLoginId(requestDTO));
     }
 
     /**
      * 이메일 중복 체크
      */
     @PostMapping("/email/validation")
-    public MemberValidationEmailResponseDTO validationEmail(@RequestBody @Valid MemberEmailRequestDTO requestDTO){
-        return new MemberValidationEmailResponseDTO(memberService.validationMemberEmail(requestDTO));
+    public ResponseEntity<Boolean> validationEmail(@RequestBody @Valid MemberEmailRequestDTO requestDTO){
+        return ResponseEntity.ok(memberService.validationMemberEmail(requestDTO));
     }
 
     /**
@@ -156,7 +150,7 @@ public class MemberController {
      * - 추후 : 나의 랭킹, 그 동안 쓴 일기, 메달 획득 개수
      */
     @GetMapping("/myPage")
-    public MemberMyPageDTO findByMyInfo(
+    public MemberDTO findByMyInfo(
             @AuthenticationPrincipal LoginSession session
     ){
         return memberService.findMemberById(session.getId());
