@@ -175,7 +175,7 @@ public class MemberService {
         List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(memberId)
                 .stream()
                 .filter(md -> Role.HOST.equals(md.getRole()))
-                .toList();
+                .collect(Collectors.toList());
 
         return memberDiaryRooms.size() < 3;
     }
