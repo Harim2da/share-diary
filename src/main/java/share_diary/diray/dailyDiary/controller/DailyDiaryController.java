@@ -1,4 +1,4 @@
-package share_diary.diray.dailyDiary;
+package share_diary.diray.dailyDiary.controller;
 
 
 import lombok.RequiredArgsConstructor;
@@ -10,13 +10,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import share_diary.diray.auth.domain.AuthenticationPrincipal;
+import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.common.response.PagingResponse;
+import share_diary.diray.dailyDiary.DailyDiaryService;
+import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequest;
 
 @RestController
 @RequestMapping("/api/v0/daily-diaries")
 @RequiredArgsConstructor
 @Slf4j
 public class DailyDiaryController {
+
+    private final DailyDiaryService dailyDiaryService;
+
     /**
      * 1차 설계용
      * Response 및 request 작업 전
@@ -27,8 +34,11 @@ public class DailyDiaryController {
     }
 
     @PostMapping()
-    public void createDailyDiary() {
-
+    public void createDailyDiary(
+            @AuthenticationPrincipal LoginSession auth,
+            DailyDiaryCreateModifyRequest request
+    ) {
+        dailyDiaryService.createDailyDiary(auth.getId(), request);
     }
 
     @PatchMapping()
