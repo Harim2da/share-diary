@@ -37,7 +37,7 @@ public class MemberInviteHistory {
     private InviteAcceptStatus status;
 
     @Column
-    private String hostUserId;
+    private Long hostUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
@@ -48,19 +48,21 @@ public class MemberInviteHistory {
     private DiaryRoom diaryRoom;
 
 
-    public static MemberInviteHistory of(Member member, DiaryRoom diaryRoom, String email) {
+    public static MemberInviteHistory of(Member member, DiaryRoom diaryRoom, String email, Long hostUserId) {
         MemberInviteHistory instance = new MemberInviteHistory();
         instance.uuid = UUID.randomUUID().toString();
         instance.email = email;
         instance.status = InviteAcceptStatus.INVITE;
         instance.member = member;
         instance.diaryRoom = diaryRoom;
+        instance.hostUserId = hostUserId;
         return instance;
     }
 
     public static MemberInviteHistory reInvite(Member member, MemberInviteHistory beforeHistory) {
         beforeHistory.status = InviteAcceptStatus.RE_INVITE;
-        return of(member, beforeHistory.getDiaryRoom(), member.getEmail());
+        return of(member, beforeHistory.getDiaryRoom(), member.getEmail(),
+                beforeHistory.getHostUserId());
     }
 
     public MemberInviteHistory updateAcceptStatus(InviteAcceptStatus status) {

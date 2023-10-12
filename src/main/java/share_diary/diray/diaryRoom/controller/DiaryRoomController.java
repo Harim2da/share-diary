@@ -26,7 +26,6 @@ public class DiaryRoomController {
 
     /**
      * 일기방 생성
-     * - 토큰에서 생성하는 사람 정보 뽑아내는 방법 알아보기
      * - 일기방 만들 수 있는지 여부는 member controller에서 뽑아내기
      * */
     @PostMapping

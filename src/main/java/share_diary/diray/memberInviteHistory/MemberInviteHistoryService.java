@@ -12,9 +12,12 @@ import share_diary.diray.common.email.EmailSenderComponent;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.diaryRoom.DiaryRoomRepository;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
+import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
+import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
@@ -27,17 +30,23 @@ import share_diary.diray.memberInviteHistory.mapper.MemberInviteHistoryMapper;
 @RequiredArgsConstructor
 @Transactional
 public class MemberInviteHistoryService {
-    private final DiaryRoomRepository diaryRoomRepository;
     private final MemberRepository memberRepository;
     private final MemberInviteHistoryRepository memberInviteHistoryRepository;
     private final EmailSenderComponent emailSenderComponent;
     private final ApplicationEventPublisher publisher;
     private final MemberInviteHistoryMapper inviteHistoryMapper;
+    private final MemberDiaryRoomRepository memberDiaryRoomRepository;
 
     public void inviteRoomMembers(MemberInviteRequest request) {
-        // 일기방 검증
-        DiaryRoom diaryRoom = diaryRoomRepository.findById(request.getDiaryRoomId())
+        // 일기방 검증 및 host 체크
+        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(request.getHostId(),
+                request.getDiaryRoomId())
+                .stream()
+                .filter(m -> m.getRole().isHost())
+                .findFirst()
                 .orElseThrow(DiaryRoomNotFoundException::new);
+
+        DiaryRoom diaryRoom = memberDiaryRoom.getDiaryRoom();
 
         // 멤버에서 이메일로 조회해오기 -> 일치하는 멤버가 없으면 임시 회원가입 필요
         List<Member> members = memberRepository.findAllByEmail(request.getEmails());
@@ -65,24 +74,25 @@ public class MemberInviteHistoryService {
 
                 } else {
                     // 메일 최초 발송
-                    thisInviteHistory = MemberInviteHistory.of(member, diaryRoom, email);
+                    thisInviteHistory = MemberInviteHistory.of(member, diaryRoom, email, request.getHostId());
                 }
 
             } else {
                 // 비회원인 경우, 계정 만든 후 초대 진행
                 Member newMember = Member.ofCreateInviteMember(email);
                 memberRepository.save(newMember);
-                thisInviteHistory = MemberInviteHistory.of(newMember, diaryRoom, email);
+                thisInviteHistory = MemberInviteHistory.of(newMember, diaryRoom, email, request.getHostId());
             }
             memberInviteHistoryRepository.save(thisInviteHistory);
 
-            // TODO : {누가} diaryRoom.getName() 으로 초대했습니다. 보내도록 수정 필요
+            Member host = memberRepository.findById(request.getHostId())
+                            .orElseThrow(MemberNotFoundException::new);
             // 메일 발송
-            emailSenderComponent.sendMemberInviteMail(diaryRoom.getName(), email,
+            emailSenderComponent.sendMemberInviteMail(diaryRoom.getName(), host.getNickName(), email,
                             thisInviteHistory.getUuid())
                     .addCallback(result -> {
-                        log.info("email : {} 로 메일 발송 성공", email);
-                    }, ex -> log.info("email : {}로 메일 발송 실패", email));
+                        log.info("일기방 {} 로 email {} 초대 메일 발송 성공", diaryRoom.getName(), email);
+                    }, ex -> log.info("일기방 {} 로 email {} 초대 메일 발송 실패", diaryRoom.getName(), email));
         }
     }
 
