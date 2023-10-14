@@ -1,6 +1,9 @@
 package share_diary.diray.memberInviteHistory;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +31,20 @@ class MemberInviteHistoryApiTest extends ApiTest {
 
     private static final String URL = "/api/v0/member-invite-histories";
 
+    ExtractableResponse<Response> loginResponse = null;
+
+    @BeforeEach
+    void init(){
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
+        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("somin2","somin2@gmail.com","1234","소민2"));
+        loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"));
+    }
+
     @Test
     @DisplayName("일기방 초대")
     void inviteDiaryRoomToMember(){
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
-        String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"))
+        String token = loginResponse
                 .body().jsonPath().getString("accessToken");
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
         MemberInviteRequest request = MemberInvitesHistorySteps.일기방초대요청_생성();
@@ -48,8 +59,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
     @DisplayName("알림 내역 조회 API TEST - empty")
     void findByInviteHistoryEmptyTest() throws Exception {
         //given
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
-        String token = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"))
+        String token = loginResponse
                 .body().jsonPath().getString("accessToken");
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
 
@@ -68,26 +78,20 @@ class MemberInviteHistoryApiTest extends ApiTest {
     @DisplayName("알림 내역 조회 API TEST")
     void findByInviteHistoryTest() throws Exception {
         //given
-
-        //회원가입
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
-        MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("somin2","somin2@gmail.com","1234","소민2"));
-
-        //로그인
-        var loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("jipdol2","1234"));
+            //(jipdol2)로그인
         String token = loginResponse
                 .body().jsonPath().getString("accessToken");
         String refreshToken = loginResponse
                 .cookie("REFRESH_TOKEN");
 
-        //일기방생성
+            //일기방생성
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
-        //일기방 초대
+            //일기방 초대
         MemberInvitesHistorySteps.일기방초대요청(token,MemberInvitesHistorySteps.일기방초대요청_생성());
-        //로그아웃
+            //(jipdol2)로그아웃
         AuthSteps.로그아웃요청(token,refreshToken);
 
-        //로그인
+            //(somin)로그인
         loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("somin2","1234"));
         token = loginResponse
                 .body().jsonPath().getString("accessToken");
