@@ -1,7 +1,6 @@
 package share_diary.diray.emoji.domain;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
@@ -19,17 +18,8 @@ public class Emoji extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int angryEmojiNumber;
-
-    private int badEmojiNumber;
-
-    private int boringEmojiNumber;
-
-    private int goodEmojiNumber;
-
-    private int refreshEmojiNumber;
-
-    private int funEmojiNumber;
+    @Enumerated(value = EnumType.STRING)
+    MyEmoji myEmoji;
 
     private int heartEmojiNumber;
 
@@ -52,29 +42,23 @@ public class Emoji extends BaseTimeEntity {
     private DailyDiary dailyDiary;
 
     public Emoji(
-            int angryEmojiNumber,
-            int badEmojiNumber,
-            int boringEmojiNumber,
-            int goodEmojiNumber,
-            int refreshEmojiNumber,
-            int funEmojiNumber,
+            MyEmoji emoji,
             int heartEmojiNumber,
             int thumbSupEmojiNumber,
             int partyPopperEmojiNumber,
             int cakeEmojiNumber,
             int devilEmojiNumber
     ) {
-        this.angryEmojiNumber = angryEmojiNumber;
-        this.badEmojiNumber = badEmojiNumber;
-        this.boringEmojiNumber = boringEmojiNumber;
-        this.goodEmojiNumber = goodEmojiNumber;
-        this.refreshEmojiNumber = refreshEmojiNumber;
-        this.funEmojiNumber = funEmojiNumber;
+        this.myEmoji = emoji;
         this.heartEmojiNumber = heartEmojiNumber;
         this.thumbSupEmojiNumber = thumbSupEmojiNumber;
         this.partyPopperEmojiNumber = partyPopperEmojiNumber;
         this.cakeEmojiNumber = cakeEmojiNumber;
         this.devilEmojiNumber = devilEmojiNumber;
+    }
+
+    public static Emoji of(MyEmoji myEmoji,int heart,int thumb,int party,int cake,int devil){
+        return new Emoji(myEmoji,heart,thumb,party,cake,devil);
     }
 
     //연관관계 편의메소드
