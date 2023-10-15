@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "loginId" : "jipdol2",
-  "email" : "gch03915@naver.com",
+  "email" : "jipdol2@gmail.com",
   "password" : "1234",
   "nickName" : "jipdol2"
 }
@@ -35,7 +35,7 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2
 ### 회원 수정
 PATCH http://localhost:8080/api/member/me
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2ODU2MjExMjh9.LwDHZ2nBL71OpHfsrNtrLsRwQhaUNl5MGlHQZD7xgH4
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjk3MzUyMzMzLCJleHAiOjE2OTczNTQxMzN9.tDGx-nA4hFiNz41TLgbKBx8mHHue1iCnUd7r5zW2f6k
 
 {
   "email" : "jipdol2@gmail.com",
