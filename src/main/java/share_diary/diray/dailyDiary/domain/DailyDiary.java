@@ -28,10 +28,11 @@ public class DailyDiary extends BaseTimeEntity {
      * MyEmoji enum type 선언 (jipdol2)
      */
     @Enumerated(value = EnumType.STRING)
-    MyEmoji myEmoji;
+    private MyEmoji feeling;
 
     // 삭제 상태 관리
     @Column
+    @Enumerated(value = EnumType.STRING)
     private DiaryStatus status;
 
     @Column
@@ -55,10 +56,11 @@ public class DailyDiary extends BaseTimeEntity {
     @OneToMany(mappedBy = "dailyDiary")
     private Set<Emoji> emoji = new HashSet<>();
 
-    public static DailyDiary of(String content, DiaryRoom diaryRoom, String createBy) {
+    public static DailyDiary of(String content, DiaryRoom diaryRoom, MyEmoji feeling, String createBy) {
         DailyDiary instance = new DailyDiary();
         instance.content = content;
         instance.status = DiaryStatus.SHOW;
+        instance.feeling = feeling;
         instance.diaryRoom = diaryRoom;
         instance.createBy = createBy;
         instance.modifyBy = createBy;

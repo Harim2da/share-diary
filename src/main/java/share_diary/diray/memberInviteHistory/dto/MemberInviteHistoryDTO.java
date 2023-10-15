@@ -18,7 +18,7 @@ public class MemberInviteHistoryDTO {
     private Long id;
     private String uuid;
     private String email;
-    private String hostUserId;
+    private Long hostUserId;
     private InviteAcceptStatus status;
     private Long memberId;
     private Long diaryRoomId;
