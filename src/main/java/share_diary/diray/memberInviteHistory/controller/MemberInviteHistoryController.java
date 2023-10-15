@@ -33,11 +33,12 @@ public class MemberInviteHistoryController {
      * @author harim
      * */
     @PostMapping
-    @NoAuth // 수정 예정
     public ResponseEntity<HttpStatus> inviteRoomMembers(
-            @RequestBody MemberInviteRequest request
+            @RequestBody MemberInviteRequest request,
+            @AuthenticationPrincipal LoginSession session
     ) {
-        //TODO [하림] : 초대하는 사람이 방장인지 체크하는 로직 필요 (프론트와 논의), 보낸 사람 이름도 뽑아낼 방법 확인 (논의)
+        // 초대하는 사람 본인 Id 추가
+        request.updateHostId(session.getId());
         memberInviteHistoryService.inviteRoomMembers(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }

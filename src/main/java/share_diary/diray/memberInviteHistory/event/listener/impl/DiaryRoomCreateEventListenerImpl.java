@@ -17,6 +17,6 @@ public class DiaryRoomCreateEventListenerImpl implements DiaryRoomCreateEventLis
 
     @Override
     public void handleDiaryRoomCreateEvent(DiaryRoomCreateEvent event) {
-        memberInviteHistoryService.inviteRoomMembers(MemberInviteRequest.of(event.getDiaryRoomId(), event.getEmails()));
+        memberInviteHistoryService.inviteRoomMembers(MemberInviteRequest.of(event.getDiaryRoomId(), event.getEmails(), event.getHost().getId()));
     }
 }
