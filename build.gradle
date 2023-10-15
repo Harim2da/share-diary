@@ -68,6 +68,11 @@ dependencies {
 
 //    sql logging
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
+//    rest assured
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+//    guava
+    implementation 'com.google.guava:guava:11.0.2'
 }
 
 ext['spring-security.version']='5.8.4'
@@ -148,4 +153,3 @@ configurations {
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
-

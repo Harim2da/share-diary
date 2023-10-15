@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.memberInviteHistory.AlreadyCheckedInviteException;
@@ -19,11 +20,11 @@ import java.util.UUID;
 @Entity
 @Getter
 @Slf4j
-public class MemberInviteHistory {
+public class MemberInviteHistory extends BaseTimeEntity {
 
     @Id
     @Column
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -36,28 +37,33 @@ public class MemberInviteHistory {
     @Enumerated(value = STRING)
     private InviteAcceptStatus status;
 
+    @Column
+    private Long hostUserId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", referencedColumnName = "id")
+    @JoinColumn(name = "member_id", referencedColumnName = "id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diary_room_id", referencedColumnName = "id")
+    @JoinColumn(name = "diary_room_id", referencedColumnName = "id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DiaryRoom diaryRoom;
 
 
-    public static MemberInviteHistory of(Member member, DiaryRoom diaryRoom, String email) {
+    public static MemberInviteHistory of(Member member, DiaryRoom diaryRoom, String email, Long hostUserId) {
         MemberInviteHistory instance = new MemberInviteHistory();
         instance.uuid = UUID.randomUUID().toString();
         instance.email = email;
         instance.status = InviteAcceptStatus.INVITE;
         instance.member = member;
         instance.diaryRoom = diaryRoom;
+        instance.hostUserId = hostUserId;
         return instance;
     }
 
     public static MemberInviteHistory reInvite(Member member, MemberInviteHistory beforeHistory) {
         beforeHistory.status = InviteAcceptStatus.RE_INVITE;
-        return of(member, beforeHistory.getDiaryRoom(), member.getEmail());
+        return of(member, beforeHistory.getDiaryRoom(), member.getEmail(),
+                beforeHistory.getHostUserId());
     }
 
     public MemberInviteHistory updateAcceptStatus(InviteAcceptStatus status) {

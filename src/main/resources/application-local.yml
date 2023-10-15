@@ -39,8 +39,8 @@ spring:
 #    host: localhost
 #    port: 6379
 
-logging.level:
-  org.hibernate.SQL: debug
+#logging.level:
+#  org.hibernate.SQL: debug
 # org.hibernate.type: trace
 
 decorator:

@@ -51,7 +51,7 @@ public class DiaryRoomService {
 
         // 만들어지고 나면 이벤트 처리로 멤버 초대 메일 발송하도록 하기
         if(!CollectionUtils.isEmpty(request.getEmails())) {
-            publisher.publishEvent(new DiaryRoomCreateEvent(diaryRoom.getId(), request.getEmails()));
+            publisher.publishEvent(new DiaryRoomCreateEvent(diaryRoom.getId(), member, request.getEmails()));
         }
     }
 

@@ -1,5 +1,6 @@
 package share_diary.diray.common;
 
+import lombok.Getter;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,18 +12,19 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
+@Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseTimeEntity {
 
     @CreatedDate
-    protected LocalDateTime createDate;
+    private LocalDateTime createDate;
 
     @CreatedBy
     protected String createBy;
 
     @LastModifiedDate
-    protected LocalDateTime lastModifyDate;
+    private LocalDateTime lastModifyDate;
 
     @LastModifiedBy
     protected String lastModifiedBy;

@@ -10,9 +10,6 @@ import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
-import share_diary.diray.member.dto.response.MemberResponseDTO;
-import share_diary.diray.member.dto.response.MemberValidationEmailResponseDTO;
-import share_diary.diray.member.dto.response.MemberValidationLoginIdResponseDTO;
 
 import javax.validation.Valid;
 
@@ -26,59 +23,62 @@ public class MemberController {
 
     /**
      * 회원가입
+     * @author jipdol2
      */
     @NoAuth
     @PostMapping("/signUp")
-    public void signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
+    public ResponseEntity<Void> signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
         memberService.joinMember(requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 소셜 로그인 시도 - 회원가입
+     * @author jipdol2
      */
     @NoAuth
     @PostMapping("/signUp/social")
-    public void signUpSocial(@RequestBody MemberSignUpSocialRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
+    public ResponseEntity<Void> signUpSocial(@RequestBody MemberSignUpSocialRequestDTO requestDTO){
         memberService.joinMemberSocial(requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 아이디 찾기
+     * @author jipdol2
      */
     @NoAuth
     @GetMapping("/me/id")
-    public MemberResponseDTO findMemberId(@RequestParam("email") String email){
-//        log.info("email={}",email);
-        MemberResponseDTO memberResponseDTO = memberService.findMemberByEmail(email);
-        return memberResponseDTO;
+    public MemberDTO findMemberId(@RequestParam("email") String email){
+        return memberService.findMemberByEmail(email);
     }
 
     /**
      * 비밀번호 확인
+     * @author jipdol2
      */
     @PostMapping("/me/pwd")
-    public void passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
-        memberService.passwordCheck(session,requestDTO);
+    public ResponseEntity<Void> passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
+        memberService.passwordCheck(session.getId(),requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 비밀번호 변경
+     * @author jipdol2
      */
     @PostMapping("/pwd")
-    public void updatePassword(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordUpdateDTO requestDTO){
-        memberService.updatePassword(session,requestDTO);
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordUpdateDTO requestDTO){
+        memberService.updatePassword(session.getId(),requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 회원 수정
+     * @author jipdol2
      */
-//    @NoAuth
     @PatchMapping("/me")
-    public MemberResponseDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
+    public MemberDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
         if(!requestDTO.validationPassword()){
             throw new UpdatePasswordNotCoincide();
         }
@@ -87,21 +87,22 @@ public class MemberController {
 
     /**
      * 아이디 중복 체크
+     * @author jipdol2
      */
     @NoAuth
     @PostMapping("/loginId/validation")
-    public MemberValidationLoginIdResponseDTO validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
-        return new MemberValidationLoginIdResponseDTO(memberService.validationMemberLoginId(requestDTO));
+    public ResponseEntity<Boolean> validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
+        return ResponseEntity.ok(memberService.validationMemberLoginId(requestDTO));
     }
 
     /**
      * 이메일 중복 체크
+     * @author jipdol2
      */
+    @NoAuth
     @PostMapping("/email/validation")
-    public MemberValidationEmailResponseDTO validationEmail(@RequestBody @Valid MemberEmailRequestDTO requestDTO){
-//        log.info("requestDTO={}",requestDTO.toString());
-        return new MemberValidationEmailResponseDTO(memberService.validationMemberEmail(requestDTO));
+    public ResponseEntity<Boolean> validationEmail(@RequestBody @Valid MemberEmailRequestDTO requestDTO){
+        return ResponseEntity.ok(memberService.validationMemberEmail(requestDTO));
     }
 
     /**
@@ -113,24 +114,28 @@ public class MemberController {
 
     /**
      * 비밀번호 초기화 : 인증번호 email 로 전송
+     * @author jipdol2
      */
     @PostMapping("/certification-number")
-    public void sendToCertificationNumber(@AuthenticationPrincipal LoginSession session){
+    public ResponseEntity<Void> sendToCertificationNumber(@AuthenticationPrincipal LoginSession session){
         memberService.sendCertificationNumber(session);
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 비밀번호 초기화 : 입력된 인증번호 유효성 검증
+     * @author jipdol2
      */
     @PostMapping("/validation-certification-number")
-    public void validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
-//        log.info("request={}", requestDTO.toString());
+    public ResponseEntity<Void> validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
         memberService.validationCertificationNumber(requestDTO.getCertificationNumber());
+        return ResponseEntity.ok().build();
     }
 
     /**
      * 일기방 만들기 전, 해당 계정이 신규 일기방을 만들 수 있는지
      * 체크 API
+     * @author harim
      * */
     @GetMapping("/diary-room/validation")
     public ResponseEntity<Boolean> validateCreateDiaryRoom(
@@ -141,6 +146,7 @@ public class MemberController {
 
     /**
      * 멤버 초대 uuid 유효성 체크 API
+     * @author harim
      * */
     @GetMapping("/uuid/{uuid}")
     @NoAuth
@@ -149,4 +155,18 @@ public class MemberController {
     ) {
         return ResponseEntity.ok(memberService.validateMember(uuid));
     }
+
+    /**
+     * 마이페이지 조회 API
+     * - 이메일, 닉네임
+     * - 추후 : 나의 랭킹, 그 동안 쓴 일기, 메달 획득 개수
+     * @author jipdol2
+     */
+    @GetMapping("/myPage")
+    public MemberDTO findByMyInfo(
+            @AuthenticationPrincipal LoginSession session
+    ){
+        return memberService.findMemberById(session.getId());
+    }
+
 }

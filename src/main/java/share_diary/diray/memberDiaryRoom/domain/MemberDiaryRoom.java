@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "member_diary_room")
 public class MemberDiaryRoom {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -23,12 +23,12 @@ public class MemberDiaryRoom {
 
     //회원
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
     //일기방
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diary_room_id", referencedColumnName = "id")
+    @JoinColumn(name = "diary_room_id", referencedColumnName = "id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DiaryRoom diaryRoom;
 
     public MemberDiaryRoom(Role role) {

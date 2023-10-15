@@ -24,7 +24,7 @@ import java.util.Set;
 @Table(name = "member")
 public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String loginId;

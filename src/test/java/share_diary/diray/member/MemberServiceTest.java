@@ -2,8 +2,6 @@ package share_diary.diray.member;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import share_diary.diray.auth.domain.LoginSession;
@@ -12,8 +10,8 @@ import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
-import share_diary.diray.member.dto.response.MemberResponseDTO;
 
 import javax.transaction.Transactional;
 
@@ -71,6 +69,25 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원 아이디로 회원정보 조회")
+    void findByMemberToIdTest(){
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "password123",
+                "jipdol2");
+
+        //when
+        Member findByMember = memberRepository.save(member);
+        //then
+        MemberDTO response = memberService.findMemberById(member.getId());
+
+        assertThat(response.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(response.getNickName()).isEqualTo(findByMember.getNickName());
+    }
+
+    @Test
     @DisplayName("이메일로 회원정보 조회")
     void findByMemberToEmailTest(){
         //given
@@ -83,11 +100,11 @@ class MemberServiceTest {
         //when
         Member findByMember = memberRepository.save(member);
         //then
-        MemberResponseDTO memberByEmail = memberService.findMemberByEmail(member.getEmail());
+        MemberDTO response = memberService.findMemberByEmail(member.getEmail());
 
-        assertThat(memberByEmail.getLoginId()).isEqualTo(findByMember.getLoginId());
-        assertThat(memberByEmail.getEmail()).isEqualTo(findByMember.getEmail());
-        assertThat(memberByEmail.getNickName()).isEqualTo(findByMember.getNickName());
+        assertThat(response.getLoginId()).isEqualTo(findByMember.getLoginId());
+        assertThat(response.getEmail()).isEqualTo(findByMember.getEmail());
+        assertThat(response.getNickName()).isEqualTo(findByMember.getNickName());
     }
 
     @Test
@@ -106,7 +123,7 @@ class MemberServiceTest {
         MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password123");
 
         //then
-        memberService.passwordCheck(session,dto);
+        memberService.passwordCheck(session.getId(),dto);
     }
 
     @Test
@@ -125,7 +142,7 @@ class MemberServiceTest {
         MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password111");
 
         //expected
-        assertThatThrownBy(()-> memberService.passwordCheck(session,dto))
+        assertThatThrownBy(()-> memberService.passwordCheck(session.getId(),dto))
                 .isInstanceOf(PasswordNotCoincide.class);
     }
 
@@ -145,7 +162,7 @@ class MemberServiceTest {
         MemberPasswordUpdateDTO dto = new MemberPasswordUpdateDTO("password123","password111");
 
         //when
-        memberService.updatePassword(session,dto);
+        memberService.updatePassword(session.getId(),dto);
 
         //then
         Member findByMember = memberRepository.findById(saveMember.getId())

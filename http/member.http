@@ -60,3 +60,8 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2
 POST localhost:8080/api/member/certification-number
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjkxOTA3NzI4LCJleHAiOjE2OTE5MDk1Mjh9.wKD2zxkE3jSmJQtxTAW1_XIKhAkY8cuiKeaFtLpF1dk
+
+### 회원 마이페이지 조회
+GET localhost:8080/api/member/myPage
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjk1ODg4NTA4LCJleHAiOjE2OTU4OTAzMDh9.azLjavjaIv3QY5vaoNF-wwq_lBqv2yllYD6jKAGsAI8

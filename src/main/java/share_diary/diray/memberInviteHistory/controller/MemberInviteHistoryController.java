@@ -1,8 +1,8 @@
 package share_diary.diray.memberInviteHistory.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,10 @@ import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
 import share_diary.diray.memberInviteHistory.MemberInviteRequest;
 import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
-import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
+import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
+import share_diary.diray.common.response.ResultList;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,17 +30,23 @@ public class MemberInviteHistoryController {
      * - 초대는 방장만 가능
      * - 재초대 횟수 제한 없음 (상대 거절 여부 무관)
      * - 수락, 거절 이력은 계속 보임
+     * @author harim
      * */
     @PostMapping
-    @NoAuth // 수정 예정
     public ResponseEntity<HttpStatus> inviteRoomMembers(
-            @RequestBody MemberInviteRequest request
+            @RequestBody MemberInviteRequest request,
+            @AuthenticationPrincipal LoginSession session
     ) {
-        //TODO [하림] : 초대하는 사람이 방장인지 체크하는 로직 필요 (프론트와 논의), 보낸 사람 이름도 뽑아낼 방법 확인 (논의)
+        // 초대하는 사람 본인 Id 추가
+        request.updateHostId(session.getId());
         memberInviteHistoryService.inviteRoomMembers(request);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     *
+     * @author harim
+     */
     @PatchMapping("/{historyId}")
     @NoAuth
     public ResponseEntity<HttpStatus> updateInviteHistory(
@@ -57,9 +66,9 @@ public class MemberInviteHistoryController {
     @GetMapping
     @NoAuth
     //TODO[jipdol2] : MemberInviteHistory Entity 에 '누가' 초대를 했는지 알 수 있도록 필드 추가 필요...
-    public ResponseEntity<HttpStatus> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
-        memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<ResultList> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
+        List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
+        return ResponseEntity.ok(new ResultList<>(byLoginUserInviteHistory));
     }
 
 }
