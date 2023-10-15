@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
+import share_diary.diray.dailyDiary.domain.MyEmoji;
 import share_diary.diray.member.domain.Member;
 
 import javax.persistence.*;
@@ -17,9 +18,6 @@ public class Emoji extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(value = EnumType.STRING)
-    MyEmoji myEmoji;
 
     private int heartEmojiNumber;
 
@@ -42,23 +40,17 @@ public class Emoji extends BaseTimeEntity {
     private DailyDiary dailyDiary;
 
     public Emoji(
-            MyEmoji emoji,
             int heartEmojiNumber,
             int thumbSupEmojiNumber,
             int partyPopperEmojiNumber,
             int cakeEmojiNumber,
             int devilEmojiNumber
     ) {
-        this.myEmoji = emoji;
         this.heartEmojiNumber = heartEmojiNumber;
         this.thumbSupEmojiNumber = thumbSupEmojiNumber;
         this.partyPopperEmojiNumber = partyPopperEmojiNumber;
         this.cakeEmojiNumber = cakeEmojiNumber;
         this.devilEmojiNumber = devilEmojiNumber;
-    }
-
-    public static Emoji of(MyEmoji myEmoji,int heart,int thumb,int party,int cake,int devil){
-        return new Emoji(myEmoji,heart,thumb,party,cake,devil);
     }
 
     //연관관계 편의메소드
