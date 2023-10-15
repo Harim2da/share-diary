@@ -26,6 +26,10 @@ public class DiaryRoom extends BaseTimeEntity {
     private String name;
 
     @Column
+    @Enumerated(value = EnumType.STRING)
+    private DiaryRoomStatus status;
+
+    @Column
     private String createBy;
 
     @Column
@@ -40,8 +44,13 @@ public class DiaryRoom extends BaseTimeEntity {
     public static DiaryRoom of(String name, String createBy) {
         DiaryRoom instance = new DiaryRoom();
         instance.name = name;
+        instance.status = DiaryRoomStatus.OPEN;
         instance.createBy = createBy;
         instance.modifyBy = createBy;
         return instance;
+    }
+
+    public boolean isOpen() {
+        return status.equals(DiaryRoomStatus.OPEN);
     }
 }

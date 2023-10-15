@@ -24,7 +24,6 @@ public class DailyDiaryService {
 
     private final MemberDiaryRoomRepository memberDiaryRoomRepository;
     private final DailyDiaryRepository dailyDiaryRepository;
-    private final EmojiRepository emojiRepository;
 
     public void createDailyDiary(Long memberId, DailyDiaryCreateModifyRequest request) {
         // 업로드할 일기방 속한 멤버인지 확인
@@ -33,24 +32,14 @@ public class DailyDiaryService {
         if(CollectionUtils.isEmpty(memberDiaryRooms)) {
             throw new MemberNotFoundException();
         } else {
-            // 이모지 찾기 - 이모지는 신규 추가가 많지 않음
-            Emoji todayEmoji = emojiRepository.findAll()
-                    .stream()
-                    .filter(e -> e.getId().equals((long)request.getEmojiNum()))
-                    .findFirst()
-                    .orElseThrow(EmojiNotFoundException::new);
-
+            // 존재하는 일기방에 저장
             for(Long diaryRoomId : request.getDiaryRooms()) {
-                for(MemberDiaryRoom md : memberDiaryRooms) {
-                    if(diaryRoomId.equals(md.getDiaryRoom().getId())) {
-                        // 일기 생성 후 save
-                        DailyDiary diary = dailyDiaryRepository.save(
-                                DailyDiary.of(request.getContent(), md.getDiaryRoom(),
-                                        md.getMember().getLoginId()));
-                        // 이모지에도 추가
-                        todayEmoji.addDailyDiary(diary);
-                    }
-                }
+                memberDiaryRooms.stream()
+                        .filter(md -> diaryRoomId.equals(md.getDiaryRoom().getId()))
+                        .filter(room -> room.getDiaryRoom().isOpen())
+                        .findFirst()
+                        .ifPresent(memberDiaryRoom -> DailyDiary.of(request.getContent(), memberDiaryRoom.getDiaryRoom(), request.getFeeling(),
+                                memberDiaryRoom.getMember().getLoginId()));
             }
         }
     }
