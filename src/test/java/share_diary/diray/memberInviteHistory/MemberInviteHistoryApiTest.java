@@ -104,11 +104,11 @@ class MemberInviteHistoryApiTest extends ApiTest {
                 .then()
                 .log().all().extract();
         //then
-//        assertThat(response.jsonPath().getInt("result[0].id")).isEqualTo(1);
         assertThat(response.jsonPath().getString("result[0].uuid")).isNotNull();
         assertThat(response.jsonPath().getString("result[0].email")).isEqualTo("somin2@gmail.com");
         assertThat(response.jsonPath().getString("result[0].status")).isEqualTo(InviteAcceptStatus.INVITE.toString());
         assertThat(response.jsonPath().getString("result[0].createDate")).isEqualTo(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        assertThat(response.jsonPath().getString("result[0].createBy")).isEqualTo("jipdol2");
         assertThat(response.jsonPath().getInt("size")).isEqualTo(1);
     }
 

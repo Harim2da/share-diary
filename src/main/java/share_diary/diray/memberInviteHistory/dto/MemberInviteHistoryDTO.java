@@ -9,8 +9,6 @@ import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 
 import java.time.LocalDateTime;
 
-//@Setter
-//@NoArgsConstructor
 @Getter
 @AllArgsConstructor
 public class MemberInviteHistoryDTO {
@@ -24,5 +22,6 @@ public class MemberInviteHistoryDTO {
     private Long diaryRoomId;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createDate;
+    private String createBy;
 
 }

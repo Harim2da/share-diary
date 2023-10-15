@@ -111,6 +111,6 @@ public class MemberInviteHistoryService {
 
     public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId){
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
-        return inviteHistoryMapper.asDTOList(inviteHistories);
+        return inviteHistoryMapper.asMemberInviteHistoryDTOList(inviteHistories);
     }
 }
