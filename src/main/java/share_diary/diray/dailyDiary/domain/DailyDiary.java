@@ -23,6 +23,12 @@ public class DailyDiary {
     @Column
     private String content;
 
+    /**
+     * MyEmoji enum type 선언 (jipdol2)
+     */
+    @Enumerated(value = EnumType.STRING)
+    MyEmoji myEmoji;
+
     // 삭제 상태 관리
     @Column
     private DiaryStatus status;

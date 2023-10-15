@@ -1,11 +1,11 @@
 package share_diary.diray.emoji.domain;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
+import share_diary.diray.dailyDiary.domain.MyEmoji;
 import share_diary.diray.member.domain.Member;
 
 import javax.persistence.*;
@@ -18,18 +18,6 @@ public class Emoji extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private int angryEmojiNumber;
-
-    private int badEmojiNumber;
-
-    private int boringEmojiNumber;
-
-    private int goodEmojiNumber;
-
-    private int refreshEmojiNumber;
-
-    private int funEmojiNumber;
 
     private int heartEmojiNumber;
 
@@ -52,24 +40,12 @@ public class Emoji extends BaseTimeEntity {
     private DailyDiary dailyDiary;
 
     public Emoji(
-            int angryEmojiNumber,
-            int badEmojiNumber,
-            int boringEmojiNumber,
-            int goodEmojiNumber,
-            int refreshEmojiNumber,
-            int funEmojiNumber,
             int heartEmojiNumber,
             int thumbSupEmojiNumber,
             int partyPopperEmojiNumber,
             int cakeEmojiNumber,
             int devilEmojiNumber
     ) {
-        this.angryEmojiNumber = angryEmojiNumber;
-        this.badEmojiNumber = badEmojiNumber;
-        this.boringEmojiNumber = boringEmojiNumber;
-        this.goodEmojiNumber = goodEmojiNumber;
-        this.refreshEmojiNumber = refreshEmojiNumber;
-        this.funEmojiNumber = funEmojiNumber;
         this.heartEmojiNumber = heartEmojiNumber;
         this.thumbSupEmojiNumber = thumbSupEmojiNumber;
         this.partyPopperEmojiNumber = partyPopperEmojiNumber;
