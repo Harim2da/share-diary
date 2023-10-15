@@ -22,7 +22,7 @@ public interface MemberInviteHistoryMapper extends GenericMapper<MemberInviteHis
         Long id = null;
         String uuid = null;
         String email = null;
-        String hostUserId = null;
+        Long hostUserId = null;
         InviteAcceptStatus status = null;
         LocalDateTime createDate = null;
         Long memberId = null;
