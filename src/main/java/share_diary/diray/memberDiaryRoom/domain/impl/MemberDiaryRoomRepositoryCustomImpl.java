@@ -28,6 +28,8 @@ public class MemberDiaryRoomRepositoryCustomImpl extends QuerydslRepositorySuppo
     @Override
     public List<MemberDiaryRoom> findAllByMemberId(Long memberId) {
         return from(memberDiaryRoom)
+                .join(memberDiaryRoom.member).fetchJoin()
+                .join(memberDiaryRoom.diaryRoom).fetchJoin()
                 .where(memberDiaryRoom.member.id.eq(memberId))
                 .fetch();
     }

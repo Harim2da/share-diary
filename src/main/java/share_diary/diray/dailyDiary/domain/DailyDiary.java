@@ -6,13 +6,14 @@ import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Getter;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.emoji.domain.Emoji;
 
 @Table(name = "daily_diary")
 @Entity
 @Getter
-public class DailyDiary {
+public class DailyDiary extends BaseTimeEntity {
 
     @Id
     @Column(nullable = false)
@@ -27,10 +28,11 @@ public class DailyDiary {
      * MyEmoji enum type 선언 (jipdol2)
      */
     @Enumerated(value = EnumType.STRING)
-    MyEmoji myEmoji;
+    private MyEmoji feeling;
 
     // 삭제 상태 관리
     @Column
+    @Enumerated(value = EnumType.STRING)
     private DiaryStatus status;
 
     @Column
@@ -53,4 +55,15 @@ public class DailyDiary {
     // 이모지
     @OneToMany(mappedBy = "dailyDiary")
     private Set<Emoji> emoji = new HashSet<>();
+
+    public static DailyDiary of(String content, DiaryRoom diaryRoom, MyEmoji feeling, String createBy) {
+        DailyDiary instance = new DailyDiary();
+        instance.content = content;
+        instance.status = DiaryStatus.SHOW;
+        instance.feeling = feeling;
+        instance.diaryRoom = diaryRoom;
+        instance.createBy = createBy;
+        instance.modifyBy = createBy;
+        return instance;
+    }
 }
