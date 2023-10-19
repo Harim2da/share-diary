@@ -4,6 +4,7 @@ import lombok.Getter;
 import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.certification.CertificationNotFoundException;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
+import share_diary.diray.exception.emoji.EmojiNotFoundException;
 import share_diary.diray.exception.jwt.AccessTokenRenewException;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.jwt.TokenIsNotValidException;
@@ -36,7 +37,9 @@ public enum ErrorType {
 
     H001("H001", "유효하지 않은 초대 이력입니다.", InvalidInviteHistoryIdException.class),
     H002("H002", "유효하지 않은 초대 코드입니다.", InvalidInviteUuidException.class),
-    HOO3("H003", "이미 수락/거절한 초대 링크입니다.", AlreadyCheckedInviteException.class)
+    HOO3("H003", "이미 수락/거절한 초대 링크입니다.", AlreadyCheckedInviteException.class),
+
+    E001("E001", "존재하지 않는 이모지입니다.", EmojiNotFoundException.class)
     ;
 
     private final String code;
