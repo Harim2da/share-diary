@@ -18,15 +18,10 @@ public class Emoji extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private int heartEmojiNumber;
-
     private int thumbSupEmojiNumber;
-
     private int partyPopperEmojiNumber;
-
     private int cakeEmojiNumber;
-
     private int devilEmojiNumber;
 
     //회원
@@ -51,6 +46,26 @@ public class Emoji extends BaseTimeEntity {
         this.partyPopperEmojiNumber = partyPopperEmojiNumber;
         this.cakeEmojiNumber = cakeEmojiNumber;
         this.devilEmojiNumber = devilEmojiNumber;
+    }
+
+    public void countEmoji(String name){
+        switch (name){
+            case "HEART":
+                this.heartEmojiNumber++;
+                break;
+            case "THUMB":
+                this.thumbSupEmojiNumber++;
+                break;
+            case "PARTY":
+                this.partyPopperEmojiNumber++;
+                break;
+            case "CAKE":
+                this.cakeEmojiNumber++;
+                break;
+            case "DEVIL":
+                this.devilEmojiNumber++;
+                break;
+        }
     }
 
     //연관관계 편의메소드

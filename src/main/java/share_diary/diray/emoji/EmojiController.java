@@ -23,13 +23,13 @@ public class EmojiController {
      */
     //TODO : 내일기 감정이모지 -> daliyDiary 로 이전으로 인한 수정 필요
     @PostMapping("/{diaryId}")
-    public ResponseEntity<Void> saveEmoji(
+    public ResponseEntity<Void> clickEmoji(
             @AuthenticationPrincipal LoginSession session,
             @PathVariable("diaryId") Long diaryId,
             @RequestBody DiaryEmojiRequest request
     ){
 //        MyEmoji emoji = MyEmoji.valueOf(request.getEmoji().toUpperCase());
-        return null;
+        return ResponseEntity.ok().build();
     }
 
     /**
