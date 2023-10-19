@@ -26,7 +26,6 @@ public class MemberInvitesHistorySteps {
     public static MemberInviteRequest 일기방초대요청_생성(){
         final Long diaryRoomId = 1L;
         final List<String> emails = List.of("boyoung2@gmail.com", "somin2@gmail.com");
-        final Long hostId = 1L;
-        return MemberInviteRequest.of(diaryRoomId,emails, hostId);
+        return MemberInviteRequest.of(diaryRoomId,emails,null);
     }
 }
