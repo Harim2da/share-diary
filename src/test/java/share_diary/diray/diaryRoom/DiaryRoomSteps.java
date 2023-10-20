@@ -25,9 +25,8 @@ public class DiaryRoomSteps {
                 .log().all().extract();
     }
 
-    public static DiaryRoomCreateRequest 일기방생성요청_생성() {
+    public static DiaryRoomCreateRequest 일기방생성요청_생성(List<String> emails) {
         final String diaryRoomName = "오늘의 일기방";
-        final List<String> emails = List.of("jipsun2@gmail.com","jipal2@gmail.com");
         return new DiaryRoomCreateRequest(diaryRoomName,emails);
     }
 }

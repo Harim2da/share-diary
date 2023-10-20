@@ -24,6 +24,7 @@ import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepositor
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +47,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
         //given
         String token = loginResponse
                 .body().jsonPath().getString("accessToken");
-        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
+        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
         MemberInviteRequest request = MemberInvitesHistorySteps.일기방초대요청_생성();
 
         //expected
@@ -61,7 +62,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
         //given
         String token = loginResponse
                 .body().jsonPath().getString("accessToken");
-        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
+        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
 
         //api 요청
         final var response = RestAssured.given().log().all()
@@ -85,7 +86,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
                 .cookie("REFRESH_TOKEN");
 
             //일기방생성
-        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성());
+        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
             //일기방 초대
         MemberInvitesHistorySteps.일기방초대요청(token,MemberInvitesHistorySteps.일기방초대요청_생성());
             //(jipdol2)로그아웃

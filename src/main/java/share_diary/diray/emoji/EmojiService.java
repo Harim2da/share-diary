@@ -7,6 +7,8 @@ import share_diary.diray.dailyDiary.DailyDiaryRepository;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
 import share_diary.diray.emoji.domain.Emoji;
 import share_diary.diray.emoji.domain.EmojiRepository;
+import share_diary.diray.emoji.dto.DiaryEmojiDTO;
+import share_diary.diray.exception.dailyDiary.DailyDiaryNotFoundException;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
 import share_diary.diray.exception.emoji.EmojiNotFoundException;
 import share_diary.diray.exception.member.MemberNotFoundException;
@@ -28,7 +30,7 @@ public class EmojiService {
         //다이어리 조회
         //만약 다이어리가 없다면,예외
         DailyDiary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(DiaryRoomNotFoundException::new);
+                .orElseThrow(DailyDiaryNotFoundException::new);
         //다이어리에 이모지가 없다면, 이모지 생성
         //입력한 이모지 count 진행
         //save 호출
@@ -53,8 +55,16 @@ public class EmojiService {
         findEmoji.countEmoji(emojiType);
     }
 
-    public void findByEmojiCount(){
+    public DiaryEmojiDTO findByEmojiCount(Long diaryId){
+        //다이어리 조회
+        DailyDiary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(DailyDiaryNotFoundException::new);
         //다이어리에 이모지가 없는 경우 (0,0,0,0,0) 리턴
+        if(Objects.isNull(diary.getEmoji())){
+            return new DiaryEmojiDTO();
+        }
         //다이어리 id 로 group by 쿼리문 작성
+        emojiRepository.findBySumEmoji(diaryId);
+        return null;
     }
 }

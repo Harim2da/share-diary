@@ -11,6 +11,8 @@ import share_diary.diray.auth.AuthSteps;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
 import share_diary.diray.member.MemberSteps;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DiaryRoomApiTest extends ApiTest {
@@ -31,7 +33,7 @@ public class DiaryRoomApiTest extends ApiTest {
         //given
         final String token = loginResponse
                 .body().jsonPath().getString("accessToken");
-        DiaryRoomCreateRequest request = DiaryRoomSteps.일기방생성요청_생성();
+        DiaryRoomCreateRequest request = DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com"));
 
         //expected
         final var response = DiaryRoomSteps.일기방생성요청(token,request);

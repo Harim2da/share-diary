@@ -19,11 +19,11 @@ public class Emoji extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int heartEmojiNumber;
-    private int thumbSupEmojiNumber;
-    private int partyPopperEmojiNumber;
-    private int cakeEmojiNumber;
-    private int devilEmojiNumber;
+    private long heartEmojiNumber;
+    private long thumbSupEmojiNumber;
+    private long partyPopperEmojiNumber;
+    private long cakeEmojiNumber;
+    private long devilEmojiNumber;
 
     //회원
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,11 +36,11 @@ public class Emoji extends BaseTimeEntity {
     private DailyDiary dailyDiary;
 
     public Emoji(
-            int heartEmojiNumber,
-            int thumbSupEmojiNumber,
-            int partyPopperEmojiNumber,
-            int cakeEmojiNumber,
-            int devilEmojiNumber
+            long heartEmojiNumber,
+            long thumbSupEmojiNumber,
+            long partyPopperEmojiNumber,
+            long cakeEmojiNumber,
+            long devilEmojiNumber
     ) {
         this.heartEmojiNumber = heartEmojiNumber;
         this.thumbSupEmojiNumber = thumbSupEmojiNumber;
