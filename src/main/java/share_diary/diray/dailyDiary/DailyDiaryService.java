@@ -38,8 +38,11 @@ public class DailyDiaryService {
                         .filter(md -> diaryRoomId.equals(md.getDiaryRoom().getId()))
                         .filter(room -> room.getDiaryRoom().isOpen())
                         .findFirst()
-                        .ifPresent(memberDiaryRoom -> DailyDiary.of(request.getContent(), memberDiaryRoom.getDiaryRoom(), request.getFeeling(),
-                                memberDiaryRoom.getMember().getLoginId()));
+                        .ifPresent(memberDiaryRoom -> {
+                            DailyDiary dailyDiary = DailyDiary.of(request.getContent(), memberDiaryRoom.getDiaryRoom(), request.getFeeling(),
+                                    memberDiaryRoom.getMember().getLoginId());
+                            dailyDiaryRepository.save(dailyDiary);
+                        });
             }
         }
     }
