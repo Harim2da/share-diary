@@ -6,21 +6,14 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import share_diary.diray.ApiTest;
-import share_diary.diray.auth.AuthService;
 import share_diary.diray.auth.AuthSteps;
-import share_diary.diray.auth.dto.request.LoginRequestDTO;
-import share_diary.diray.crypto.PasswordEncoder;
-import share_diary.diray.diaryRoom.DiaryRoomRepository;
 import share_diary.diray.diaryRoom.DiaryRoomSteps;
 import share_diary.diray.member.MemberSteps;
-import share_diary.diray.member.domain.Member;
-import share_diary.diray.member.domain.MemberRepository;
+import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
-import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,12 +41,42 @@ class MemberInviteHistoryApiTest extends ApiTest {
         String token = loginResponse
                 .body().jsonPath().getString("accessToken");
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
-        MemberInviteRequest request = MemberInvitesHistorySteps.일기방초대요청_생성();
+        MemberInviteRequest request = MemberInvitesHistorySteps.일기방초대요청_생성(List.of("boyoung2@gmail.com", "somin2@gmail.com"));
 
         //expected
         final var response = MemberInvitesHistorySteps.일기방초대요청(token,request);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("일기방 초대 수락")
+    void inviteDiaryRoomAccept(){
+        //given
+        String token = loginResponse
+                .body().jsonPath().getString("accessToken");
+        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of()));
+        MemberInvitesHistorySteps.일기방초대요청(token,MemberInvitesHistorySteps.일기방초대요청_생성(List.of("boyoung2@gmail.com", "somin2@gmail.com")));
+
+            //somin2 로그인
+        loginResponse = AuthSteps.회원로그인요청(AuthSteps.회원로그인요청_생성("somin2","1234"));
+        token = loginResponse
+                .body().jsonPath().getString("accessToken");
+
+        //expected
+        var response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
+            //초대 id 조회
+        Long inviteId = response.body().jsonPath().getLong("result[0].id");
+
+        MemberInvitesHistorySteps.일기방초대수락요청(token, inviteId, MemberInvitesHistorySteps.일기방초대수락요청_생성());
+
+        response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getString("result[0].uuid")).isNotNull();
+        assertThat(response.jsonPath().getString("result[0].email")).isEqualTo("somin2@gmail.com");
+        assertThat(response.jsonPath().getString("result[0].status")).isEqualTo(InviteAcceptStatus.ACCEPT.toString());
+        assertThat(response.jsonPath().getInt("size")).isEqualTo(1);
     }
 
     @Test
@@ -65,12 +88,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
 
         //api 요청
-        final var response = RestAssured.given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, token)
-                .when()
-                .get(URL)
-                .then()
-                .log().all().extract();
+        final var response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
         //then
         assertThat(response.jsonPath().getInt("size")).isEqualTo(0);
     }
@@ -88,7 +106,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
             //일기방생성
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
             //일기방 초대
-        MemberInvitesHistorySteps.일기방초대요청(token,MemberInvitesHistorySteps.일기방초대요청_생성());
+        MemberInvitesHistorySteps.일기방초대요청(token,MemberInvitesHistorySteps.일기방초대요청_생성(List.of("boyoung2@gmail.com", "somin2@gmail.com")));
             //(jipdol2)로그아웃
         AuthSteps.로그아웃요청(token,refreshToken);
 
@@ -98,12 +116,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
                 .body().jsonPath().getString("accessToken");
 
         //expected
-        final var response = RestAssured.given().log().all()
-                .header(HttpHeaders.AUTHORIZATION,token)
-                .when()
-                .get(URL)
-                .then()
-                .log().all().extract();
+        final var response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
         //then
         assertThat(response.jsonPath().getString("result[0].uuid")).isNotNull();
         assertThat(response.jsonPath().getString("result[0].email")).isEqualTo("somin2@gmail.com");
@@ -112,5 +125,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
         assertThat(response.jsonPath().getString("result[0].createBy")).isEqualTo("jipdol2");
         assertThat(response.jsonPath().getInt("size")).isEqualTo(1);
     }
+
+
 
 }

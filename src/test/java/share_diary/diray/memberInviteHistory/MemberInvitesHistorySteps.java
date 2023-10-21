@@ -5,6 +5,8 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
+import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 
 import java.util.List;
 
@@ -23,9 +25,32 @@ public class MemberInvitesHistorySteps {
                 .log().all().extract();
     }
 
-    public static MemberInviteRequest 일기방초대요청_생성(){
+    public static MemberInviteRequest 일기방초대요청_생성(List<String> emails){
         final Long diaryRoomId = 1L;
-        final List<String> emails = List.of("boyoung2@gmail.com", "somin2@gmail.com");
         return MemberInviteRequest.of(diaryRoomId,emails,null);
+    }
+
+    public static ExtractableResponse<Response> 일기방초대수락요청(String token, Long inviteId,InviteUpdateRequest request) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .headers(HttpHeaders.AUTHORIZATION, token)
+                .body(request)
+                .when()
+                .patch(URL+"/{historyId}",inviteId)
+                .then()
+                .log().all().extract();
+    }
+
+    public static InviteUpdateRequest 일기방초대수락요청_생성() {
+        return new InviteUpdateRequest(InviteAcceptStatus.ACCEPT);
+    }
+
+    public static ExtractableResponse<Response> 일기방초대_알림내역조회_요청(String token) {
+        return RestAssured.given().log().all()
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .when()
+                .get(URL)
+                .then()
+                .log().all().extract();
     }
 }
