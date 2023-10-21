@@ -29,4 +29,14 @@ public class DiaryRoomSteps {
         final String diaryRoomName = "오늘의 일기방";
         return new DiaryRoomCreateRequest(diaryRoomName,emails);
     }
+
+    public static ExtractableResponse<Response> 참여하고있는_일기방목록조회_요청(String token) {
+        final var response = RestAssured.given().log().all()
+                .headers(HttpHeaders.AUTHORIZATION, token)
+                .when()
+                .get(URL)
+                .then()
+                .log().all().extract();
+        return response;
+    }
 }
