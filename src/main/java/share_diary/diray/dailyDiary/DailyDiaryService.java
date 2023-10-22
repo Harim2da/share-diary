@@ -27,19 +27,23 @@ public class DailyDiaryService {
 
     public void createDailyDiary(Long memberId, DailyDiaryCreateModifyRequest request) {
         // 업로드할 일기방 속한 멤버인지 확인
-        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(memberId);
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(
+                memberId);
 
-        if(CollectionUtils.isEmpty(memberDiaryRooms)) {
+        if (CollectionUtils.isEmpty(memberDiaryRooms)) {
             throw new MemberNotFoundException();
         } else {
             // 존재하는 일기방에 저장
-            for(Long diaryRoomId : request.getDiaryRooms()) {
+            for (Long diaryRoomId : request.getDiaryRooms()) {
                 memberDiaryRooms.stream()
                         .filter(md -> diaryRoomId.equals(md.getDiaryRoom().getId()))
                         .filter(room -> room.getDiaryRoom().isOpen())
                         .findFirst()
-                        .ifPresent(memberDiaryRoom -> DailyDiary.of(request.getContent(), memberDiaryRoom.getDiaryRoom(), request.getFeeling(),
-                                    memberDiaryRoom.getMember().getLoginId()));
+                        .ifPresent(memberDiaryRoom ->
+                                dailyDiaryRepository.save(DailyDiary.of(request.getContent(),
+                                        memberDiaryRoom.getDiaryRoom(), request.getFeeling(),
+                                        memberDiaryRoom.getMember().getLoginId()))
+                        );
             }
         }
     }

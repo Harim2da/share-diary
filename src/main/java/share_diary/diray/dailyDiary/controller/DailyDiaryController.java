@@ -3,6 +3,8 @@ package share_diary.diray.dailyDiary.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
@@ -28,11 +30,12 @@ public class DailyDiaryController {
     }
 
     @PostMapping()
-    public void createDailyDiary(
+    public ResponseEntity<HttpStatus> createDailyDiary(
             @AuthenticationPrincipal LoginSession auth,
-            DailyDiaryCreateModifyRequest request
+            @RequestBody DailyDiaryCreateModifyRequest request
     ) {
         dailyDiaryService.createDailyDiary(auth.getId(), request);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PatchMapping()
