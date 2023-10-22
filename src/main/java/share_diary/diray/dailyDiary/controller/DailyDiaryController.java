@@ -30,7 +30,7 @@ public class DailyDiaryController {
     @PostMapping()
     public void createDailyDiary(
             @AuthenticationPrincipal LoginSession auth,
-            @RequestBody DailyDiaryCreateModifyRequest request
+            DailyDiaryCreateModifyRequest request
     ) {
         dailyDiaryService.createDailyDiary(auth.getId(), request);
     }
