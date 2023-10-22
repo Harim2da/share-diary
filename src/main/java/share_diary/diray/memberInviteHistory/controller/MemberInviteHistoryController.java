@@ -44,7 +44,7 @@ public class MemberInviteHistoryController {
     }
 
     /**
-     *
+     * 일기방 초대 수락 api
      * @author harim
      */
     @PatchMapping("/{historyId}")

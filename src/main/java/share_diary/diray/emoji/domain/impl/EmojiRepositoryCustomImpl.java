@@ -12,8 +12,8 @@ import static share_diary.diray.emoji.domain.QEmoji.emoji;
 public class EmojiRepositoryCustomImpl extends QuerydslRepositorySupport implements
         EmojiRepositoryCustom {
 
-    public EmojiRepositoryCustomImpl(Class<?> domainClass) {
-        super(domainClass);
+    public EmojiRepositoryCustomImpl() {
+        super(Emoji.class);
     }
 
     @Override
