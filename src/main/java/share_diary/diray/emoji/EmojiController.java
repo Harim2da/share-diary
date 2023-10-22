@@ -29,6 +29,7 @@ public class EmojiController {
             @RequestBody DiaryEmojiRequest request
     ){
 //        MyEmoji emoji = MyEmoji.valueOf(request.getEmoji().toUpperCase());
+        emojiService.click(session.getId(),diaryId,request.getEmoji());
         return ResponseEntity.ok().build();
     }
 

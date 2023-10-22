@@ -25,9 +25,18 @@ public class DiaryRoomSteps {
                 .log().all().extract();
     }
 
-    public static DiaryRoomCreateRequest 일기방생성요청_생성() {
+    public static DiaryRoomCreateRequest 일기방생성요청_생성(List<String> emails) {
         final String diaryRoomName = "오늘의 일기방";
-        final List<String> emails = List.of("jipsun2@gmail.com","jipal2@gmail.com");
         return new DiaryRoomCreateRequest(diaryRoomName,emails);
+    }
+
+    public static ExtractableResponse<Response> 참여하고있는_일기방목록조회_요청(String token) {
+        final var response = RestAssured.given().log().all()
+                .headers(HttpHeaders.AUTHORIZATION, token)
+                .when()
+                .get(URL)
+                .then()
+                .log().all().extract();
+        return response;
     }
 }

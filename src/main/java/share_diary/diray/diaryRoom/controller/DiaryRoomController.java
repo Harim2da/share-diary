@@ -27,6 +27,7 @@ public class DiaryRoomController {
     /**
      * 일기방 생성
      * - 일기방 만들 수 있는지 여부는 member controller에서 뽑아내기
+     * @author harim
      * */
     @PostMapping
     public ResponseEntity<HttpStatus> createDiaryRoom(
@@ -37,6 +38,10 @@ public class DiaryRoomController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    /**
+     * 참여하고 있는 일기방 목록 조회 api
+     * @author harim
+     */
     // TODO : 일기방 정렬 방식 논의 필요
     @GetMapping
     public ResponseEntity<List<DiaryRoomDTO>> getDiaryRooms(
@@ -44,5 +49,4 @@ public class DiaryRoomController {
     ) {
         return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId()));
     }
-
 }

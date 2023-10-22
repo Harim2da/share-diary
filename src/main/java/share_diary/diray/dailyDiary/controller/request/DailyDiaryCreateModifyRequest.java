@@ -2,11 +2,16 @@ package share_diary.diray.dailyDiary.controller.request;
 
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import share_diary.diray.dailyDiary.domain.DiaryStatus;
 import share_diary.diray.dailyDiary.domain.MyEmoji;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DailyDiaryCreateModifyRequest {
     @NotBlank
     private String content; // 일기 내용

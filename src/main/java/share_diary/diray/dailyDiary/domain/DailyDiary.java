@@ -35,7 +35,7 @@ public class DailyDiary extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private DiaryStatus status;
 
-    @Column
+/*    @Column
     private LocalDateTime createDate;
 
     @Column
@@ -45,7 +45,7 @@ public class DailyDiary extends BaseTimeEntity {
     private LocalDateTime modifyDate;
 
     @Column
-    private String modifyBy;
+    private String modifyBy;*/
 
     // 일기방
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,8 +62,8 @@ public class DailyDiary extends BaseTimeEntity {
         instance.status = DiaryStatus.SHOW;
         instance.feeling = feeling;
         instance.diaryRoom = diaryRoom;
-        instance.createBy = createBy;
-        instance.modifyBy = createBy;
+//        instance.createBy = createBy;
+//        instance.modifyBy = createBy;
         return instance;
     }
 }

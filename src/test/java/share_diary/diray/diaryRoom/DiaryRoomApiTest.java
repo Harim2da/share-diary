@@ -1,15 +1,19 @@
 package share_diary.diray.diaryRoom;
 
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import share_diary.diray.ApiTest;
 import share_diary.diray.auth.AuthSteps;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
 import share_diary.diray.member.MemberSteps;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,12 +35,29 @@ public class DiaryRoomApiTest extends ApiTest {
         //given
         final String token = loginResponse
                 .body().jsonPath().getString("accessToken");
-        DiaryRoomCreateRequest request = DiaryRoomSteps.일기방생성요청_생성();
+        DiaryRoomCreateRequest request = DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com"));
 
         //expected
         final var response = DiaryRoomSteps.일기방생성요청(token,request);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("참여하고 있는 일기방 목록 조회 테스트")
+    void findByDiaryRoomsAll(){
+        //given
+        final String token = loginResponse
+                .body().jsonPath().getString("accessToken");
+        DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of()));
+
+        //expected
+        final var response = DiaryRoomSteps.참여하고있는_일기방목록조회_요청(token);
+
+        assertThat(response.body().jsonPath().getLong("id[0]")).isNotNull();
+        assertThat(response.body().jsonPath().getString("name[0]")).isEqualTo("오늘의 일기방");
+        assertThat(response.body().jsonPath().getString("status[0]")).isEqualTo(DiaryRoomStatus.OPEN.name());
+        assertThat(response.body().jsonPath().getString("createBy[0]")).isEqualTo("jipdol2");
     }
 
 }

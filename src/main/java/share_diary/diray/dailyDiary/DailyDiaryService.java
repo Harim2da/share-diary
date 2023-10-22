@@ -39,7 +39,7 @@ public class DailyDiaryService {
                         .filter(room -> room.getDiaryRoom().isOpen())
                         .findFirst()
                         .ifPresent(memberDiaryRoom -> DailyDiary.of(request.getContent(), memberDiaryRoom.getDiaryRoom(), request.getFeeling(),
-                                memberDiaryRoom.getMember().getLoginId()));
+                                    memberDiaryRoom.getMember().getLoginId()));
             }
         }
     }

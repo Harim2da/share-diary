@@ -16,30 +16,31 @@ import javax.persistence.*;
 @Table(name = "emoji")
 public class Emoji extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int heartEmojiNumber;
-    private int thumbSupEmojiNumber;
-    private int partyPopperEmojiNumber;
-    private int cakeEmojiNumber;
-    private int devilEmojiNumber;
+    private long heartEmojiNumber;
+    private long thumbSupEmojiNumber;
+    private long partyPopperEmojiNumber;
+    private long cakeEmojiNumber;
+    private long devilEmojiNumber;
 
     //회원
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
     //일기
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="daily_diary_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "daily_diary_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DailyDiary dailyDiary;
 
     public Emoji(
-            int heartEmojiNumber,
-            int thumbSupEmojiNumber,
-            int partyPopperEmojiNumber,
-            int cakeEmojiNumber,
-            int devilEmojiNumber
+            long heartEmojiNumber,
+            long thumbSupEmojiNumber,
+            long partyPopperEmojiNumber,
+            long cakeEmojiNumber,
+            long devilEmojiNumber
     ) {
         this.heartEmojiNumber = heartEmojiNumber;
         this.thumbSupEmojiNumber = thumbSupEmojiNumber;
@@ -48,29 +49,33 @@ public class Emoji extends BaseTimeEntity {
         this.devilEmojiNumber = devilEmojiNumber;
     }
 
-    public void countEmoji(String name){
-        switch (name){
+    public static Emoji of() {
+        return new Emoji(0, 0, 0, 0, 0);
+    }
+
+    public void countEmoji(String name) {
+        switch (name) {
             case "HEART":
-                this.heartEmojiNumber++;
+                heartEmojiNumber = (heartEmojiNumber == 0) ? 1 : 0;
                 break;
             case "THUMB":
-                this.thumbSupEmojiNumber++;
+                thumbSupEmojiNumber = (thumbSupEmojiNumber == 0) ? 1 : 0;
                 break;
             case "PARTY":
-                this.partyPopperEmojiNumber++;
+                partyPopperEmojiNumber = (partyPopperEmojiNumber == 0) ? 1 : 0;
                 break;
             case "CAKE":
-                this.cakeEmojiNumber++;
+                cakeEmojiNumber = (cakeEmojiNumber == 0) ? 1 : 0;
                 break;
             case "DEVIL":
-                this.devilEmojiNumber++;
+                devilEmojiNumber = (devilEmojiNumber == 0 ) ? 1 : 0;
                 break;
         }
     }
 
     //연관관계 편의메소드
-    public void addMember(Member member){
-        if(this.member != null){
+    public void addMember(Member member) {
+        if (this.member != null) {
             this.member.getEmojis().remove(this);
         }
         this.member = member;
@@ -78,8 +83,8 @@ public class Emoji extends BaseTimeEntity {
     }
 
     //연관관계 편의메소드
-    public void addDailyDiary(DailyDiary dailyDiary){
-        if(this.dailyDiary != null){
+    public void addDailyDiary(DailyDiary dailyDiary) {
+        if (this.dailyDiary != null) {
             this.dailyDiary.getEmoji().remove(this);
         }
         this.dailyDiary = dailyDiary;
