@@ -55,10 +55,14 @@ public class MemberService {
     private final MemberInviteHistoryRepository memberInviteHistoryRepository;
 
     public void joinMember(MemberSignUpRequestDTO requestDTO) {
-        Member member = MemberSignUpRequestDTO.fromToMember(requestDTO);
-        String encode = passwordEncoder.encode(requestDTO.getPassword());
-        member.updatePassword(encode);
-        validationMember(member);
+        //빵
+        validationMember(requestDTO);
+
+        //속
+        String encodedPassword = passwordEncoder.encode(requestDTO.getPassword());
+        Member member = requestDTO.toMember(encodedPassword);
+
+        //빵
         memberRepository.save(member);
     }
 
@@ -67,13 +71,11 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    private void validationMember(Member member) {
-        boolean flag = memberRepository.existsByLoginId(member.getLoginId());
-        if (flag) {
+    private void validationMember(MemberSignUpRequestDTO request) {
+        if (memberRepository.existsByLoginId(request.getLoginId())) {
             throw new ValidationMemberIdException();
         }
-        flag = memberRepository.existsByEmail(member.getEmail());
-        if (flag) {
+        if (memberRepository.existsByEmail(request.getEmail())) {
             throw new ValidationMemberEmailException();
         }
     }
