@@ -1,10 +1,12 @@
 package share_diary.diray.emoji.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class DiaryEmojiDTO {
 
     private long heart = 0;

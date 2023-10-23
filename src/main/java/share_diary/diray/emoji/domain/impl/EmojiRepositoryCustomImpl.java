@@ -16,13 +16,5 @@ public class EmojiRepositoryCustomImpl extends QuerydslRepositorySupport impleme
         super(Emoji.class);
     }
 
-    @Override
-    public DiaryEmojiDTO findBySumEmoji(Long diaryId) {
-        List<Emoji> fetch = from(emoji)
-                .join(emoji.dailyDiary).fetchJoin()
-                .groupBy(emoji.dailyDiary.id)
-                .having(emoji.dailyDiary.id.eq(diaryId))
-                .fetch();
-        return null;
-    }
+
 }

@@ -3,6 +3,7 @@ package share_diary.diray.emoji;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import share_diary.diray.dailyDiary.DailyDiaryRepository;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
 import share_diary.diray.emoji.domain.Emoji;
@@ -34,7 +35,7 @@ public class EmojiService {
         //다이어리에 이모지가 없다면, 이모지 생성
         //입력한 이모지 count 진행
         //save 호출
-        if (diary.getEmoji() == null) {
+        if (ObjectUtils.isEmpty(diary.getEmoji())) {
             Member member = memberRepository.findById(loginId)
                     .orElseThrow(MemberNotFoundException::new);
             Emoji emoji = Emoji.of();
@@ -53,6 +54,7 @@ public class EmojiService {
                 .orElseThrow(EmojiNotFoundException::new);
 
         findEmoji.countEmoji(emojiType);
+        //TODO(jipdol2) : EmojiDTO return 하기
     }
 
     public DiaryEmojiDTO findByEmojiCount(Long diaryId){
@@ -60,11 +62,10 @@ public class EmojiService {
         DailyDiary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(DailyDiaryNotFoundException::new);
         //다이어리에 이모지가 없는 경우 (0,0,0,0,0) 리턴
-        if(Objects.isNull(diary.getEmoji())){
+        if(ObjectUtils.isEmpty(diary.getEmoji())){
             return new DiaryEmojiDTO();
         }
         //다이어리 id 로 group by 쿼리문 작성
-        emojiRepository.findBySumEmoji(diaryId);
-        return null;
+        return emojiRepository.findBySumEmoji(diaryId);
     }
 }

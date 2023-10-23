@@ -3,6 +3,7 @@ package share_diary.diray.emoji;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ import share_diary.diray.emoji.dto.request.DiaryEmojiRequest;
 import share_diary.diray.member.MemberSteps;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EmojiApiTest extends ApiTest {
 
@@ -34,7 +38,7 @@ public class EmojiApiTest extends ApiTest {
     }
 
     @Test
-    @DisplayName("(내 일기)이모지 저장 테스트")
+    @DisplayName("(내 일기)이모지 저장 테스트 + 이모지 조회 테스트")
     void saveMyEmojiTest(){
         final String token = loginResponse
                 .body()
@@ -47,15 +51,30 @@ public class EmojiApiTest extends ApiTest {
             //2. 일기 생성
         DailyDiarySteps.일기생성요청(token,DailyDiarySteps.일기생성요청_생성());
 
+        DiaryEmojiRequest request = new DiaryEmojiRequest("HEART");
         //expected
-//        response = RestAssured.given().log().all()
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .headers(HttpHeaders.AUTHORIZATION, token)
-//                .when()
-//                .post(URL + "/{diaryId}", diaryId)
-//                .then()
-//                .log().all().extract();
-//
-//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        var response = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .headers(HttpHeaders.AUTHORIZATION, token)
+                .body(request)
+                .when()
+                .post(URL + "/{diaryId}", 1L)
+                .then()
+                .log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+
+        response = RestAssured.given().log().all()
+                .header(HttpHeaders.AUTHORIZATION,token)
+                .when()
+                .get(URL+"/{diaryId}",1L)
+                .then()
+                .log().all().extract();
+
+        assertThat(response.body().jsonPath().getLong("heart")).isEqualTo(1);
+        assertThat(response.body().jsonPath().getLong("thumb")).isEqualTo(0);
+        assertThat(response.body().jsonPath().getLong("party")).isEqualTo(0);
+        assertThat(response.body().jsonPath().getLong("cake")).isEqualTo(0);
+        assertThat(response.body().jsonPath().getLong("devil")).isEqualTo(0);
     }
 }
