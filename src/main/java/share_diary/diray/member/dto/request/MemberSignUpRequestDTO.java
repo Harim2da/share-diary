@@ -34,12 +34,12 @@ public class MemberSignUpRequestDTO {
         return new MemberSignUpRequestDTO(memberId,email,password,nickName);
     }
 
-    public static Member fromToMember(MemberSignUpRequestDTO signUpRequestDTO){
+    public Member toMember(String encodedPassword){
         return Member.builder()
-                .loginId(signUpRequestDTO.getLoginId())
-                .email(signUpRequestDTO.getEmail())
-                .password(signUpRequestDTO.getPassword())
-                .nickName(signUpRequestDTO.getNickName())
+                .loginId(loginId)
+                .email(email)
+                .password(encodedPassword)
+                .nickName(nickName)
                 .joinStatus(JoinStatus.USER)
                 .build();
     }
