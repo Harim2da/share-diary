@@ -11,6 +11,7 @@ import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.common.response.PagingResponse;
 import share_diary.diray.dailyDiary.DailyDiaryService;
 import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequest;
+import share_diary.diray.dailyDiary.dto.DailyDiaryDTO;
 
 @RestController
 @RequestMapping("/api/v0/daily-diaries")
@@ -38,11 +39,13 @@ public class DailyDiaryController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PatchMapping()
-    public void modifyDailyDiary(
-            @PathVariable Long diaryId
+    @PatchMapping("/{diaryId}")
+    public ResponseEntity<DailyDiaryDTO> modifyDailyDiary(
+            @PathVariable Long diaryId,
+            @RequestBody DailyDiaryCreateModifyRequest request,
+            @AuthenticationPrincipal LoginSession auth
     ) {
-
+        return ResponseEntity.ok(dailyDiaryService.modifyDailyDiary(diaryId, request, auth.getId()));
     }
 
     @DeleteMapping("/{diaryId}")
