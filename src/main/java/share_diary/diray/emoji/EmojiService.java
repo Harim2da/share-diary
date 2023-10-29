@@ -3,12 +3,14 @@ package share_diary.diray.emoji;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import share_diary.diray.dailyDiary.DailyDiaryRepository;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
 import share_diary.diray.emoji.domain.Emoji;
 import share_diary.diray.emoji.domain.EmojiRepository;
 import share_diary.diray.emoji.dto.DiaryEmojiDTO;
+import share_diary.diray.emoji.mapper.EmojiMapper;
 import share_diary.diray.exception.dailyDiary.DailyDiaryNotFoundException;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
 import share_diary.diray.exception.emoji.EmojiNotFoundException;
@@ -20,14 +22,18 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EmojiService {
 
+    //repository
     private final MemberRepository memberRepository;
     private final DailyDiaryRepository diaryRepository;
     private final EmojiRepository emojiRepository;
+    //mapper
+    private final EmojiMapper emojiMapper;
 
-    public void click(Long loginId, Long diaryId,String emojiType) {
+    public DiaryEmojiDTO click(Long loginId, Long diaryId,String emojiType) {
         //다이어리 조회
         //만약 다이어리가 없다면,예외
         DailyDiary diary = diaryRepository.findById(diaryId)
@@ -42,8 +48,8 @@ public class EmojiService {
             emoji.countEmoji(emojiType);
             emoji.addMember(member);
             emoji.addDailyDiary(diary);
-            emojiRepository.save(emoji);
-            return;
+            Emoji saveEmoji = emojiRepository.save(emoji);
+            return emojiMapper.asDiaryEmojiDTO(saveEmoji);
         }
         //다이어리에 이모지가 있을때
         //입력한 이모지가 1 인 경우 0으로 변경
@@ -54,9 +60,10 @@ public class EmojiService {
                 .orElseThrow(EmojiNotFoundException::new);
 
         findEmoji.countEmoji(emojiType);
-        //TODO(jipdol2) : EmojiDTO return 하기
+        return emojiMapper.asDiaryEmojiDTO(findEmoji);
     }
 
+    @Transactional(readOnly = true)
     public DiaryEmojiDTO findByEmojiCount(Long diaryId){
         //다이어리 조회
         DailyDiary diary = diaryRepository.findById(diaryId)
