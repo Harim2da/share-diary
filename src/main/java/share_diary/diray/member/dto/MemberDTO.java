@@ -11,7 +11,6 @@ public class MemberDTO {
     protected Long id;
     protected String loginId;
     protected String email;
-    protected String password;
     protected String nickName;
     protected String joinStatus; // 이건 좀 더 고민
     protected LocalDateTime joinTime;

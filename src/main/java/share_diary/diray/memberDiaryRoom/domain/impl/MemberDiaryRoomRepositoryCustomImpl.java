@@ -1,5 +1,6 @@
 package share_diary.diray.memberDiaryRoom.domain.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -31,6 +32,17 @@ public class MemberDiaryRoomRepositoryCustomImpl extends QuerydslRepositorySuppo
                 .join(memberDiaryRoom.member).fetchJoin()
                 .join(memberDiaryRoom.diaryRoom).fetchJoin()
                 .where(memberDiaryRoom.member.id.eq(memberId))
+                .fetch();
+    }
+
+    @Override
+    public List<MemberDiaryRoom> findAllByDiaryRoomIdAndSearchDateWithMember(Long diaryRoomId,
+            LocalDate searchDate, Long memberId) {
+        return from(memberDiaryRoom)
+                .join(memberDiaryRoom.member).fetchJoin()
+                .where(memberDiaryRoom.diaryRoom.id.eq(diaryRoomId)
+                        .and(memberDiaryRoom.member.id.in(memberId))
+                        .and(memberDiaryRoom.joinDate.loe(searchDate)))
                 .fetch();
     }
 }

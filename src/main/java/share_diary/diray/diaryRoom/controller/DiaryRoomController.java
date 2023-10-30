@@ -1,19 +1,24 @@
 package share_diary.diray.diaryRoom.controller;
 
+import java.time.LocalDate;
 import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.diaryRoom.DiaryRoomService;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
+import share_diary.diray.diaryRoom.controller.response.DiaryRoomMembersResponse;
 import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
 
 @Slf4j
@@ -48,5 +53,14 @@ public class DiaryRoomController {
             @AuthenticationPrincipal LoginSession session
     ) {
         return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId()));
+    }
+
+    @GetMapping("/{diaryRoomId}/members")
+    public ResponseEntity<DiaryRoomMembersResponse> getDiaryRoomMembers(
+            @PathVariable Long diaryRoomId,
+            @RequestParam String searchDate,
+            @AuthenticationPrincipal LoginSession session
+    ) {
+        return ResponseEntity.ok(diaryRoomService.getDiaryRoomMembers(diaryRoomId, searchDate, session.getId()));
     }
 }
