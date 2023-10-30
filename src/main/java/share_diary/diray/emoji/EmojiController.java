@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
+import share_diary.diray.emoji.dto.DiaryEmojiDTO;
 import share_diary.diray.emoji.dto.request.DiaryEmojiRequest;
 
 @Slf4j
@@ -21,16 +22,14 @@ public class EmojiController {
      * (친구 일기) 이모지 저장
      * @author jipdol2
      */
-    //TODO : 내일기 감정이모지 -> daliyDiary 로 이전으로 인한 수정 필요
     @PostMapping("/{diaryId}")
-    public ResponseEntity<Void> clickEmoji(
+    public DiaryEmojiDTO clickEmoji(
             @AuthenticationPrincipal LoginSession session,
             @PathVariable("diaryId") Long diaryId,
             @RequestBody DiaryEmojiRequest request
     ){
 //        MyEmoji emoji = MyEmoji.valueOf(request.getEmoji().toUpperCase());
-        emojiService.click(session.getId(),diaryId,request.getEmoji());
-        return ResponseEntity.ok().build();
+        return emojiService.click(session.getId(),diaryId,request.getEmoji());
     }
 
     /**
@@ -38,11 +37,10 @@ public class EmojiController {
      * @author jipdol2
      */
     @GetMapping("/{diaryId}")
-    public ResponseEntity<Void> findByMyEmoji(
+    public DiaryEmojiDTO findByMyEmoji(
             @AuthenticationPrincipal LoginSession session,
             @PathVariable("diaryId") Long diaryId
     ){
-
-        return ResponseEntity.ok().build();
+        return emojiService.findByEmojiCount(diaryId);
     }
 }

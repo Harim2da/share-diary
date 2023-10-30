@@ -4,5 +4,4 @@ import share_diary.diray.emoji.dto.DiaryEmojiDTO;
 
 public interface EmojiRepositoryCustom {
 
-    DiaryEmojiDTO findBySumEmoji(Long diaryId);
 }
