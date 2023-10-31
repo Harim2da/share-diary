@@ -1,5 +1,6 @@
 package share_diary.diray.memberDiaryRoom.domain;
 
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class MemberDiaryRoom {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -30,6 +32,14 @@ public class MemberDiaryRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_room_id", referencedColumnName = "id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private DiaryRoom diaryRoom;
+
+    // 일기방 가입일
+    @Column
+    private LocalDate joinDate;
+
+    // 일기방 탈퇴일
+    @Column
+    private LocalDate exitDate;
 
     public MemberDiaryRoom(Role role) {
         this.role = role;
@@ -62,6 +72,7 @@ public class MemberDiaryRoom {
         instance.addMember(member);
         instance.addDiaryRoom(diaryRoom);
         instance.role = role;
+        instance.joinDate = LocalDate.now(); // zone 지정 관련 논의 필요
         return instance;
     }
 }

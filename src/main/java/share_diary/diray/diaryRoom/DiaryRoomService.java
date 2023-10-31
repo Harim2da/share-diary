@@ -1,5 +1,7 @@
 package share_diary.diray.diaryRoom;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
+import share_diary.diray.diaryRoom.controller.response.DiaryRoomMembersResponse;
 import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
 import share_diary.diray.diaryRoom.event.DiaryRoomCreateEvent;
 import share_diary.diray.diaryRoom.mapper.DiaryRoomMapper;
@@ -63,5 +66,18 @@ public class DiaryRoomService {
         List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId());
 
         return diaryRoomMapper.asDTOList(diaryRooms);
+    }
+
+    @Transactional(readOnly = true)
+    public DiaryRoomMembersResponse getDiaryRoomMembers(Long diaryRoomId, String stringDate, Long memberId) {
+        // TODO : DB 타임존 관련 체크 후 수정 필요
+        LocalDate searchDate = LocalDate.parse(stringDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate, memberId);
+
+        // 나를 포함해서 조회 -> Size가 0이면 회원이 없다고 표기
+        if(CollectionUtils.isEmpty(memberDiaryRooms)) {
+            throw new MemberNotFoundException();
+        }
+        return new DiaryRoomMembersResponse().of(diaryRoomId, memberDiaryRooms);
     }
 }
