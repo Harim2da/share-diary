@@ -93,20 +93,15 @@ function SignUp() {
             method: "post",
             url: "/api/member/signUp",
             data: {
-                memberId: id,
+                loginId: id,
                 email: email,
                 password: password,
                 nickName: nickName,
             },
         }).then((res) => {
-            console.log(res);
-            if (res.status === 200) {
-                setIsSubmitted(true);
-            } else {
-                alert("정확한 정보를 입력해 주세요.")
-            }
+            setIsSubmitted(true);
         }).catch(function (error) {
-            console.log(error.toJSON());
+            alert(error.response.data.message);
         });
     };
 
@@ -131,11 +126,11 @@ function SignUp() {
             },
         }).then((res) => {
             setIsDuplicationLoading(false);
-            if (res.status === 200) {
-                alert("사용 가능한 아이디입니다.")
-                setIsDuplication(true);
-            } else {
+            if (res.data.validationLoginId) {
                 alert("이미 존재하는 아이디입니다.")
+            } else {
+                setIsDuplication(true);
+                alert("사용 가능한 아이디입니다.")
             }
         }).catch(function (error) {
             console.log(error.toJSON());
@@ -149,7 +144,7 @@ function SignUp() {
                 {isSubmitted ? (
                     <>
                         <SuccessMessage>회원가입이 완료되었습니다.</SuccessMessage>
-                        <Button type="primary" style={{ width: '100%' }} onClick={() => navigate('/login')}>
+                        <Button type="primary" style={{ width: '100%' }} onClick={() => navigate('/userLogin')}>
                             로그인 화면으로
                         </Button>
                     </>

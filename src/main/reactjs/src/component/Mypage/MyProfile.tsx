@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { Card, Mentions, Button, Select } from 'antd';
+import axios from 'axios'
 
 function MyProfile() {
     let navigate = useNavigate();
@@ -26,12 +27,25 @@ function MyProfile() {
         setIsModified(true);
     };
 
+    const clickBtn = () => {
+        let accessToken = localStorage.getItem('login-token');
+        axios({
+            method: "GET",
+            url: "/api/member/myPage",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }).then((res) => {
+            alert(res)
+        })
+    }
+
     return (
         <Container>
             <ImgBox>
                 <ProfileImg src='img/profile.jpg' />
             </ImgBox>
-            <ProfileText>짱소희94</ProfileText>
+            <ProfileText onClick={clickBtn}>짱소희94</ProfileText>
             <Card style={{ width: '90%', margin: '20px auto', borderColor: '#c0c0c0' }} title="기본 정보">
                 {/* 수정/작성 시 수정버튼 활성화 */}
                 <InfoText>이메일</InfoText>
