@@ -2,11 +2,13 @@ package share_diary.diray.dailyDiary.domain;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Getter;
 import share_diary.diray.common.BaseTimeEntity;
+import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequest;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.emoji.domain.Emoji;
 
@@ -65,5 +67,17 @@ public class DailyDiary extends BaseTimeEntity {
 //        instance.createBy = createBy;
 //        instance.modifyBy = createBy;
         return instance;
+    }
+
+    public DailyDiary update(DailyDiaryCreateModifyRequest request) {
+        // 현재 수정 가능한 것이 두 케이스이므로 둘만 넣음. 추후 수정 가능한 것들이 늘어나면 아래 추가
+        if (request.getContent() != null) {
+            content = request.getContent();
+        }
+        if (request.getStatus() != null) {
+            status = request.getStatus();
+        }
+
+        return this;
     }
 }

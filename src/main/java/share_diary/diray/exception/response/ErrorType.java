@@ -4,6 +4,7 @@ import lombok.Getter;
 import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.certification.CertificationNotFoundException;
 import share_diary.diray.exception.dailyDiary.DailyDiaryNotFoundException;
+import share_diary.diray.exception.dailyDiary.InvalidRequestException;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
 import share_diary.diray.exception.emoji.EmojiNotFoundException;
 import share_diary.diray.exception.jwt.AccessTokenRenewException;
@@ -37,6 +38,7 @@ public enum ErrorType {
     D001("D001", "존재하지 않는 일기방입니다.", DiaryRoomNotFoundException.class),
 
     DD001("DD001","존재하지 않는 일기입니다.", DailyDiaryNotFoundException.class),
+    DD002("DD002", "수정할 수 있는 일기가 아닙니다.", InvalidRequestException.class),
 
     H001("H001", "유효하지 않은 초대 이력입니다.", InvalidInviteHistoryIdException.class),
     H002("H002", "유효하지 않은 초대 코드입니다.", InvalidInviteUuidException.class),
