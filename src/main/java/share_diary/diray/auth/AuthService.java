@@ -12,7 +12,7 @@ import share_diary.diray.auth.dto.request.LoginRequestDTO;
 import share_diary.diray.auth.oauth.OAuthManager;
 import share_diary.diray.auth.oauth.OAuthManagerFinder;
 import share_diary.diray.auth.oauth.SocialType;
-import share_diary.diray.common.utils.StringUtil;
+import share_diary.diray.common.utils.Utils;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
@@ -39,7 +39,7 @@ public class AuthService {
         String loginId = null;
 
         //provider 가 존재하지 않을때는 일반 로그인, 존재하면 소셜 로그인
-        if(StringUtil.isNullAndBlank(provider)){
+        if(Utils.isNullAndBlank(provider)){
             loginId = loginRequestDTO.getLoginId();
         }else {
             Member oAuthUser = getOAuthUser(provider,loginRequestDTO.getCode());
@@ -49,7 +49,7 @@ public class AuthService {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(MemberNotFoundException::new);
 
-        if(StringUtil.isNullAndBlank(provider)){
+        if(Utils.isNullAndBlank(provider)){
             validatedPassword(loginRequestDTO.getPassword(), member.getPassword());
         }
 
