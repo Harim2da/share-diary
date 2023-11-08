@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { isMenuOpenState } from "../../atom/uiAtom";
@@ -26,6 +26,7 @@ function Header() {
       url: "/api/auth/logout",
     }).then((response) => {
       setIsLoggedIn(false);
+      localStorage.removeItem("login-token");
       console.log(response);
     });
   };
@@ -33,40 +34,46 @@ function Header() {
   return (
     <HeaderWrap>
       <div>
-        <FontAwesomeIcon
+        <Icon
           icon={faBars}
           onClick={() => setIsMenuOpen((prev) => !prev)}
           style={{ cursor: "pointer" }}
         />
-        <h1 onClick={() => navigate("/")}>잇츠 다이어리</h1>
+        <h1 onClick={() => { navigate("/"); }} style={{ cursor: "pointer" }}>잇츠 다이어리</h1>
       </div>
       <div>
-        {isLoggedIn ? (
-          <>
-            <span className="bell">
-              <FontAwesomeIcon icon={faBell} />
-              <span className="red" />
-            </span>
-            <span className="login-btn" onClick={handleLogout}>
-              로그아웃
-            </span>
-          </>
-        ) : (
-          <span
-            className="login-btn"
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            로그인
+        {isLoggedIn ?
+          <><span className="bell">
+            <Icon icon={faBell} />
+            <span className="red" />
           </span>
-        )}
+            <span className="myInfo"
+              onClick={() => {
+                navigate("/mypage");
+              }}>
+              <Icon icon={faUser} />
+            </span>
+            <span
+              className="login-btn"
+              onClick={handleLogout}>로그아웃</span>
+          </> :
+          <>
+            <span
+              className="login-btn"
+              onClick={() => {
+                navigate("/userLogin");
+              }}>로그인</span>
+          </>}
       </div>
     </HeaderWrap>
   );
 }
 
 export default Header;
+
+const Icon = styled(FontAwesomeIcon)`
+  font-size:25px;
+`
 
 const HeaderWrap = styled.div`
   display: flex;
@@ -76,6 +83,7 @@ const HeaderWrap = styled.div`
   border-bottom: 1px solid #d9d9d9;
   padding: 0.75rem 1rem;
   position: relative;
+  height: 60px;
 
   h1 {
     font-weight: bold;

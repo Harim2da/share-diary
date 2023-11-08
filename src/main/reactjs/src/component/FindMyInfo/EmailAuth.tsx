@@ -27,10 +27,11 @@ const EmailAuth: React.FC<EmailAuthProps> = ({ isFindId, btnText }) => {
                     email: text,
                 },
             }).then((res) => {
-                console.log(res)
-            }).catch(function (error) {
-                console.log(error.toJSON());
-            });
+                alert(`회원님의 아이디는 ${res.data.loginId} 입니다`)
+            })
+                .catch(function (error) {
+                    alert("회원을 찾을 수 없습니다.");
+                });
         }
     };
 

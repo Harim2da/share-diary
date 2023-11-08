@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { Card, Mentions, Button, Select } from 'antd';
+import axios from 'axios'
 
 function MyProfile() {
     let navigate = useNavigate();
 
-    const [nickname, setNickname] = useState<string>("짱소희94");
+    const [nickname, setNickname] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [isModified, setIsModified] = useState<boolean>(false);
+
+    useEffect(() => {
+        //내 정보 불러오기 
+        let accessToken = localStorage.getItem('login-token');
+        axios({
+            method: "GET",
+            url: "/api/member/myPage",
+            headers: {
+                Authorization: accessToken,
+            },
+        })
+            .then((res) => {
+                setEmail(res.data.email);
+                setNickname(res.data.nickName);
+            })
+            .catch((error) => {
+                console.error("Error : ", error);
+            });
+    }, []);
 
     const handleNicknameChange = (value: string) => {
         setNickname(value);
@@ -31,18 +52,17 @@ function MyProfile() {
             <ImgBox>
                 <ProfileImg src='img/profile.jpg' />
             </ImgBox>
-            <ProfileText>짱소희94</ProfileText>
+            <ProfileText>{nickname}</ProfileText>
             <Card style={{ width: '90%', margin: '20px auto', borderColor: '#c0c0c0' }} title="기본 정보">
                 {/* 수정/작성 시 수정버튼 활성화 */}
                 <InfoText>이메일</InfoText>
                 <MyMentions
-                    placeholder="skditjsdud35@naver.com"
+                    placeholder={email}
                     disabled
-
                 />
                 <InfoText>닉네임</InfoText>
                 <MyMentions
-                    defaultValue="짱소희94"
+                    defaultValue={nickname}
                     onChange={handleNicknameChange}
                 />
                 <InfoText>비밀번호</InfoText>
