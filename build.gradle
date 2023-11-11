@@ -73,6 +73,8 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured:4.4.0'
 //    guava
     implementation 'com.google.guava:guava:11.0.2'
+//    aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 ext['spring-security.version']='5.8.4'
