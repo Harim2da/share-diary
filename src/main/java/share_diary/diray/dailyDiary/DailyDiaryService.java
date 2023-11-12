@@ -1,6 +1,10 @@
 package share_diary.diray.dailyDiary;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,7 +14,10 @@ import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyReq
 import share_diary.diray.dailyDiary.domain.DailyDiary;
 import share_diary.diray.dailyDiary.dto.DailyDiaryDTO;
 import share_diary.diray.dailyDiary.mapper.DailyDiaryMapper;
+import share_diary.diray.exception.BaseException;
+import share_diary.diray.exception.dailyDiary.InvalidGetDiaryException;
 import share_diary.diray.exception.dailyDiary.InvalidRequestException;
+import share_diary.diray.exception.dailyDiary.TooManyDailyDiariesException;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
@@ -62,5 +69,31 @@ public class DailyDiaryService {
                 .orElseThrow(InvalidRequestException::new);
 
         return dailyDiaryMapper.asDTO(diary.update(request));
+    }
+
+    public DailyDiaryDTO getDailyDiary(Long loginMemberId, Long diaryRoomId, String searchDate,
+            Long memberId) {
+
+        LocalDate searchingDate = LocalDate.parse(searchDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(
+                        diaryRoomId, searchingDate, loginMemberId)
+                .stream()
+                .filter(mb -> mb.getMember().getId().equals(memberId))
+                .findFirst()
+                .orElseThrow(InvalidGetDiaryException::new);
+
+        List<DailyDiary> diary = dailyDiaryRepository.findByLoginIdDiaryRoomIdAndSearchDate(
+                memberDiaryRoom.getMember().getLoginId(), memberDiaryRoom.getDiaryRoom(),
+                searchingDate);
+
+        if (CollectionUtils.isEmpty(diary)) {
+            return null;
+        } else if (diary.size() > 1){
+            throw new TooManyDailyDiariesException();
+        } else {
+            return dailyDiaryMapper.asDTO(diary.get(0));
+        }
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
-import share_diary.diray.common.response.PagingResponse;
 import share_diary.diray.dailyDiary.DailyDiaryService;
 import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequest;
 import share_diary.diray.dailyDiary.dto.DailyDiaryDTO;
@@ -22,12 +21,17 @@ public class DailyDiaryController {
     private final DailyDiaryService dailyDiaryService;
 
     /**
-     * 1차 설계용
-     * Response 및 request 작업 전
+     * 한 번에 한 개의 일기만 조회하는 것으로 결정해
+     * 일기는 단건 조회로 개발
      * */
     @GetMapping()
-    public PagingResponse getDailyDiaries() {
-        return null;
+    public ResponseEntity<DailyDiaryDTO> getDailyDiary(
+            @RequestParam Long diaryRoomId,
+            @RequestParam String searchDate,
+            @RequestParam Long memberId,
+            @AuthenticationPrincipal LoginSession auth
+    ) {
+        return ResponseEntity.ok(dailyDiaryService.getDailyDiary(auth.getId(), diaryRoomId, searchDate, memberId));
     }
 
     @PostMapping()
