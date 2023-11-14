@@ -2,6 +2,8 @@ package share_diary.diray.diaryRoom.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v0/diary-rooms")
+@Tag(name = "DiaryRoom",description = "DiaryRoom API")
 public class DiaryRoomController {
 
     private final DiaryRoomService diaryRoomService;

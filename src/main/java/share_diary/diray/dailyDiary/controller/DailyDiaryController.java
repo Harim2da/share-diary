@@ -1,6 +1,7 @@
 package share_diary.diray.dailyDiary.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import share_diary.diray.dailyDiary.dto.DailyDiaryDTO;
 @RequestMapping("/api/v0/daily-diaries")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "DailyDiary",description = "DailyDiary API")
 public class DailyDiaryController {
 
     private final DailyDiaryService dailyDiaryService;

@@ -1,5 +1,9 @@
 package share_diary.diray.auth;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
@@ -19,6 +23,7 @@ import java.time.Duration;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+@Tag(name = "Auth",description = "Auth API")
 public class AuthController {
 
     private final AuthService authService;
@@ -27,11 +32,13 @@ public class AuthController {
 
     /**
      * 로그인(일반/소셜)
+     * @author jipdol2
      */
+    @Operation(summary = "Login Member",description = "로그인(일반/소셜) API")
+    @Schema(description = "provider",example = "github")
     @NoAuth
     @PostMapping(value = {"/login","/social/{provider}"})
     public ResponseEntity<AccessToken> loginSocial(@PathVariable(required = false) String provider,@RequestBody LoginRequestDTO requestDTO){
-//        log.info("requestDTO = {}", requestDTO.toString());
         String accessToken = authService.makeAccessToken(provider,requestDTO);
         Long id = authService.extractIdByToken(accessToken);
         ResponseCookie cookie = makeRefreshTokenCookie(id);
@@ -43,8 +50,9 @@ public class AuthController {
 
     /**
      * 로그아웃
+     * @author jipdol2
      */
-    //    @NoAuth
+    @Operation(summary = "Logout Member",description = "로그아웃 API")
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession, @CookieValue("REFRESH_TOKEN") String refreshToken){
 //        authService.removeRefreshToken(refreshToken);
@@ -82,7 +90,9 @@ public class AuthController {
 
     /**
      * accessToken 갱신
+     * @author jipdol2
      */
+    @Operation(summary = "Renew AccessToken",description = "accessToken 갱신 API")
     @NoAuth
     @GetMapping("/token")
     public ResponseEntity<AccessToken> renewAccessToken(@CookieValue("refreshToken") String refreshToken){
@@ -96,7 +106,9 @@ public class AuthController {
     /**
      * TODO: 추후 삭제 필요
      * Redis 저장 확인
+     * @author jipdol2
      */
+    @Operation(summary = "(X)삭제예정")
     @NoAuth
     @GetMapping("/GetRedis")
     public ResponseEntity<?> getRefreshToken(@RequestParam String token){

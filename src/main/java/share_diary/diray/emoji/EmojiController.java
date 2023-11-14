@@ -1,5 +1,7 @@
 package share_diary.diray.emoji;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import share_diary.diray.emoji.dto.request.DiaryEmojiRequest;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/emoji")
+@Tag(name = "Emoji",description = "Emoji API")
 public class EmojiController {
 
     private final EmojiService emojiService;
@@ -22,6 +25,7 @@ public class EmojiController {
      * (친구 일기) 이모지 저장
      * @author jipdol2
      */
+    @Operation(summary = "Update Emoji",description = "일기 이모지 저장 API")
     @PostMapping("/{diaryId}")
     public DiaryEmojiDTO clickEmoji(
             @AuthenticationPrincipal LoginSession session,
@@ -36,6 +40,7 @@ public class EmojiController {
      * (친구 일기) 이모지 조회
      * @author jipdol2
      */
+    @Operation(summary = "Get Emoji",description = "이모지 조회 API")
     @GetMapping("/{diaryId}")
     public DiaryEmojiDTO findByMyEmoji(
             @AuthenticationPrincipal LoginSession session,
