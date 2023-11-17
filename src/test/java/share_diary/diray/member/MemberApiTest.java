@@ -1,13 +1,16 @@
 package share_diary.diray.member;
 
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import share_diary.diray.ApiTest;
 import share_diary.diray.auth.AuthSteps;
+import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,6 +121,24 @@ class MemberApiTest extends ApiTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.as(Boolean.class)).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("마이페이지 조회 테스트")
+    void myPageTest(){
+        String token = loginResponse.body().jsonPath().getString("accessToken");
+
+        final var response = RestAssured.given().log().all()
+                .headers(HttpHeaders.AUTHORIZATION, token)
+                .when()
+                .get(URL + "/myPage")
+                .then()
+                .log().all().extract();
+
+        assertThat(response.jsonPath().getString("loginId")).isEqualTo("jipdol2");
+        assertThat(response.jsonPath().getString("email")).isEqualTo("jipdol2@gmail.com");
+        assertThat(response.jsonPath().getString("nickName")).isEqualTo("집돌2");
+        assertThat(response.jsonPath().getString("joinStatus")).isEqualTo(JoinStatus.USER.name());
     }
 
 }
