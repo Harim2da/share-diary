@@ -75,6 +75,8 @@ dependencies {
     implementation 'com.google.guava:guava:11.0.2'
 //    aop
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+//    swagger
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 }
 
 ext['spring-security.version']='5.8.4'

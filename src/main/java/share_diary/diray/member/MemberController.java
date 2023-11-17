@@ -1,5 +1,7 @@
 package share_diary.diray.member;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
+@Tag(name = "Member",description = "Member API")
 public class MemberController {
 
     private final MemberService memberService;
@@ -25,6 +28,7 @@ public class MemberController {
      * 회원가입
      * @author jipdol2
      */
+    @Operation(summary = "SignUp Member",description = "회원가입 API")
     @NoAuth
     @PostMapping("/signUp")
     public ResponseEntity<Void> signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
@@ -36,6 +40,7 @@ public class MemberController {
      * 소셜 로그인 시도 - 회원가입
      * @author jipdol2
      */
+    @Operation(summary = "Social SignUp Member",description = "(소셜)회원가입 API")
     @NoAuth
     @PostMapping("/signUp/social")
     public ResponseEntity<Void> signUpSocial(@RequestBody MemberSignUpSocialRequestDTO requestDTO){
@@ -47,6 +52,7 @@ public class MemberController {
      * 아이디 찾기
      * @author jipdol2
      */
+    @Operation(summary = "Find Member",description = "아이디 찾기 API")
     @NoAuth
     @GetMapping("/me/id")
     public MemberDTO findMemberId(@RequestParam("email") String email){
@@ -57,6 +63,7 @@ public class MemberController {
      * 비밀번호 확인
      * @author jipdol2
      */
+    @Operation(summary = "Check Member Password",description = "비밀번호 확인 API")
     @PostMapping("/me/pwd")
     public ResponseEntity<Void> passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
         memberService.passwordCheck(session.getId(),requestDTO);
@@ -67,6 +74,7 @@ public class MemberController {
      * 비밀번호 변경
      * @author jipdol2
      */
+    @Operation(summary = "Change Member Password",description = "비밀번호 변경 API")
     @PostMapping("/pwd")
     public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordUpdateDTO requestDTO){
         memberService.updatePassword(session.getId(),requestDTO);
@@ -77,6 +85,7 @@ public class MemberController {
      * 회원 수정
      * @author jipdol2
      */
+    @Operation(summary = "Update Member", description = "회원 수정 API")
     @PatchMapping("/me")
     public MemberDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
         if(!requestDTO.validationPassword()){
@@ -89,6 +98,7 @@ public class MemberController {
      * 아이디 중복 체크
      * @author jipdol2
      */
+    @Operation(summary = "Validation Check LoginId",description = "아이디 중복 체크 API")
     @NoAuth
     @PostMapping("/loginId/validation")
     public ResponseEntity<Boolean> validationLoginId(@RequestBody @Valid MemberLoginIdRequestDTO requestDTO){
@@ -99,6 +109,7 @@ public class MemberController {
      * 이메일 중복 체크
      * @author jipdol2
      */
+    @Operation(summary = "Validation Check Email",description = "이메일 중복 체크 API")
     @NoAuth
     @PostMapping("/email/validation")
     public ResponseEntity<Boolean> validationEmail(@RequestBody @Valid MemberEmailRequestDTO requestDTO){
@@ -137,6 +148,7 @@ public class MemberController {
      * 체크 API
      * @author harim
      * */
+    @Operation(summary = "Validation Check Create DiaryRoom",description = "일기방 생성 가능 여부 확인 API")
     @GetMapping("/diary-room/validation")
     public ResponseEntity<Boolean> validateCreateDiaryRoom(
             @AuthenticationPrincipal LoginSession auth
@@ -148,6 +160,7 @@ public class MemberController {
      * 멤버 초대 uuid 유효성 체크 API
      * @author harim
      * */
+    @Operation(summary = "UUID Check",description = "uuid 유효성 체크 API")
     @GetMapping("/uuid/{uuid}")
     @NoAuth
     public ResponseEntity<MemberDTO> validateMember(
@@ -162,6 +175,7 @@ public class MemberController {
      * - 추후 : 나의 랭킹, 그 동안 쓴 일기, 메달 획득 개수
      * @author jipdol2
      */
+    @Operation(summary = "Get MyPage",description = "마이페이지 조회 API")
     @GetMapping("/myPage")
     public MemberDTO findByMyInfo(
             @AuthenticationPrincipal LoginSession session

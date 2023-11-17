@@ -1,5 +1,7 @@
 package share_diary.diray.memberInviteHistory.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v0/member-invite-histories")
 @Slf4j
+@Tag(name = "MemberInviteHistory",description = "MemberInviteHistory API")
 public class MemberInviteHistoryController {
 
     private final MemberInviteHistoryService memberInviteHistoryService;
@@ -63,6 +66,7 @@ public class MemberInviteHistoryController {
      * 알림 내역 조회 api
      * @author jipdol2
      */
+    @Operation(summary = "Get Invite History",description = "알림 내역 조회 API")
     @GetMapping
     @NoAuth
     //TODO[jipdol2] : MemberInviteHistory Entity 에 '누가' 초대를 했는지 알 수 있도록 필드 추가 필요...

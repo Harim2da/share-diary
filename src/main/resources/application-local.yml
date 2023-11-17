@@ -82,3 +82,8 @@ kakao:
   url:
     access-token: https://kauth.kakao.com/oauth/token
     profile: https://kapi.kakao.com/v2/user/me
+
+springdoc:
+  swagger-ui:
+    # swagger-ui 접근 경로
+    path: /swagger-custom-ui.html
