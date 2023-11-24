@@ -2,126 +2,120 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
 import { Card, Mentions, Button, Select } from 'antd';
+import PwModal from '../../component/Modal/ChangePasswordModal'
+import InfoModal from '../../component/Modal/ChangeInfoModal'
 import axios from 'axios'
+import { useRecoilState } from "recoil";
+import { loginState } from "../../atom/loginState";
+import useModal from '../../hooks/useModal';
 
 function MyProfile() {
     let navigate = useNavigate();
-
-    const [nickname, setNickname] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [isModified, setIsModified] = useState<boolean>(false);
+    let accessToken = localStorage.getItem('login-token');
+    const [isPwModalVisible, showPwModal, closePwModal] = useModal();
+    const [isInfoModalVisible, showInfoModal, closeInfoModal] = useModal();
+    const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
+    const [nickname, setNickname] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [id, setId] = useState<string>('');
 
     useEffect(() => {
-        //내 정보 불러오기 
-        let accessToken = localStorage.getItem('login-token');
-        axios({
-            method: "GET",
-            url: "/api/member/myPage",
-            headers: {
-                Authorization: accessToken,
-            },
-        })
-            .then((res) => {
-                setEmail(res.data.email);
-                setNickname(res.data.nickName);
+        if (!isLoggedIn) {
+            navigate('/');
+        } else {
+            axios({
+                method: "GET",
+                url: '/api/member/myPage',
+                headers: { Authorization: accessToken }
             })
-            .catch((error) => {
-                console.error("Error : ", error);
-            });
-    }, []);
-
-    const handleNicknameChange = (value: string) => {
-        setNickname(value);
-        setIsModified(true);
-    };
-
-    const handlePasswordChange = (value: string) => {
-        setPassword(value);
-        setIsModified(true);
-    };
-
-    const handleConfirmPasswordChange = (value: string) => {
-        setConfirmPassword(value);
-        setIsModified(true);
-    };
+                .then(res => {
+                    setEmail(res.data.email)
+                    setNickname(res.data.nickName)
+                    setId(res.data.loginId)
+                });
+        }
+    }, [isLoggedIn, navigate, accessToken]);
 
     return (
-        <Container>
-            <ImgBox>
-                <ProfileImg src='img/profile.jpg' />
-            </ImgBox>
-            <ProfileText>{nickname}</ProfileText>
-            <Card style={{ width: '90%', margin: '20px auto', borderColor: '#c0c0c0' }} title="기본 정보">
-                {/* 수정/작성 시 수정버튼 활성화 */}
-                <InfoText>이메일</InfoText>
-                <MyMentions
-                    placeholder={email}
-                    disabled
-                />
-                <InfoText>닉네임</InfoText>
-                <MyMentions
-                    defaultValue={nickname}
-                    onChange={handleNicknameChange}
-                />
-                <InfoText>비밀번호</InfoText>
-                <MyMentions
-                    placeholder="************"
-                    onChange={handlePasswordChange}
-                />
-                <InfoText>비밀번호 확인</InfoText>
-                <MyMentions
-                    placeholder="************"
-                    onChange={handleConfirmPasswordChange}
-                />
-                <Button style={{ textAlign: "center" }} type="primary" disabled={!isModified}>수정</Button>
-            </Card>
-            <Card style={{ width: '90%', margin: '20px auto', marginBottom: '100px', borderColor: '#c0c0c0' }} title="추가 정보">
-                {/* 수정/작성 시 수정버튼 활성화 */}
-                <InfoText>
-                    나의 랭킹
-                    <LinkText color="blue" onClick={() => navigate("/ranking")}> 랭킹 점수 보러가기 →</LinkText>
-                </InfoText>
-                <MyMentions
-                    defaultValue="123위"
-                    readOnly
-                />
-                <InfoText>그동안 쓴 일기</InfoText>
-                <MyMentions
-                    defaultValue="3921개"
-                    readOnly
-                />
-                <InfoText>메달 획득 갯수</InfoText>
-                <MyMentions
-                    defaultValue="🥇 12개  🥈 3개  🥉 23개"
-                    readOnly
-                />
-                <InfoText>일기방 나가기
-                    <LinkText>삭제</LinkText>
-                </InfoText>
-                <Select
-                    defaultValue="공유일기방"
-                    style={{
-                        width: '100%',
-                    }}
-                    options={[
-                        {
-                            value: '클라이밍방',
-                            label: '클라이밍방',
-                        },
-                        {
-                            value: '공유일기방',
-                            label: '공유일기방',
-                        },
-                        {
-                            value: '고양이조아방',
-                            label: '고양이조아방',
-                        },
-                    ]}
-                />
-            </Card>
-        </Container >
+        <>
+            <PwModal visible={isPwModalVisible} closeModal={closePwModal} />
+            <InfoModal
+                visible={isInfoModalVisible}
+                closeModal={closeInfoModal}
+                email={email}
+                nickName={nickname}
+            />
+            <Container>
+                <ImgBox>
+                    <ProfileImg src='img/profile_icon.png' />
+                </ImgBox>
+                <ProfileText>{id}</ProfileText>
+                <Card style={{ width: '90%', margin: '20px auto', borderColor: '#c0c0c0' }} title="기본 정보">
+                    <InfoText>이메일</InfoText>
+                    <MyMentions
+                        value={email}
+                        readOnly
+                    />
+                    <InfoText>닉네임
+                        <Button style={{ float: 'right', marginBottom: '10px' }} onClick={() => showInfoModal()}>수정</Button>
+                    </InfoText>
+                    <MyMentions
+                        value={nickname}
+                        onChange={(value) => { setNickname(value); }}
+                    />
+                    <InfoText>비밀번호
+                        <LinkText color="blue" onClick={() => showPwModal()}> 비밀번호 변경 →</LinkText>
+                    </InfoText>
+                    <MyMentions
+                        defaultValue="***********"
+                        readOnly
+                    />
+                </Card>
+                <Card style={{ width: '90%', margin: '20px auto', marginBottom: '100px', borderColor: '#c0c0c0' }} title="추가 정보">
+                    <InfoText>
+                        나의 랭킹
+                        <LinkText color="blue" onClick={() => navigate("/ranking")}> 랭킹 점수 보러가기 →</LinkText>
+                    </InfoText>
+                    <MyMentions
+                        defaultValue="123위"
+                        readOnly
+                    />
+                    <InfoText>그동안 쓴 일기</InfoText>
+                    <MyMentions
+                        defaultValue="3921개"
+                        readOnly
+                    />
+                    <InfoText>메달 획득 갯수</InfoText>
+                    <MyMentions
+                        defaultValue="🥇 12개  🥈 3개  🥉 23개"
+                        readOnly
+                    />
+                    <InfoText>일기방 나가기
+                        <LinkText>삭제</LinkText>
+                    </InfoText>
+                    <Select
+                        defaultValue="공유일기방"
+                        style={{
+                            width: '100%',
+                        }}
+                        options={[
+                            {
+                                value: '클라이밍방',
+                                label: '클라이밍방',
+                            },
+                            {
+                                value: '공유일기방',
+                                label: '공유일기방',
+                            },
+                            {
+                                value: '고양이조아방',
+                                label: '고양이조아방',
+                            },
+                        ]}
+                    />
+                </Card>
+            </Container >
+        </>
     );
 }
 
@@ -160,6 +154,12 @@ const InfoText = styled.div`
 
 const MyMentions = styled(Mentions)`
     margin-bottom: 20px;
+    width: 100%;
+`
+
+const MentionBox = styled(Mentions)`
+    margin-bottom: 20px;
+    width: 100%;
 `
 
 const LinkText = styled.span`
