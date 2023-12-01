@@ -69,9 +69,9 @@ public class AuthController {
         return ResponseCookie.from("REFRESH_TOKEN",refreshToken)
                 .path("/")
                 .domain("localhost")
-                .sameSite("Lax")
-                .httpOnly(true)
-                .secure(false)
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(true)
                 .maxAge(Duration.ofDays(30))
                 .build();
     }
@@ -80,9 +80,9 @@ public class AuthController {
         ResponseCookie cookie = ResponseCookie.from("REFRESH_TOKEN", "")
                 .path("/")
                 .domain("localhost")
-                .sameSite("Lax")
+                .sameSite("None")
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .maxAge(Duration.ofDays(0))
                 .build();
         return cookie;

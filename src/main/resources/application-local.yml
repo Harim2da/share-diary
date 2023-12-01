@@ -60,24 +60,24 @@ github:
     profile: https://api.github.com/user
 
 #Authorization url :
-#  https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/login/oauth2/callback&response_type=code&client_id=225651924488-oq3i2bo15p16qvnmad43hpabphts956u.apps.googleusercontent.com
+#  https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:3000/login/oauth2/callback&response_type=code&client_id=225651924488-oq3i2bo15p16qvnmad43hpabphts956u.apps.googleusercontent.com
 google:
   client:
     id: 225651924488-oq3i2bo15p16qvnmad43hpabphts956u.apps.googleusercontent.com
     secret: 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
-  redirect-uri: http://localhost:8080/login/oauth2/callback
+  redirect-uri: http://localhost:3000/login/oauth2/callback
   grant-type: authorization_code
   url:
     access-token: https://oauth2.googleapis.com/token
     profile: https://www.googleapis.com/oauth2/v2/userinfo
 
 #Authorization url:
-#https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=c7893734cf9af631da8451f73fe618b8&redirect_uri=http://localhost:8080/login/oauth2/callback
+#https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=c7893734cf9af631da8451f73fe618b8&redirect_uri=http://localhost:3000/login/oauth2/callback
 kakao:
   client:
     id: c7893734cf9af631da8451f73fe618b8
     secret: 8S8JTnTu9PChRr74K0I1IxLtjzqTk59o
-  redirect-uri: http://localhost:8080/login/oauth2/callback
+  redirect-uri: http://localhost:3000/login/oauth2/callback
   grant-type: authorization_code
   url:
     access-token: https://kauth.kakao.com/oauth/token

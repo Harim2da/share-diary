@@ -3,11 +3,10 @@ package share_diary.diray.auth.oauth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -66,20 +65,24 @@ public class GoogleOAuthManager implements OAuthManager{
 
     @Override
     public String getAccessToken(String code) {
-        GoogleTokenRequest requestEntity = GoogleTokenRequest.builder()
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .code(code)
-                .redirectUri(redirectUri)
-                .grantType(grantType)
-                .build();
+        MultiValueMap<String,String> requestEntity = new LinkedMultiValueMap<>();
+        requestEntity.add("client_id",clientId);
+        requestEntity.add("client_secret",clientSecret);
+        requestEntity.add("code",code);
+        requestEntity.add("redirect_uri",redirectUri);
+        requestEntity.add("grant_type",grantType);
 
         UriComponents uri = UriComponentsBuilder
                 .fromUriString(accessTokenUrl)
                 .build();
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity<Object> entity = new HttpEntity<>(requestEntity,headers);
+
         ResponseEntity<GoogleTokenResponse> responseEntity =
-                restTemplate.postForEntity(uri.toString(), requestEntity, GoogleTokenResponse.class);
+                restTemplate.postForEntity(uri.toString(), entity, GoogleTokenResponse.class);
         GoogleTokenResponse body = responseEntity.getBody();
         return body.getAccessToken();
     }

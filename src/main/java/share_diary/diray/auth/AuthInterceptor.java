@@ -1,6 +1,8 @@
 package share_diary.diray.auth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.WebUtils;
@@ -14,6 +16,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 @RequiredArgsConstructor
 public class AuthInterceptor implements HandlerInterceptor {
 
@@ -25,7 +28,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         //만약 oauth 로그인 후 redirect 된 uri 라면 그냥 true
         //interceptor 에 대해 학습 더 필요
 
+        if(CorsUtils.isPreFlightRequest(request)){
+            log.info("-----Preflight Request Occur-----");
+            return true;
+        }
+
         if(handler instanceof HandlerMethod) {
+            log.info("-----No Auth Request-----");
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             NoAuth noAuth = handlerMethod.getMethodAnnotation(NoAuth.class);
             if(noAuth != null){
