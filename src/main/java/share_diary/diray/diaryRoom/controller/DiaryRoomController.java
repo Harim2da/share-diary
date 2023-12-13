@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,5 +66,17 @@ public class DiaryRoomController {
             @AuthenticationPrincipal LoginSession session
     ) {
         return ResponseEntity.ok(diaryRoomService.getDiaryRoomMembers(diaryRoomId, searchDate, session.getId()));
+    }
+
+    /**
+     * 내가 속한 특정 일기방에서 나가기
+     * */
+    @DeleteMapping("/{diaryRoomId}")
+    public ResponseEntity<HttpStatus> deleteDiaryRoomMember(
+            @PathVariable Long diaryRoomId,
+            @AuthenticationPrincipal LoginSession session
+    ) {
+        diaryRoomService.deleteDiaryRoomMember(diaryRoomId, session.getId());
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
