@@ -70,7 +70,7 @@ public class MemberInviteHistoryController {
     @GetMapping
     @NoAuth
     //TODO[jipdol2] : MemberInviteHistory Entity 에 '누가' 초대를 했는지 알 수 있도록 필드 추가 필요...
-    public ResponseEntity<ResultList> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
+    public ResponseEntity<ResultList<MemberInviteHistoryDTO>> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
         List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
         return ResponseEntity.ok(new ResultList<>(byLoginUserInviteHistory));
     }

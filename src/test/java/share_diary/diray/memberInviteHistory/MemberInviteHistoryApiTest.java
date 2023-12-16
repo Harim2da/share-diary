@@ -1,18 +1,15 @@
 package share_diary.diray.memberInviteHistory;
 
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import share_diary.diray.ApiTest;
 import share_diary.diray.auth.AuthSteps;
 import share_diary.diray.diaryRoom.DiaryRoomSteps;
 import share_diary.diray.member.MemberSteps;
-import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 
 import java.time.LocalDateTime;
@@ -115,8 +112,9 @@ class MemberInviteHistoryApiTest extends ApiTest {
         token = loginResponse
                 .body().jsonPath().getString("accessToken");
 
-        //expected
+        //when
         final var response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
+
         //then
         assertThat(response.jsonPath().getString("result[0].uuid")).isNotNull();
         assertThat(response.jsonPath().getString("result[0].email")).isEqualTo("somin2@gmail.com");
