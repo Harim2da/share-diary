@@ -18,6 +18,7 @@ public interface MemberInviteHistoryMapper extends GenericMapper<MemberInviteHis
     @Named(value = "asMemberInviteHistoryDTO")
     @Mapping(target = "memberId", source = "member.id")
     @Mapping(target = "diaryRoomId", source = "diaryRoom.id")
+    @Mapping(target = "diaryRoomName",source = "diaryRoom.name")
     MemberInviteHistoryDTO asMemberInviteHistoryDTO(MemberInviteHistory memberInviteHistory);
 
     @IterableMapping(qualifiedByName = "asMemberInviteHistoryDTO")

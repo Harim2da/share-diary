@@ -20,8 +20,9 @@ public class MemberInviteHistoryDTO {
     private InviteAcceptStatus status;
     private Long memberId;
     private Long diaryRoomId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDateTime createDate;
-    private String createBy;
+    private String diaryRoomName;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//    private LocalDateTime createDate;
+//    private String createBy;
 
 }
