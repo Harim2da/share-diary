@@ -9,12 +9,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ResultList<T> {
 
-    private List<T> result;
+    private T result;
 
     private int size;
 
-    public ResultList(List<T> result) {
+    public ResultList(T result,int size) {
         this.result = result;
-        this.size = result.size();
+        this.size = size;
     }
 }

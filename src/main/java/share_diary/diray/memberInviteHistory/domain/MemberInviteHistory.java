@@ -14,6 +14,7 @@ import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdExc
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
 import share_diary.diray.member.domain.Member;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table(name = "member_invite_history")
@@ -40,6 +41,9 @@ public class MemberInviteHistory extends BaseTimeEntity {
     @Column
     private Long hostUserId;
 
+    @Column
+    private LocalDateTime inviteDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
@@ -49,7 +53,7 @@ public class MemberInviteHistory extends BaseTimeEntity {
     private DiaryRoom diaryRoom;
 
 
-    public static MemberInviteHistory of(Member member, DiaryRoom diaryRoom, String email, Long hostUserId) {
+    public static MemberInviteHistory of(Member member, DiaryRoom diaryRoom, String email, Long hostUserId,LocalDateTime inviteDate) {
         MemberInviteHistory instance = new MemberInviteHistory();
         instance.uuid = UUID.randomUUID().toString();
         instance.email = email;
@@ -57,13 +61,14 @@ public class MemberInviteHistory extends BaseTimeEntity {
         instance.member = member;
         instance.diaryRoom = diaryRoom;
         instance.hostUserId = hostUserId;
+        instance.inviteDate = inviteDate;
         return instance;
     }
 
-    public static MemberInviteHistory reInvite(Member member, MemberInviteHistory beforeHistory) {
+    public static MemberInviteHistory reInvite(Member member, MemberInviteHistory beforeHistory,LocalDateTime inviteDate) {
         beforeHistory.status = InviteAcceptStatus.RE_INVITE;
         return of(member, beforeHistory.getDiaryRoom(), member.getEmail(),
-                beforeHistory.getHostUserId());
+                beforeHistory.getHostUserId(),inviteDate);
     }
 
     public MemberInviteHistory updateAcceptStatus(InviteAcceptStatus status) {
