@@ -89,8 +89,9 @@ public class DiaryRoomService {
 
     public void deleteDiaryRoomMember(Long diaryRoomId, Long memberId) {
         LocalDate searchDate = LocalDate.now(); // zone 관련 수정 필요. 원래는 ZoneId로 가는 게 맞을 듯
-        memberDiaryRoomRepository.findByDiaryRoomIdAndSearchDateAndMemberId(diaryRoomId, searchDate, memberId)
-                .map(MemberDiaryRoom::exitDiaryRoom)
+        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByDiaryRoomIdAndSearchDateAndMemberId(
+                        diaryRoomId, searchDate, memberId)
                 .orElseThrow(DiaryRoomNotFoundException::new);
+        memberDiaryRoom.exitDiaryRoom();
     }
 }
