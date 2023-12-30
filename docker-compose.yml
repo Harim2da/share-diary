@@ -1,0 +1,39 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    ports:
+      - "3306:3306" # HOST:CONTAINER
+    environment:
+      MYSQL_DATABASE: diarydb
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: admin
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - D:/mysql/data:/var/lib/mysql
+    networks:
+      - app_network
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    container_name: app_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/diarydb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    networks:
+      - app_network
+
+networks:
+  app_network:

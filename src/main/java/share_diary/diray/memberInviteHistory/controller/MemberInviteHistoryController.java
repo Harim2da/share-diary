@@ -17,7 +17,9 @@ import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequ
 import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
 import share_diary.diray.common.response.ResultList;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,9 +42,10 @@ public class MemberInviteHistoryController {
             @RequestBody MemberInviteRequest request,
             @AuthenticationPrincipal LoginSession session
     ) {
+        LocalDateTime now = LocalDateTime.now();
         // 초대하는 사람 본인 Id 추가
         request.updateHostId(session.getId());
-        memberInviteHistoryService.inviteRoomMembers(request);
+        memberInviteHistoryService.inviteRoomMembers(request,now);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -69,10 +72,9 @@ public class MemberInviteHistoryController {
     @Operation(summary = "Get Invite History",description = "알림 내역 조회 API")
     @GetMapping
     @NoAuth
-    //TODO[jipdol2] : MemberInviteHistory Entity 에 '누가' 초대를 했는지 알 수 있도록 필드 추가 필요...
-    public ResponseEntity<ResultList> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
-        List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
-        return ResponseEntity.ok(new ResultList<>(byLoginUserInviteHistory));
+    public ResponseEntity<ResultList<Map<String, List<MemberInviteHistoryDTO>>>> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
+        Map<String, List<MemberInviteHistoryDTO>> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
+        return ResponseEntity.ok(new ResultList<>(byLoginUserInviteHistory,byLoginUserInviteHistory.size()));
     }
 
 }

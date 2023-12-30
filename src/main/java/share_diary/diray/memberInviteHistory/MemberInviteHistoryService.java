@@ -1,6 +1,9 @@
 package share_diary.diray.memberInviteHistory;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -38,7 +41,7 @@ public class MemberInviteHistoryService {
     private final MemberInviteHistoryMapper inviteHistoryMapper;
     private final MemberDiaryRoomRepository memberDiaryRoomRepository;
 
-    public void inviteRoomMembers(MemberInviteRequest request) {
+    public void inviteRoomMembers(MemberInviteRequest request, LocalDateTime now) {
         // 일기방 검증 및 host 체크
         MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(request.getHostId(),
                 request.getDiaryRoomId())
@@ -71,18 +74,18 @@ public class MemberInviteHistoryService {
 
                 if(Objects.nonNull(beforeInviteHistory)) {
                     // 메일 재발송 - 기존 초대 상태 Reinvite로 변경 -> Invite 하나 더 쌓기
-                    thisInviteHistory = MemberInviteHistory.reInvite(member, beforeInviteHistory);
+                    thisInviteHistory = MemberInviteHistory.reInvite(member, beforeInviteHistory,now);
 
                 } else {
                     // 메일 최초 발송
-                    thisInviteHistory = MemberInviteHistory.of(member, diaryRoom, email, request.getHostId());
+                    thisInviteHistory = MemberInviteHistory.of(member, diaryRoom, email, request.getHostId(),now);
                 }
 
             } else {
                 // 비회원인 경우, 계정 만든 후 초대 진행
                 Member newMember = Member.ofCreateInviteMember(email);
                 memberRepository.save(newMember);
-                thisInviteHistory = MemberInviteHistory.of(newMember, diaryRoom, email, request.getHostId());
+                thisInviteHistory = MemberInviteHistory.of(newMember, diaryRoom, email, request.getHostId(),now);
             }
             memberInviteHistoryRepository.save(thisInviteHistory);
 
@@ -109,8 +112,10 @@ public class MemberInviteHistoryService {
         }
     }
 
-    public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId){
+    public Map<String, List<MemberInviteHistoryDTO>> findByLoginUserInviteHistory(Long loginId){
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
-        return inviteHistoryMapper.asMemberInviteHistoryDTOList(inviteHistories);
+        List<MemberInviteHistoryDTO> memberInviteHistoryDTOList = inviteHistoryMapper.asMemberInviteHistoryDTOList(inviteHistories);
+        return memberInviteHistoryDTOList.stream()
+                .collect(Collectors.groupingBy(dto-> dto.getInviteDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
     }
 }

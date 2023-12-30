@@ -8,6 +8,8 @@ import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
 import share_diary.diray.memberInviteHistory.MemberInviteRequest;
 import share_diary.diray.memberInviteHistory.event.listener.DiaryRoomCreateEventListener;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class DiaryRoomCreateEventListenerImpl implements DiaryRoomCreateEventLis
 
     @Override
     public void handleDiaryRoomCreateEvent(DiaryRoomCreateEvent event) {
-        memberInviteHistoryService.inviteRoomMembers(MemberInviteRequest.of(event.getDiaryRoomId(), event.getEmails(), event.getHost().getId()));
+        LocalDateTime now = LocalDateTime.now();
+        memberInviteHistoryService.inviteRoomMembers(MemberInviteRequest.of(event.getDiaryRoomId(), event.getEmails(), event.getHost().getId()),now);
     }
 }
