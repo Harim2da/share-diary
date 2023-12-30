@@ -84,10 +84,14 @@ public class DiaryRoomService {
 
     public void deleteDiaryRoomMember(Long diaryRoomId, Long memberId) {
         LocalDate searchDate = LocalDate.now(); // zone 관련 수정 필요. 원래는 ZoneId로 가는 게 맞을 듯
-        memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate, memberId)
-                .stream()
-                .findFirst()
-                .map(MemberDiaryRoom::exitDiaryRoom)
-                .orElseThrow(DiaryRoomNotFoundException::new);
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate, memberId);
+
+        if(CollectionUtils.isEmpty(memberDiaryRooms)) {
+            throw new DiaryRoomNotFoundException();
+        } else {
+            memberDiaryRooms.stream()
+                    .findFirst()
+                    .map(MemberDiaryRoom::exitDiaryRoom);
+        }
     }
 }
