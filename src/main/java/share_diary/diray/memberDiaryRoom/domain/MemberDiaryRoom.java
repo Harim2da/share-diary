@@ -1,10 +1,12 @@
 package share_diary.diray.memberDiaryRoom.domain;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.diaryRoom.DiaryRoom;
+import share_diary.diray.exception.memberDiaryRoom.AlreadyExitedDiaryRoomException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.Role;
 
@@ -74,5 +76,14 @@ public class MemberDiaryRoom {
         instance.role = role;
         instance.joinDate = LocalDate.now(); // zone 지정 관련 논의 필요
         return instance;
+    }
+
+    public MemberDiaryRoom exitDiaryRoom() {
+        if(Objects.isNull(getExitDate())) {
+            this.exitDate = LocalDate.now(); // zone 지정 관련 논의 필요
+            return this;
+        } else {
+            throw new AlreadyExitedDiaryRoomException();
+        }
     }
 }

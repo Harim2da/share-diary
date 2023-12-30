@@ -16,6 +16,7 @@ import share_diary.diray.diaryRoom.controller.response.DiaryRoomMembersResponse;
 import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
 import share_diary.diray.diaryRoom.event.DiaryRoomCreateEvent;
 import share_diary.diray.diaryRoom.mapper.DiaryRoomMapper;
+import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
@@ -79,5 +80,18 @@ public class DiaryRoomService {
             throw new MemberNotFoundException();
         }
         return new DiaryRoomMembersResponse().of(diaryRoomId, memberDiaryRooms);
+    }
+
+    public void deleteDiaryRoomMember(Long diaryRoomId, Long memberId) {
+        LocalDate searchDate = LocalDate.now(); // zone 관련 수정 필요. 원래는 ZoneId로 가는 게 맞을 듯
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate, memberId);
+
+        if(CollectionUtils.isEmpty(memberDiaryRooms)) {
+            throw new DiaryRoomNotFoundException();
+        } else {
+            memberDiaryRooms.stream()
+                    .findFirst()
+                    .map(MemberDiaryRoom::exitDiaryRoom);
+        }
     }
 }

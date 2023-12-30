@@ -17,6 +17,7 @@ import share_diary.diray.exception.member.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import share_diary.diray.exception.memberDiaryRoom.AlreadyExitedDiaryRoomException;
 import share_diary.diray.exception.memberInviteHistory.AlreadyCheckedInviteException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
@@ -37,6 +38,7 @@ public enum ErrorType {
     M005("M005","비밀번호가 일치하지 않습니다.", PasswordNotCoincide.class),
     M006("M006","수정하려는 비밀번호가 일치하지 않습니다.", UpdatePasswordNotCoincide.class),
 
+    MD001("MD001", "이미 탈퇴한 일기방입니다.", AlreadyExitedDiaryRoomException.class),
     D001("D001", "존재하지 않는 일기방입니다.", DiaryRoomNotFoundException.class),
 
     DD001("DD001","존재하지 않는 일기입니다.", DailyDiaryNotFoundException.class),
