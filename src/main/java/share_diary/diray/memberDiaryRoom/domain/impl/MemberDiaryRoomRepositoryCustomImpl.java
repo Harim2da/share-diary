@@ -37,12 +37,24 @@ public class MemberDiaryRoomRepositoryCustomImpl extends QuerydslRepositorySuppo
 
     @Override
     public List<MemberDiaryRoom> findAllByDiaryRoomIdAndSearchDateWithMember(Long diaryRoomId,
-            LocalDate searchDate, Long memberId) {
+            LocalDate searchDate) {
         return from(memberDiaryRoom)
                 .join(memberDiaryRoom.member).fetchJoin()
                 .where(memberDiaryRoom.diaryRoom.id.eq(diaryRoomId)
-                        .and(memberDiaryRoom.member.id.in(memberId))
                         .and(memberDiaryRoom.joinDate.loe(searchDate)))
                 .fetch();
+    }
+
+    @Override
+    public Optional<MemberDiaryRoom> findByDiaryRoomIdAndSearchDateAndMemberId(Long diaryRoomId,
+            LocalDate searchDate, Long memberId) {
+        return Optional.ofNullable(
+                from(memberDiaryRoom)
+                        .join(memberDiaryRoom.member).fetchJoin()
+                        .where(memberDiaryRoom.diaryRoom.id.eq(diaryRoomId)
+                                .and(memberDiaryRoom.member.id.eq(memberId))
+                                .and(memberDiaryRoom.joinDate.loe(searchDate)))
+                        .fetchOne()
+        );
     }
 }

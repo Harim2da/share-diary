@@ -78,8 +78,9 @@ public class DailyDiaryService {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(
-                        diaryRoomId, searchingDate, loginMemberId)
+                        diaryRoomId, searchingDate)
                 .stream()
+                .filter(m -> m.getMember().getId().equals(loginMemberId))
                 .filter(mb -> mb.getMember().getId().equals(memberId))
                 .findFirst()
                 .orElseThrow(InvalidGetDiaryException::new);
