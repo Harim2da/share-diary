@@ -6,6 +6,7 @@ import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.domain.Member;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -34,13 +35,14 @@ public class MemberSignUpRequestDTO {
         return new MemberSignUpRequestDTO(memberId,email,password,nickName);
     }
 
-    public Member toMember(String encodedPassword){
+    public static Member fromToMember(MemberSignUpRequestDTO request,String encodedPassword, LocalDateTime now){
         return Member.builder()
-                .loginId(loginId)
-                .email(email)
+                .loginId(request.getLoginId())
+                .email(request.getEmail())
                 .password(encodedPassword)
-                .nickName(nickName)
+                .nickName(request.getNickName())
                 .joinStatus(JoinStatus.USER)
+                .joinTime(now)
                 .build();
     }
 }
