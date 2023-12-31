@@ -1,0 +1,14 @@
+POST http://localhost:8080/api/v0/daily-diaries
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA0MDExNzcyLCJleHAiOjE3MDQwMTM1NzJ9.-aDfxR2C0Oy8_1OhvJeIheV7cDEIU-PEGlCvOlFInO0
+Content-Type: application/json
+
+{
+  "content": "오늘의 일기입니다.",
+  "feeling": "ANGRY",
+  "diaryRooms": ["1"],
+  "status": "SHOW"
+}
+
+###
+GET http://localhost:8080/api/v0/daily-diaries?diaryRoomId=1&searchDate=2023-12-31&memberId=1
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA0MDExNzcyLCJleHAiOjE3MDQwMTM1NzJ9.-aDfxR2C0Oy8_1OhvJeIheV7cDEIU-PEGlCvOlFInO0

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.emoji.domain.Emoji;
+import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 
@@ -62,6 +63,17 @@ public class Member extends BaseTimeEntity {
         this.joinTime = joinTime;
     }
 
+    public static Member ofCreateMember(String loginId, String email, String password, String nickName, JoinStatus joinStatus, LocalDateTime joinTime){
+        return Member.builder()
+                .loginId(loginId)
+                .email(email)
+                .password(password)
+                .nickName(nickName)
+                .joinStatus(joinStatus)
+                .joinTime(joinTime)
+                .build();
+    }
+
     public void updatePassword(String encryptPassword){
         this.password = encryptPassword;
     }
@@ -76,5 +88,13 @@ public class Member extends BaseTimeEntity {
         instance.email = email;
         instance.joinStatus = JoinStatus.WAITING;
         return instance;
+    }
+
+    public void updateJoinMember(MemberSignUpRequestDTO requestDTO,String encodedPassword,LocalDateTime now) {
+        this.loginId = requestDTO.getLoginId();
+        this.password = encodedPassword;
+        this.nickName = requestDTO.getNickName();
+        this.joinStatus = JoinStatus.USER;
+        this.joinTime = now;
     }
 }

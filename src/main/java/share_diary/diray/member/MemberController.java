@@ -14,6 +14,7 @@ import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -32,7 +33,8 @@ public class MemberController {
     @NoAuth
     @PostMapping("/signUp")
     public ResponseEntity<Void> signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
-        memberService.joinMember(requestDTO);
+        LocalDateTime now = LocalDateTime.now();
+        memberService.joinMember(requestDTO,now);
         return ResponseEntity.ok().build();
     }
 

@@ -25,6 +25,7 @@ import share_diary.diray.member.mapper.MemberMapper;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,30 +55,52 @@ public class MemberService {
     private final CertificationNumberRepository certificationNumberRepository;
     private final MemberInviteHistoryRepository memberInviteHistoryRepository;
 
-    public void joinMember(MemberSignUpRequestDTO requestDTO) {
+    public void joinMember(MemberSignUpRequestDTO requestDTO, LocalDateTime now) {
         //빵
-        validationMember(requestDTO);
+        validationLoginId(requestDTO.getLoginId());
 
         //속
         String encodedPassword = passwordEncoder.encode(requestDTO.getPassword());
-        Member member = requestDTO.toMember(encodedPassword);
+
+            //일기방 초대를 통해 생성된 Member 객체 회원가입 진행
+        if (joinedMemberUpdate(requestDTO, now, encodedPassword)) return;
+
+        validationEmail(requestDTO.getEmail());
+        Member member = MemberSignUpRequestDTO.fromToMember(requestDTO,encodedPassword,now);
 
         //빵
         memberRepository.save(member);
     }
 
     public void joinMemberSocial(MemberSignUpSocialRequestDTO requestDTO) {
+
+        validationEmail(requestDTO.getEmail());
+
         Member member = MemberSignUpSocialRequestDTO.fromToMember(requestDTO);
+
         memberRepository.save(member);
     }
 
-    private void validationMember(MemberSignUpRequestDTO request) {
-        if (memberRepository.existsByLoginId(request.getLoginId())) {
+    private void validationLoginId(String loginId) {
+        if (memberRepository.existsByLoginId(loginId)) {
             throw new ValidationMemberIdException();
         }
-        if (memberRepository.existsByEmail(request.getEmail())) {
+    }
+
+    private void validationEmail(String email){
+        if(memberRepository.existsByEmail(email)){
             throw new ValidationMemberEmailException();
         }
+    }
+
+    private boolean joinedMemberUpdate(MemberSignUpRequestDTO requestDTO, LocalDateTime now, String encodedPassword) {
+        if(memberRepository.isJoinedMember(requestDTO.getEmail())){
+            Member findMember = memberRepository.findByEmail(requestDTO.getEmail())
+                    .orElseThrow(MemberNotFoundException::new);
+            findMember.updateJoinMember(requestDTO, encodedPassword, now);
+            return true;
+        }
+        return false;
     }
 
     public MemberDTO findMemberById(Long loginId) {
