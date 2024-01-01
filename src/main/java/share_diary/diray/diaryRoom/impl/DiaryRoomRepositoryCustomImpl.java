@@ -1,6 +1,9 @@
 package share_diary.diray.diaryRoom.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.diaryRoom.DiaryRoomRepositoryCustom;
@@ -14,12 +17,22 @@ public class DiaryRoomRepositoryCustomImpl extends QuerydslRepositorySupport imp
     }
 
     @Override
-    public List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId) {
+    public List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId, Long diaryRoomId) {
         return from(diaryRoom)
                 .join(diaryRoom.memberDiaryRooms, memberDiaryRoom).fetchJoin()
                 .where(
-                        memberDiaryRoom.member.id.eq(memberId)
+                        memberDiaryRoom.member.id.eq(memberId),
+                        ltDiaryRoomId(diaryRoomId)
                 )
+                .orderBy(diaryRoom.createDate.desc())
+                .limit(5)
                 .fetch();
+    }
+
+    private BooleanExpression ltDiaryRoomId(Long diaryRoomId){
+        if(diaryRoomId == null){
+            return null;
+        }
+        return diaryRoom.id.lt(diaryRoomId);
     }
 }

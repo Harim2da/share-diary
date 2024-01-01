@@ -1,10 +1,9 @@
 package share_diary.diray.diaryRoom.controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,8 @@ public class DiaryRoomController {
             @RequestBody DiaryRoomCreateRequest request,
             @AuthenticationPrincipal LoginSession session
             ) {
-        diaryRoomService.createDiaryRoom(session.getId(), request);
+        LocalDateTime now = LocalDateTime.now();
+        diaryRoomService.createDiaryRoom(session.getId(), request,now);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -54,9 +54,10 @@ public class DiaryRoomController {
     // TODO : 일기방 정렬 방식 논의 필요
     @GetMapping
     public ResponseEntity<List<DiaryRoomDTO>> getDiaryRooms(
-            @AuthenticationPrincipal LoginSession session
-    ) {
-        return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId()));
+            @AuthenticationPrincipal LoginSession session,
+            @RequestParam(required = false) Long lastDiaryId
+            ) {
+        return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId(),lastDiaryId));
     }
 
     @GetMapping("/{diaryRoomId}/members")

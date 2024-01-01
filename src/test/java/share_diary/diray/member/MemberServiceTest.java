@@ -5,11 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import share_diary.diray.DatabaseCleanup;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.ValidationMemberEmailException;
+import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
@@ -25,8 +27,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 class MemberServiceTest {
 
+    //Database cleanUp
+    @Autowired
+    private DatabaseCleanup databaseCleanup;
+
+    //Service
     @Autowired
     private MemberService memberService;
+
+    //Repository
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -34,7 +43,7 @@ class MemberServiceTest {
 
     @AfterEach
     void tearDown() {
-        memberRepository.deleteAllInBatch();
+        databaseCleanup.execute();
     }
 
     @Test
@@ -90,8 +99,29 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원가입을 시도하지만 이미 등록된 아이디가 있어 Exception 발생")
+    void joinedMemberIdFail() {
+        //given
+        Member member = createMember(
+                "jipdol2",
+                "jipdol2@gmail.com",
+                "password123"
+        );
+        memberRepository.save(member);
+
+        MemberSignUpRequestDTO request =
+                MemberSignUpRequestDTO.of("jipdol2", "jipdol2@gmail.com", "1234", "jipdol2");
+
+        //expected
+        LocalDateTime now = LocalDateTime.of(2023, Month.DECEMBER, 31, 10, 40);
+
+        assertThatThrownBy(()->memberService.joinMember(request, now))
+                .isInstanceOf(ValidationMemberIdException.class);
+    }
+
+    @Test
     @DisplayName("회원가입을 시도하지만 이미 등록된 이메일이 있어 Exception 발생")
-    void joinedMemberFail() {
+    void joinedMemberEmailFail() {
         //given
         Member member = createMember(
                 "jipdol2",
@@ -107,8 +137,6 @@ class MemberServiceTest {
         LocalDateTime now = LocalDateTime.of(2023, Month.DECEMBER, 31, 10, 40);
 
         assertThatThrownBy(()->memberService.joinMember(request, now))
-//                .extracting("code","message")
-//                .containsExactlyInAnyOrder(ErrorType.M004,"이미 등록된 이메일이 존재합니다.")
                 .isInstanceOf(ValidationMemberEmailException.class);
     }
 
