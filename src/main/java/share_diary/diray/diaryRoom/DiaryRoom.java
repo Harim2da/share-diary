@@ -29,6 +29,8 @@ public class DiaryRoom extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private DiaryRoomStatus status;
 
+    private LocalDateTime registeredDate;
+
     @Column
     private String createBy;
 
@@ -41,12 +43,13 @@ public class DiaryRoom extends BaseTimeEntity {
     @OneToMany(mappedBy = "diaryRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<MemberInviteHistory> memberInviteHistories = new HashSet<>();
 
-    public static DiaryRoom of(String name, String createBy) {
+    public static DiaryRoom of(String name, String createBy, LocalDateTime now) {
         DiaryRoom instance = new DiaryRoom();
         instance.name = name;
         instance.status = DiaryRoomStatus.OPEN;
         instance.createBy = createBy;
         instance.modifyBy = createBy;
+        instance.registeredDate = now;
         return instance;
     }
 

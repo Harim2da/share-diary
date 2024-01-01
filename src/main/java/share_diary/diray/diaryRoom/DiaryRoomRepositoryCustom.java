@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface DiaryRoomRepositoryCustom {
 
-    List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId);
+    List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId, Long diaryId);
 }

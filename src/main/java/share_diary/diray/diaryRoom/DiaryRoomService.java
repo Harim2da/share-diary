@@ -1,6 +1,7 @@
 package share_diary.diray.diaryRoom;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
@@ -43,12 +44,12 @@ public class DiaryRoomService {
         }
     }
 
-    public void createDiaryRoom(Long memberId, DiaryRoomCreateRequest request) {
+    public void createDiaryRoom(Long memberId, DiaryRoomCreateRequest request, LocalDateTime now) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
         // 멤버에서 뽑아낸 로그인 아이디
-        DiaryRoom diaryRoom = DiaryRoom.of(request.getName(), member.getLoginId());
+        DiaryRoom diaryRoom = DiaryRoom.of(request.getName(), member.getLoginId(),now);
         diaryRoomRepository.save(diaryRoom);
 
         memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.HOST));
@@ -60,11 +61,11 @@ public class DiaryRoomService {
     }
 
     @Transactional(readOnly = true)
-    public List<DiaryRoomDTO> getDiaryRooms(Long memberId) {
+    public List<DiaryRoomDTO> getDiaryRooms(Long memberId, Long lastDiaryId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
-        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId());
+        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId(),lastDiaryId);
 
         return diaryRoomMapper.asDTOList(diaryRooms);
     }
