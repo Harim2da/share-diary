@@ -112,10 +112,11 @@ public class MemberInviteHistoryService {
         }
     }
 
-    public Map<String, List<MemberInviteHistoryDTO>> findByLoginUserInviteHistory(Long loginId){
-        List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId);
+    public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId,Long inviteHistoryId,int limit){
+        List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId,inviteHistoryId,limit);
         List<MemberInviteHistoryDTO> memberInviteHistoryDTOList = inviteHistoryMapper.asMemberInviteHistoryDTOList(inviteHistories);
-        return memberInviteHistoryDTOList.stream()
-                .collect(Collectors.groupingBy(dto-> dto.getInviteDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        return memberInviteHistoryDTOList;
+//        return memberInviteHistoryDTOList.stream()
+//                .collect(Collectors.groupingBy(dto-> dto.getInviteDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
     }
 }

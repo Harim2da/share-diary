@@ -2,7 +2,6 @@ package share_diary.diray.memberInviteHistory.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,11 +14,10 @@ import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
 import share_diary.diray.memberInviteHistory.MemberInviteRequest;
 import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
 import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
-import share_diary.diray.common.response.ResultList;
+import share_diary.diray.common.response.ApiResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -72,9 +70,13 @@ public class MemberInviteHistoryController {
     @Operation(summary = "Get Invite History",description = "알림 내역 조회 API")
     @GetMapping
     @NoAuth
-    public ResponseEntity<ResultList<Map<String, List<MemberInviteHistoryDTO>>>> findByInviteHistory(@AuthenticationPrincipal LoginSession loginSession){
-        Map<String, List<MemberInviteHistoryDTO>> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId());
-        return ResponseEntity.ok(new ResultList<>(byLoginUserInviteHistory,byLoginUserInviteHistory.size()));
+    public ApiResponse<List<MemberInviteHistoryDTO>> findByInviteHistory(
+            @AuthenticationPrincipal LoginSession loginSession,
+            @RequestParam(required = false) Long inviteHistoryId,
+            @RequestParam Integer limit
+    ){
+        List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId(),inviteHistoryId,limit);
+        return ApiResponse.of(byLoginUserInviteHistory);
     }
 
 }

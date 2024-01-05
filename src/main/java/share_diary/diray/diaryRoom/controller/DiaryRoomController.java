@@ -55,9 +55,10 @@ public class DiaryRoomController {
     @GetMapping
     public ResponseEntity<List<DiaryRoomDTO>> getDiaryRooms(
             @AuthenticationPrincipal LoginSession session,
-            @RequestParam(required = false) Long lastDiaryId
+            @RequestParam(required = false) Long lastDiaryId,
+            @RequestParam Integer limit
             ) {
-        return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId(),lastDiaryId));
+        return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId(),lastDiaryId,limit));
     }
 
     @GetMapping("/{diaryRoomId}/members")

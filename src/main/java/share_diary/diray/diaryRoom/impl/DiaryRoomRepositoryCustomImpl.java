@@ -17,15 +17,15 @@ public class DiaryRoomRepositoryCustomImpl extends QuerydslRepositorySupport imp
     }
 
     @Override
-    public List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId, Long diaryRoomId) {
+    public List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId, Long diaryRoomId, int limit) {
         return from(diaryRoom)
                 .join(diaryRoom.memberDiaryRooms, memberDiaryRoom).fetchJoin()
                 .where(
                         memberDiaryRoom.member.id.eq(memberId),
                         ltDiaryRoomId(diaryRoomId)
                 )
-                .orderBy(diaryRoom.createDate.desc())
-                .limit(5)
+                .orderBy(diaryRoom.registeredDate.desc())
+                .limit(limit)
                 .fetch();
     }
 

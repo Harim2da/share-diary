@@ -46,7 +46,10 @@ public class MemberInvitesHistorySteps {
     }
 
     public static ExtractableResponse<Response> 일기방초대_알림내역조회_요청(String token) {
-        return RestAssured.given().log().all()
+        return RestAssured.given()
+                .queryParams("inviteHistoryId","")
+                .queryParams("limit",5)
+                .log().all()
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .when()
                 .get(URL)

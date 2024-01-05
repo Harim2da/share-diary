@@ -6,6 +6,8 @@ import static share_diary.diray.diaryRoom.QDiaryRoom.diaryRoom;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepositoryCustom;
@@ -57,9 +59,21 @@ public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositoryS
      * @author jipdol2
      */
     @Override
-    public List<MemberInviteHistory> findAllByMemberInviteHistories(Long loginId) {
+    public List<MemberInviteHistory> findAllByMemberInviteHistories(Long loginId,Long inviteHistoryId,int limit) {
         return from(memberInviteHistory)
-                .where(memberInviteHistory.member.id.eq(loginId))
+                .where(
+                        memberInviteHistory.member.id.eq(loginId),
+                        ltInviteHistoryId(inviteHistoryId)
+                )
+                .orderBy(memberInviteHistory.createDate.desc())
+                .limit(limit)
                 .fetch();
+    }
+
+    private BooleanExpression ltInviteHistoryId(Long inviteHistoryId){
+        if(inviteHistoryId==null){
+            return null;
+        }
+        return memberInviteHistory.id.lt(inviteHistoryId);
     }
 }

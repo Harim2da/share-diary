@@ -65,17 +65,16 @@ class MemberInviteHistoryApiTest extends ApiTest {
         var response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
             //초대 id 조회
         String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        Long inviteId = response.body().jsonPath().getLong("result."+today+"[0].id");
+        Long inviteId = response.body().jsonPath().getLong("data[0].id");
 
         MemberInvitesHistorySteps.일기방초대수락요청(token, inviteId, MemberInvitesHistorySteps.일기방초대수락요청_생성());
 
         response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getString("result."+today+"[0].uuid")).isNotNull();
-        assertThat(response.jsonPath().getString("result."+today+"[0].email")).isEqualTo("somin2@gmail.com");
-        assertThat(response.jsonPath().getString("result."+today+"[0].status")).isEqualTo(InviteAcceptStatus.ACCEPT.toString());
-        assertThat(response.jsonPath().getInt("size")).isEqualTo(1);
+        assertThat(response.jsonPath().getString("data[0].uuid")).isNotNull();
+        assertThat(response.jsonPath().getString("data[0].email")).isEqualTo("somin2@gmail.com");
+        assertThat(response.jsonPath().getString("data[0].status")).isEqualTo(InviteAcceptStatus.ACCEPT.toString());
     }
 
     @Test
@@ -89,7 +88,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
         //api 요청
         final var response = MemberInvitesHistorySteps.일기방초대_알림내역조회_요청(token);
         //then
-        assertThat(response.jsonPath().getInt("size")).isEqualTo(0);
+        assertThat(response.jsonPath().getList("data")).isEmpty();
     }
 
     @Test
@@ -119,13 +118,12 @@ class MemberInviteHistoryApiTest extends ApiTest {
 
         //then
         String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        assertThat(response.jsonPath().getString("result."+today+"[0].uuid")).isNotNull();
-        assertThat(response.jsonPath().getString("result."+today+"[0].email")).isEqualTo("somin2@gmail.com");
-        assertThat(response.jsonPath().getString("result."+today+"[0].status")).isEqualTo(InviteAcceptStatus.INVITE.toString());
-        assertThat(response.jsonPath().getLong("result."+today+"[0].diaryRoomId")).isEqualTo(1L);
-        assertThat(response.jsonPath().getString("result."+today+"[0].diaryRoomName")).isEqualTo("오늘의 일기방");
-        assertThat(response.jsonPath().getString("result."+today+"[0].inviteDate")).isEqualTo(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        assertThat(response.jsonPath().getInt("size")).isEqualTo(1);
+        assertThat(response.jsonPath().getString("data[0].uuid")).isNotNull();
+        assertThat(response.jsonPath().getString("data[0].email")).isEqualTo("somin2@gmail.com");
+        assertThat(response.jsonPath().getString("data[0].status")).isEqualTo(InviteAcceptStatus.INVITE.toString());
+        assertThat(response.jsonPath().getLong("data[0].diaryRoomId")).isEqualTo(1L);
+        assertThat(response.jsonPath().getString("data[0].diaryRoomName")).isEqualTo("오늘의 일기방");
+        assertThat(response.jsonPath().getString("data[0].inviteDate")).isEqualTo(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
 
 
