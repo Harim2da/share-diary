@@ -61,11 +61,11 @@ public class DiaryRoomService {
     }
 
     @Transactional(readOnly = true)
-    public List<DiaryRoomDTO> getDiaryRooms(Long memberId, Long lastDiaryId) {
+    public List<DiaryRoomDTO> getDiaryRooms(Long memberId, Long lastDiaryId, int limit) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
-        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId(),lastDiaryId);
+        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId(),lastDiaryId, limit);
 
         return diaryRoomMapper.asDTOList(diaryRooms);
     }
