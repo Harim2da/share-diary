@@ -11,5 +11,5 @@ public interface MemberInviteHistoryRepositoryCustom {
 
     Optional<MemberInviteHistory> findByUuidWithMember(String uuid);
 
-    List<MemberInviteHistory> findAllByMemberInviteHistories(Long loginId);
+    List<MemberInviteHistory> findAllByMemberInviteHistories(Long loginId,Long inviteHistoryId,int limit);
 }

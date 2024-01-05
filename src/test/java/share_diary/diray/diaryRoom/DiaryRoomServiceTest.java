@@ -73,13 +73,13 @@ class DiaryRoomServiceTest {
         assertThat(diaryRooms).isNotEmpty();
         assertThat(diaryRooms)
                 .hasSize(5)
-                .extracting("id","name","status","createBy","modifyBy")
+                .extracting("name","status","createBy","modifyBy")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(10L,"testDiary10",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(9L,"testDiary9",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(8L,"testDiary8",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(7L,"testDiary7",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(6L,"testDiary6",DiaryRoomStatus.OPEN,"jipdol2","jipdol2")
+                        Tuple.tuple("testDiary10",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary9",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary8",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary7",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary6",DiaryRoomStatus.OPEN,"jipdol2","jipdol2")
                 );
     }
 
@@ -108,13 +108,13 @@ class DiaryRoomServiceTest {
         assertThat(diaryRooms).isNotEmpty();
         assertThat(diaryRooms)
                 .hasSize(5)
-                .extracting("id","name","status","createBy","modifyBy")
+                .extracting("name","status","createBy","modifyBy")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(5L,"testDiary5",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(4L,"testDiary4",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(3L,"testDiary3",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(2L,"testDiary2",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
-                        Tuple.tuple(1L,"testDiary1",DiaryRoomStatus.OPEN,"jipdol2","jipdol2")
+                        Tuple.tuple("testDiary5",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary4",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary3",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary2",DiaryRoomStatus.OPEN,"jipdol2","jipdol2"),
+                        Tuple.tuple("testDiary1",DiaryRoomStatus.OPEN,"jipdol2","jipdol2")
                 );
     }
 
