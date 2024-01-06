@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -74,9 +75,13 @@ public class DiaryRoomService {
     public DiaryRoomMembersResponse getDiaryRoomMembers(Long diaryRoomId, String stringDate, Long memberId) {
         // TODO : DB 타임존 관련 체크 후 수정 필요
         LocalDate searchDate = LocalDate.parse(stringDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate, memberId);
+        // 내 아이디를 빼고 조회한 뒤에, 내 아이디가 없는 방이면 예외를 내려야함
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate)
+                .stream()
+                .filter(md -> md.getMember().getId().equals(memberId))
+                .collect(Collectors.toList());
 
-        // 나를 포함해서 조회 -> Size가 0이면 회원이 없다고 표기
+        // 내가 속한 방만 collect -> Size가 0이면 회원이 없다고 표기
         if(CollectionUtils.isEmpty(memberDiaryRooms)) {
             throw new MemberNotFoundException();
         }
@@ -85,14 +90,9 @@ public class DiaryRoomService {
 
     public void deleteDiaryRoomMember(Long diaryRoomId, Long memberId) {
         LocalDate searchDate = LocalDate.now(); // zone 관련 수정 필요. 원래는 ZoneId로 가는 게 맞을 듯
-        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate, memberId);
-
-        if(CollectionUtils.isEmpty(memberDiaryRooms)) {
-            throw new DiaryRoomNotFoundException();
-        } else {
-            memberDiaryRooms.stream()
-                    .findFirst()
-                    .map(MemberDiaryRoom::exitDiaryRoom);
-        }
+        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByDiaryRoomIdAndSearchDateAndMemberId(
+                        diaryRoomId, searchDate, memberId)
+                .orElseThrow(DiaryRoomNotFoundException::new);
+        memberDiaryRoom.exitDiaryRoom();
     }
 }

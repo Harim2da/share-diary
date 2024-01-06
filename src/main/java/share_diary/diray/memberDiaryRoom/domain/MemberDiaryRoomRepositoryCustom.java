@@ -10,5 +10,7 @@ public interface MemberDiaryRoomRepositoryCustom {
 
     List<MemberDiaryRoom> findAllByMemberId(Long memberId);
 
-    List<MemberDiaryRoom> findAllByDiaryRoomIdAndSearchDateWithMember(Long diaryRoomId, LocalDate searchDate, Long memberId);
+    List<MemberDiaryRoom> findAllByDiaryRoomIdAndSearchDateWithMember(Long diaryRoomId, LocalDate searchDate);
+
+    Optional<MemberDiaryRoom> findByDiaryRoomIdAndSearchDateAndMemberId(Long diaryRoomId, LocalDate searchDate, Long memberId);
 }
