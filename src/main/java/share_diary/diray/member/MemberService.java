@@ -143,6 +143,11 @@ public class MemberService {
     public MemberDTO updateMember(MemberUpdateRequestDTO requestDTO) {
         Member member = memberRepository.findByEmail(requestDTO.getEmail())
                 .orElseThrow(MemberNotFoundException::new);
+
+        if(!passwordEncoder.matches(requestDTO.getPassword(),member.getPassword())){
+            throw new PasswordNotCoincide();
+        }
+
         String encode = passwordEncoder.encode(requestDTO.getPassword());
         member.updateMember(encode, requestDTO.getNickName());
         return memberMapper.asDTO(member);

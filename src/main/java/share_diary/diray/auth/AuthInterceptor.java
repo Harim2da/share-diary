@@ -37,14 +37,16 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if(handler instanceof HandlerMethod) {
-            log.info("-----No Auth Request-----");
+            log.info("-----HandlerMethod Request-----");
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             NoAuth noAuth = handlerMethod.getMethodAnnotation(NoAuth.class);
             if(noAuth != null){
+                log.info("-----No Auth Request-----");
                 return true;
             }
         }
 
+        log.info("-----Access Token Get-----");
         String accessToken = request.getHeader("Authorization");
 
         if(isValidToken(accessToken)){
@@ -72,8 +74,10 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private String extractRefreshToken(HttpServletRequest request){
+        log.info("-----Refresh Token Get-----");
         Cookie cookie = WebUtils.getCookie(request, "REFRESH_TOKEN");
         if(cookie==null){
+            log.info("-----Cookie is null-----");
             return null;
         }
         return cookie.getValue();
