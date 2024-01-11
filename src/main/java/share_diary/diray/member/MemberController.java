@@ -90,9 +90,6 @@ public class MemberController {
     @Operation(summary = "Update Member", description = "회원 수정 API")
     @PatchMapping("/me")
     public MemberDTO updateMember(@AuthenticationPrincipal LoginSession session, @RequestBody MemberUpdateRequestDTO requestDTO){
-        if(!requestDTO.validationPassword()){
-            throw new UpdatePasswordNotCoincide();
-        }
         return memberService.updateMember(requestDTO);
     }
 

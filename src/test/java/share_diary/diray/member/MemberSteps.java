@@ -83,7 +83,7 @@ public class MemberSteps {
     public static MemberUpdateRequestDTO 회원수정요청_생성() {
         MemberUpdateRequestDTO request = MemberUpdateRequestDTO.of(
                 "jipdol2@gmail.com",
-                "4321",
+                "1234",
                 "4321",
                 "집순2"
         );
