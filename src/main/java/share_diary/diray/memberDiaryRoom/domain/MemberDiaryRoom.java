@@ -5,6 +5,7 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.exception.memberDiaryRoom.AlreadyExitedDiaryRoomException;
 import share_diary.diray.member.domain.Member;
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member_diary_room")
-public class MemberDiaryRoom {
+public class MemberDiaryRoom extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -89,5 +90,9 @@ public class MemberDiaryRoom {
 
     public boolean isHost() {
         return getRole().isHost();
+    }
+
+    public void modifyHost() {
+        this.role = Role.HOST;
     }
 }

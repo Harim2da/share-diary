@@ -20,8 +20,10 @@ import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.diaryRoom.DiaryRoomService;
 import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
+import share_diary.diray.diaryRoom.controller.request.DiaryRoomHostModifyRequest;
 import share_diary.diray.diaryRoom.controller.response.DiaryRoomMembersResponse;
 import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
+import share_diary.diray.exception.http.ForbiddenException;
 
 @Slf4j
 @RestController
@@ -79,5 +81,22 @@ public class DiaryRoomController {
             @AuthenticationPrincipal LoginSession session
     ) {
         return ResponseEntity.ok(diaryRoomService.deleteDiaryRoomMember(diaryRoomId, session.getId()));
+    }
+
+    /**
+     * 내가 일기방 Host인 경우, 다른 사람에게 Host를 넘기고
+     * 특정 일기방 탈퇴하기
+     * */
+    @PostMapping("/{diaryRoomId}")
+    public ResponseEntity<HttpStatus> modifyDiaryRoomHost(
+            @PathVariable Long diaryRoomId,
+            @RequestBody DiaryRoomHostModifyRequest request,
+            @AuthenticationPrincipal LoginSession session
+    ) {
+        if(!session.getId().equals(request.getAsIdHostId())) {
+            throw new ForbiddenException();
+        }
+        diaryRoomService.modifyDiaryRoomHost(diaryRoomId, request, session.getId());
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
