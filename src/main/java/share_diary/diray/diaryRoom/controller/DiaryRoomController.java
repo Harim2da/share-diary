@@ -76,12 +76,11 @@ public class DiaryRoomController {
      * 내가 속한 특정 일기방에서 나가기
      * */
     @DeleteMapping("/{diaryRoomId}")
-    public ResponseEntity<HttpStatus> deleteDiaryRoomMember(
+    public ResponseEntity<Boolean> deleteDiaryRoomMember(
             @PathVariable Long diaryRoomId,
             @AuthenticationPrincipal LoginSession session
     ) {
-        diaryRoomService.deleteDiaryRoomMember(diaryRoomId, session.getId());
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(diaryRoomService.deleteDiaryRoomMember(diaryRoomId, session.getId()));
     }
 
     /**

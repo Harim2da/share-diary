@@ -1,5 +1,7 @@
 package share_diary.diray.auth;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.cors.CorsUtils;
@@ -10,6 +12,7 @@ import share_diary.diray.auth.AuthService;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.exception.http.UnAuthorizedException;
 import share_diary.diray.exception.jwt.AccessTokenRenewException;
+import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.jwt.TokenIsNotValidException;
 
 import javax.servlet.http.Cookie;
@@ -34,14 +37,16 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         if(handler instanceof HandlerMethod) {
-            log.info("-----No Auth Request-----");
+            log.info("-----HandlerMethod Request-----");
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             NoAuth noAuth = handlerMethod.getMethodAnnotation(NoAuth.class);
             if(noAuth != null){
+                log.info("-----No Auth Request-----");
                 return true;
             }
         }
 
+        log.info("-----Access Token Get-----");
         String accessToken = request.getHeader("Authorization");
 
         if(isValidToken(accessToken)){
@@ -61,14 +66,18 @@ public class AuthInterceptor implements HandlerInterceptor {
         try{
             authService.validateToken(token);
             return true;
-        }catch (UnAuthorizedException e){
-            throw new UnAuthorizedException();
+        }catch (TokenExpiredException e){
+            throw new TokenExpiredException();
+        }catch (TokenIsNotValidException e){
+            throw new TokenIsNotValidException();
         }
     }
 
     private String extractRefreshToken(HttpServletRequest request){
+        log.info("-----Refresh Token Get-----");
         Cookie cookie = WebUtils.getCookie(request, "REFRESH_TOKEN");
         if(cookie==null){
+            log.info("-----Cookie is null-----");
             return null;
         }
         return cookie.getValue();

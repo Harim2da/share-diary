@@ -88,6 +88,10 @@ public class MemberDiaryRoom extends BaseTimeEntity {
         }
     }
 
+    public boolean isHost() {
+        return getRole().isHost();
+    }
+
     public void modifyHost() {
         this.role = Role.HOST;
     }
