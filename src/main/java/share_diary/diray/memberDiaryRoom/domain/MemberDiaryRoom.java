@@ -86,4 +86,8 @@ public class MemberDiaryRoom {
             throw new AlreadyExitedDiaryRoomException();
         }
     }
+
+    public boolean isHost() {
+        return getRole().isHost();
+    }
 }

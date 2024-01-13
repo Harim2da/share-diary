@@ -53,9 +53,4 @@ public class DailyDiaryController {
     ) {
         return ResponseEntity.ok(dailyDiaryService.modifyDailyDiary(diaryId, request, auth.getId()));
     }
-
-    @DeleteMapping("/{diaryId}")
-    public void deleteDailyDiary(@PathVariable Long diaryId) {
-
-    }
 }

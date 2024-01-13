@@ -88,11 +88,17 @@ public class DiaryRoomService {
         return new DiaryRoomMembersResponse().of(diaryRoomId, memberDiaryRooms);
     }
 
-    public void deleteDiaryRoomMember(Long diaryRoomId, Long memberId) {
+    public boolean deleteDiaryRoomMember(Long diaryRoomId, Long memberId) {
         LocalDate searchDate = LocalDate.now(); // zone 관련 수정 필요. 원래는 ZoneId로 가는 게 맞을 듯
         MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByDiaryRoomIdAndSearchDateAndMemberId(
                         diaryRoomId, searchDate, memberId)
                 .orElseThrow(DiaryRoomNotFoundException::new);
-        memberDiaryRoom.exitDiaryRoom();
+
+        if(memberDiaryRoom.isHost()) {
+            return false;
+        } else {
+            memberDiaryRoom.exitDiaryRoom();
+            return true;
+        }
     }
 }
