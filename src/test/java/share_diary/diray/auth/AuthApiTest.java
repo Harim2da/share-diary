@@ -15,7 +15,7 @@ class AuthApiTest extends ApiTest {
 
     @Test
     @DisplayName("로그인 테스트")
-    void loginTest() throws Exception {
+    void loginTest() {
         //given
         MemberSteps.회원가입요청(MemberSteps.회원가입요청_생성("jipdol2","jipdol2@gmail.com","1234","집돌2"));
         LoginRequestDTO request = AuthSteps.회원로그인요청_생성("jipdol2","1234");
@@ -25,6 +25,7 @@ class AuthApiTest extends ApiTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("accessToken")).isNotNull();
+        assertThat(response.jsonPath().getString("memberId")).isNotNull();
         assertThat(response.cookie("REFRESH_TOKEN")).isNotNull();
     }
 

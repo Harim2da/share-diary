@@ -16,6 +16,7 @@ import share_diary.diray.common.email.EmailSenderComponent;
 import share_diary.diray.diaryRoom.DiaryRoom;
 import share_diary.diray.diaryRoom.DiaryRoomRepository;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
+import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 import share_diary.diray.member.domain.Member;
@@ -115,8 +116,11 @@ public class MemberInviteHistoryService {
     public List<MemberInviteHistoryDTO> findByLoginUserInviteHistory(Long loginId,Long inviteHistoryId,int limit){
         List<MemberInviteHistory> inviteHistories = memberInviteHistoryRepository.findAllByMemberInviteHistories(loginId,inviteHistoryId,limit);
         List<MemberInviteHistoryDTO> memberInviteHistoryDTOList = inviteHistoryMapper.asMemberInviteHistoryDTOList(inviteHistories);
+        for(MemberInviteHistoryDTO dto : memberInviteHistoryDTOList){
+            Member member = memberRepository.findById(dto.getHostUserId())
+                    .orElseThrow(MemberIdOrPasswordErrorException::new);
+            dto.updateHostUserNickname(member.getNickName());
+        }
         return memberInviteHistoryDTOList;
-//        return memberInviteHistoryDTOList.stream()
-//                .collect(Collectors.groupingBy(dto-> dto.getInviteDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
     }
 }

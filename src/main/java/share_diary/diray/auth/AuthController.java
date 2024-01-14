@@ -45,7 +45,7 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,cookie.toString())
-                .body(AccessToken.of(accessToken));
+                .body(AccessToken.of(accessToken,id));
     }
 
     /**
@@ -100,7 +100,7 @@ public class AuthController {
         Long id = authService.extractIdByToken(refreshToken);
         String accessToken = authService.renewAccessToken(id);
         return ResponseEntity.ok()
-                .body(AccessToken.of(accessToken));
+                .body(AccessToken.of(accessToken,id));
     }
 
     /**
