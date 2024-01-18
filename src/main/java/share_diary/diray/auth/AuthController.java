@@ -95,7 +95,7 @@ public class AuthController {
     @Operation(summary = "Renew AccessToken",description = "accessToken 갱신 API")
     @NoAuth
     @GetMapping("/token")
-    public ResponseEntity<AccessToken> renewAccessToken(@CookieValue("refreshToken") String refreshToken){
+    public ResponseEntity<AccessToken> renewAccessToken(@CookieValue("REFRESH_TOKEN") String refreshToken){
         authService.validateToken(refreshToken);
         Long id = authService.extractIdByToken(refreshToken);
         String accessToken = authService.renewAccessToken(id);
