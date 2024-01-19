@@ -37,7 +37,7 @@ public class EmailSenderComponent {
                 .append("님이 ")
                 .append(diaryRoomName)
                 .append(" 일기방에 초대 했습니다.\n초대를 수락하시려면 아래 링크를 클릭해주세요.\n")
-                .append("http://localhost:8080/uuid=") // TODO : 수정 필요
+                .append("http://localhost:8080/uuid/") // TODO : 도메인 혹은 ip 나오면 추가 수정 필요
                 .append(uuid)
                 .toString();
         return new AsyncResult<>(send(subject, sendTo, messageBody));
