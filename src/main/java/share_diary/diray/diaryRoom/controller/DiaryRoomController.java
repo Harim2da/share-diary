@@ -93,7 +93,7 @@ public class DiaryRoomController {
             @RequestBody DiaryRoomHostModifyRequest request,
             @AuthenticationPrincipal LoginSession session
     ) {
-        if(!session.getId().equals(request.getAsIdHostId())) {
+        if(!session.getId().equals(request.getAsIsHostId())) {
             throw new ForbiddenException();
         }
         diaryRoomService.modifyDiaryRoomHost(diaryRoomId, request, session.getId());

@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class DiaryRoomHostModifyRequest {
 
-    private Long asIdHostId;
+    private Long asIsHostId;
     @NotNull
     private Long toBeHostId;
 }
