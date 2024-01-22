@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
@@ -139,6 +140,15 @@ public class MemberController {
     @PostMapping("/validation-certification-number")
     public ResponseEntity<Void> validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
         memberService.validationCertificationNumber(requestDTO.getCertificationNumber());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity<Void> resetPassword(
+            @AuthenticationPrincipal LoginSession session,
+            @RequestBody MemberPasswordRequestDTO requestDTO
+    ){
+        memberService.resetPassword(session,requestDTO.getPassword());
         return ResponseEntity.ok().build();
     }
 

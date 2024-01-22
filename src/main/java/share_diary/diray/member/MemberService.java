@@ -166,35 +166,34 @@ public class MemberService {
                 .orElseThrow(MemberNotFoundException::new)
                 .getEmail();
 
-        int certificationNumber = (int) (Math.random() * (int) 1e8);
+        int certificationNumber = createMailVerifyNumber();
 
         //redis 에 저장
         certificationNumberRepository.save(CertificationNumber.of(certificationNumber, session.getId()));
 
-        emailSenderComponent.sendCertificationNumber(certificationNumber, email)
-                .addCallback(result -> log.info("email : {} 로 발송 성공", email), ex -> {
-                    //TODO: email 실패 exception 생성
-                    throw new IllegalArgumentException();
-                });
+//        emailSenderComponent.sendCertificationNumber(certificationNumber, email)
+//                .addCallback(result -> log.info("email : {} 로 발송 성공", email), ex -> {
+//                    //TODO: email 실패 exception 생성
+//                    throw new IllegalArgumentException();
+//                });
+    }
+
+    private static int createMailVerifyNumber() {
+        return (int) (Math.random() * (int) 1e8);
     }
 
     public void validationCertificationNumber(int certificationNumber) {
-        certificationNumberRepository.findById(certificationNumber)
+        CertificationNumber findCertificationNumber = certificationNumberRepository.findById(certificationNumber)
                 .orElseThrow(CertificationNotFoundException::new);
+        log.info("findCertificationNumber = {}",findCertificationNumber.getCertificationNumber());
+        log.info("findMemberId = {}",findCertificationNumber.getMemberId());
     }
 
-    public void resetPasswordAndSendEmailToMember(LoginSession session) {
-        String email = memberRepository.findById(session.getId())
-                .orElseThrow(MemberNotFoundException::new)
-                .getEmail();
+    public void resetPassword(LoginSession session,String rawPassword) {
+        Member member = memberRepository.findById(session.getId())
+                .orElseThrow(MemberNotFoundException::new);
 
-        String tempPassword = UUID.randomUUID().toString().substring(0, 8);
-
-        emailSenderComponent.sendTempPasswordMail(tempPassword, email)
-                .addCallback(result -> log.info("email : {} 로 발송 성공", email), ex -> {
-                    //TODO: email 실패 exception 생성
-                    throw new IllegalArgumentException();
-                });
+        member.updatePassword(passwordEncoder.encode(rawPassword));
     }
 
     public Boolean validateCreateDiaryRoom(Long memberId) {
