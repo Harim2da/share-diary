@@ -59,7 +59,25 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2
 ### 비밀번호 변경 : 등록된 email 로 인증번호 전송
 POST localhost:8080/api/member/certification-number
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjkxOTA3NzI4LCJleHAiOjE2OTE5MDk1Mjh9.wKD2zxkE3jSmJQtxTAW1_XIKhAkY8cuiKeaFtLpF1dk
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA1OTI5MzIxLCJleHAiOjE3MDU5Mjk2MjF9.ZQBIoF54uOpgGxXxcncc2fuo5Q8wg8Oe5YfumryqpEc
+
+### 비밀번호 변경 : 인증번호 확인
+POST localhost:8080/api/member/validation-certification-number
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA1OTI5MzIxLCJleHAiOjE3MDU5Mjk2MjF9.ZQBIoF54uOpgGxXxcncc2fuo5Q8wg8Oe5YfumryqpEc
+
+{
+  "certificationNumber" : "83673045"
+}
+
+### 비밀번호 초기화
+POST localhost:8080/api/member/resetPassword
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA1OTI5MzIxLCJleHAiOjE3MDU5Mjk2MjF9.ZQBIoF54uOpgGxXxcncc2fuo5Q8wg8Oe5YfumryqpEc
+
+{
+  "password": "4321"
+}
 
 ### 회원 마이페이지 조회
 GET localhost:8080/api/member/myPage
