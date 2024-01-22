@@ -17,23 +17,42 @@ services:
     networks:
       - app_network
 
-  backend:
-    build:
-      dockerfile: Dockerfile
-      context: ./
-    container_name: app_backend
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/diarydb?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-    depends_on:
-      - mysql
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
     ports:
-      - "8080:8080"
-    volumes:
-      - ./:/app
+      - "6379:6379"
     networks:
       - app_network
 
+#  backend:
+#    build:
+#      dockerfile: Dockerfile
+#      context: ./
+#    container_name: app_backend
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/diarydb?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: admin
+#    depends_on:
+#      - mysql
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./:/app
+#    networks:
+#      - app_network
+
 networks:
   app_network:
+
+
+#  docker-compose up -d : 실행 명령어
+#  docker ps 명령어로 mysql 과 app.jar 가 실행 중 인지 확인
+#  docker-compose logs 를 통해 로그를 확인할 수 있다
+
+# docker-compose 명령어
+#docker-compose up : 컨테이너를 생성하고 실행
+#docker-compose down : 컨테이너와 네트워크를 종료하고 삭제
+#docker-compose stop : 컨테이너를 종료
