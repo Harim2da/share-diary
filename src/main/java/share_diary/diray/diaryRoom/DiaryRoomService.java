@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -41,8 +42,14 @@ public class DiaryRoomService {
     private final DiaryRoomMapper diaryRoomMapper;
 
     public void joinNewMember(Member member, DiaryRoom diaryRoom) {
+//        2024/01/24 수정 : Optional이 empty 일때는 Objects.isNull 로 null checking 을 할 수 없습니다.
+//        Optional<MemberDiaryRoom> memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId());
+//        if(Objects.isNull(memberDiaryRoom)) {
+//            memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.USER));
+//        }
+
         Optional<MemberDiaryRoom> memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId());
-        if(Objects.isNull(memberDiaryRoom)) {
+        if(memberDiaryRoom.isEmpty()) {
             memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.USER));
         }
     }
@@ -52,13 +59,13 @@ public class DiaryRoomService {
                 .orElseThrow(MemberNotFoundException::new);
 
         // 멤버에서 뽑아낸 로그인 아이디
-        DiaryRoom diaryRoom = DiaryRoom.of(request.getName(), member.getLoginId(),now);
+        DiaryRoom diaryRoom = DiaryRoom.of(request.getName(), member.getLoginId(), now);
         diaryRoomRepository.save(diaryRoom);
 
         memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.HOST));
 
         // 만들어지고 나면 이벤트 처리로 멤버 초대 메일 발송하도록 하기
-        if(!CollectionUtils.isEmpty(request.getEmails())) {
+        if (!CollectionUtils.isEmpty(request.getEmails())) {
             publisher.publishEvent(new DiaryRoomCreateEvent(diaryRoom.getId(), member, request.getEmails()));
         }
     }
@@ -68,7 +75,7 @@ public class DiaryRoomService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
-        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId(),lastDiaryId, limit);
+        List<DiaryRoom> diaryRooms = diaryRoomRepository.findAllByMemberIdWithMemberDiaryRoom(member.getId(), lastDiaryId, limit);
 
         return diaryRoomMapper.asDTOList(diaryRooms);
     }
@@ -84,7 +91,7 @@ public class DiaryRoomService {
                 .collect(Collectors.toList());
 
         // 내가 속한 방만 collect -> Size가 0이면 회원이 없다고 표기
-        if(CollectionUtils.isEmpty(memberDiaryRooms)) {
+        if (CollectionUtils.isEmpty(memberDiaryRooms)) {
             throw new MemberNotFoundException();
         }
         return new DiaryRoomMembersResponse().of(diaryRoomId, memberDiaryRooms);
@@ -96,7 +103,7 @@ public class DiaryRoomService {
                         diaryRoomId, searchDate, memberId)
                 .orElseThrow(DiaryRoomNotFoundException::new);
 
-        if(memberDiaryRoom.isHost()) {
+        if (memberDiaryRoom.isHost()) {
             return false;
         } else {
             memberDiaryRoom.exitDiaryRoom();
@@ -115,17 +122,17 @@ public class DiaryRoomService {
                 .collect(Collectors.toList());
 
         // 바뀔 host와 현 host 최소 2명은 있어야 함
-        if(memberDiaryRooms.size() < 2) {
+        if (memberDiaryRooms.size() < 2) {
             throw new MemberNotFoundException();
         }
 
-        for(MemberDiaryRoom md : memberDiaryRooms) {
+        for (MemberDiaryRoom md : memberDiaryRooms) {
             // 현재 Host인 경우
-            if(md.getMember().getId().equals(loginId)) {
+            if (md.getMember().getId().equals(loginId)) {
                 md.exitDiaryRoom();
             }
             // 바뀔 Host인 경우
-            if(md.getMember().getId().equals(request.getToBeHostId())) {
+            if (md.getMember().getId().equals(request.getToBeHostId())) {
                 md.modifyHost();
             }
         }
