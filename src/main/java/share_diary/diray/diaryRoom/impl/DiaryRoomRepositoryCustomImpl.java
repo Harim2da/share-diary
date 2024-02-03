@@ -23,7 +23,7 @@ public class DiaryRoomRepositoryCustomImpl extends QuerydslRepositorySupport imp
                 .where(
                         eqMemberId(memberId),
                         ltDiaryRoomId(diaryRoomId),
-                        memberDiaryRoom.exitDate.isNotNull()
+                        memberDiaryRoom.exitDate.isNull()
                 )
                 .orderBy(diaryRoom.registeredDate.desc())
                 .limit(limit)
