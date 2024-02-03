@@ -165,7 +165,7 @@ public class MemberService {
         Member member = memberRepository.findByLoginId(requestDTO.getLoginId())
                 .orElseThrow(MemberNotFoundException::new);
 
-        if(!requestDTO.equals(member.getEmail())){
+        if(!requestDTO.getEmail().equals(member.getEmail())){
             throw new IllegalArgumentException("아이디 혹은 이메일의 정보가 일치하지 않습니다.");
         }
 
