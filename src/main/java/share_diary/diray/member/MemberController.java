@@ -127,9 +127,10 @@ public class MemberController {
      * 비밀번호 초기화 : 인증번호 email 로 전송
      * @author jipdol2
      */
+    @NoAuth
     @PostMapping("/certification-number")
-    public ResponseEntity<Void> sendToCertificationNumber(@AuthenticationPrincipal LoginSession session){
-        memberService.sendCertificationNumber(session);
+    public ResponseEntity<Void> sendToCertificationNumber(@RequestBody MemberIdAndEmailRequestDTO requestDTO){
+        memberService.sendCertificationNumber(requestDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -137,12 +138,14 @@ public class MemberController {
      * 비밀번호 초기화 : 입력된 인증번호 유효성 검증
      * @author jipdol2
      */
+    @NoAuth
     @PostMapping("/validation-certification-number")
     public ResponseEntity<Void> validationCertificationNumber(@RequestBody MemberCertificationNumber requestDTO){
         memberService.validationCertificationNumber(requestDTO.getCertificationNumber());
         return ResponseEntity.ok().build();
     }
 
+    @NoAuth
     @PostMapping("/resetPassword")
     public ResponseEntity<Void> resetPassword(
             @AuthenticationPrincipal LoginSession session,
