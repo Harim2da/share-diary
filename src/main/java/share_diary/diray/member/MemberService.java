@@ -161,15 +161,18 @@ public class MemberService {
         return memberRepository.existsByEmail(requestDTO.getEmail());
     }
 
-    public void sendCertificationNumber(LoginSession session) {
-        String email = memberRepository.findById(session.getId())
-                .orElseThrow(MemberNotFoundException::new)
-                .getEmail();
+    public void sendCertificationNumber(MemberIdAndEmailRequestDTO requestDTO) {
+        Member member = memberRepository.findByLoginId(requestDTO.getLoginId())
+                .orElseThrow(MemberNotFoundException::new);
+
+        if(!requestDTO.equals(member.getEmail())){
+            throw new IllegalArgumentException("아이디 혹은 이메일의 정보가 일치하지 않습니다.");
+        }
 
         int certificationNumber = createMailVerifyNumber();
 
         //redis 에 저장
-        certificationNumberRepository.save(CertificationNumber.of(certificationNumber, session.getId()));
+        certificationNumberRepository.save(CertificationNumber.of(certificationNumber, member.getId()));
 
 //        emailSenderComponent.sendCertificationNumber(certificationNumber, email)
 //                .addCallback(result -> log.info("email : {} 로 발송 성공", email), ex -> {

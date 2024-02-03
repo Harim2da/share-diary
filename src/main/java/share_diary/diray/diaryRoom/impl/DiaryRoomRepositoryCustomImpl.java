@@ -21,12 +21,20 @@ public class DiaryRoomRepositoryCustomImpl extends QuerydslRepositorySupport imp
         return from(diaryRoom)
                 .join(diaryRoom.memberDiaryRooms, memberDiaryRoom).fetchJoin()
                 .where(
-                        memberDiaryRoom.member.id.eq(memberId),
-                        ltDiaryRoomId(diaryRoomId)
+                        eqMemberId(memberId),
+                        ltDiaryRoomId(diaryRoomId),
+                        memberDiaryRoom.exitDate.isNotNull()
                 )
                 .orderBy(diaryRoom.registeredDate.desc())
                 .limit(limit)
                 .fetch();
+    }
+
+    private BooleanExpression eqMemberId(Long memberId){
+        if(memberId == null){
+            return null;
+        }
+        return memberDiaryRoom.member.id.eq(memberId);
     }
 
     private BooleanExpression ltDiaryRoomId(Long diaryRoomId){

@@ -63,6 +63,13 @@ public class DiaryRoomController {
         return ResponseEntity.ok(diaryRoomService.getDiaryRooms(session.getId(),lastDiaryId,limit));
     }
 
+    /**
+     * 일기방에 속해 있는
+     * @param diaryRoomId
+     * @param searchDate
+     * @param session
+     * @return
+     */
     @GetMapping("/{diaryRoomId}/members")
     public ResponseEntity<DiaryRoomMembersResponse> getDiaryRoomMembers(
             @PathVariable Long diaryRoomId,
@@ -74,6 +81,7 @@ public class DiaryRoomController {
 
     /**
      * 내가 속한 특정 일기방에서 나가기
+     * @author harim
      * */
     @DeleteMapping("/{diaryRoomId}")
     public ResponseEntity<Boolean> deleteDiaryRoomMember(
