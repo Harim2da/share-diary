@@ -81,14 +81,14 @@ public class DiaryRoomService {
     }
 
     @Transactional(readOnly = true)
-    public DiaryRoomMembersResponse getDiaryRoomMembers(Long diaryRoomId, String stringDate, Long memberId) {
+    public DiaryRoomMembersResponse getDiaryRoomMembers(Long diaryRoomId, String stringDate,
+            Long memberId) {
         // TODO : DB 타임존 관련 체크 후 수정 필요
-        LocalDate searchDate = LocalDate.parse(stringDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        // 내 아이디를 빼고 조회한 뒤에, 내 아이디가 없는 방이면 예외를 내려야함
-        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(diaryRoomId, searchDate)
-                .stream()
-                .filter(md -> md.getMember().getId().equals(memberId))
-                .collect(Collectors.toList());
+        LocalDate searchDate = LocalDate.parse(stringDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByDiaryRoomIdAndSearchDateWithMember(
+                diaryRoomId, searchDate);
 
         // 내가 속한 방만 collect -> Size가 0이면 회원이 없다고 표기
         if (CollectionUtils.isEmpty(memberDiaryRooms)) {
