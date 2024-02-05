@@ -210,7 +210,7 @@ class MemberServiceTest {
 
         Member saveMember = memberRepository.save(member);
         LoginSession session = new LoginSession(saveMember.getId());
-        MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password123");
+        MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO(saveMember.getLoginId(),"password123");
 
         //then
         memberService.passwordCheck(session.getId(), dto);
@@ -229,7 +229,7 @@ class MemberServiceTest {
 
         Member saveMember = memberRepository.save(member);
         LoginSession session = new LoginSession(saveMember.getId());
-        MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO("password111");
+        MemberPasswordRequestDTO dto = new MemberPasswordRequestDTO(saveMember.getLoginId(),"password111");
 
         //expected
         assertThatThrownBy(() -> memberService.passwordCheck(session.getId(), dto))
