@@ -4,13 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
-import share_diary.diray.exception.member.UpdatePasswordNotCoincide;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
 
@@ -129,7 +127,7 @@ public class MemberController {
      */
     @NoAuth
     @PostMapping("/certification-number")
-    public ResponseEntity<Void> sendToCertificationNumber(@RequestBody MemberIdAndEmailRequestDTO requestDTO){
+    public ResponseEntity<Void> sendToCertificationNumber(@RequestBody MemberLoginIdAndEmailRequestDTO requestDTO){
         memberService.sendCertificationNumber(requestDTO);
         return ResponseEntity.ok().build();
     }
@@ -148,7 +146,7 @@ public class MemberController {
     @NoAuth
     @PostMapping("/resetPassword")
     public ResponseEntity<Void> resetPassword(
-            @RequestBody MemberPasswordRequestDTO requestDTO
+            @RequestBody MemberLoginIdAndPasswordRequestDTO requestDTO
     ){
         memberService.resetPassword(requestDTO);
         return ResponseEntity.ok().build();

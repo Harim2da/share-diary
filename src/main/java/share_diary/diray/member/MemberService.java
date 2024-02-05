@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.common.email.CertificationNumber;
 import share_diary.diray.common.email.CertificationNumberRepository;
 import share_diary.diray.common.email.EmailSenderComponent;
@@ -28,8 +27,6 @@ import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import java.util.UUID;
 
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
@@ -161,7 +158,7 @@ public class MemberService {
         return memberRepository.existsByEmail(requestDTO.getEmail());
     }
 
-    public void sendCertificationNumber(MemberIdAndEmailRequestDTO requestDTO) {
+    public void sendCertificationNumber(MemberLoginIdAndEmailRequestDTO requestDTO) {
         Member member = memberRepository.findByLoginId(requestDTO.getLoginId())
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -192,7 +189,7 @@ public class MemberService {
         log.info("findMemberId = {}",findCertificationNumber.getMemberId());
     }
 
-    public void resetPassword(MemberPasswordRequestDTO requestDTO) {
+    public void resetPassword(MemberLoginIdAndPasswordRequestDTO requestDTO) {
         Member member = memberRepository.findByLoginId(requestDTO.getLoginId())
                 .orElseThrow(MemberNotFoundException::new);
 
