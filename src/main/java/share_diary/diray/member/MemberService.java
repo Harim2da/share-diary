@@ -174,11 +174,11 @@ public class MemberService {
         //redis 에 저장
         certificationNumberRepository.save(CertificationNumber.of(certificationNumber, member.getId()));
 
-//        emailSenderComponent.sendCertificationNumber(certificationNumber, email)
-//                .addCallback(result -> log.info("email : {} 로 발송 성공", email), ex -> {
-//                    //TODO: email 실패 exception 생성
-//                    throw new IllegalArgumentException();
-//                });
+        emailSenderComponent.sendCertificationNumber(certificationNumber, member.getEmail())
+                .addCallback(result -> log.info("email : {} 로 발송 성공", member.getEmail()), ex -> {
+                    //TODO: email 실패 exception 생성
+                    throw new IllegalArgumentException();
+                });
     }
 
     private static int createMailVerifyNumber() {
@@ -192,11 +192,11 @@ public class MemberService {
         log.info("findMemberId = {}",findCertificationNumber.getMemberId());
     }
 
-    public void resetPassword(LoginSession session,String rawPassword) {
-        Member member = memberRepository.findById(session.getId())
+    public void resetPassword(MemberPasswordRequestDTO requestDTO) {
+        Member member = memberRepository.findByLoginId(requestDTO.getLoginId())
                 .orElseThrow(MemberNotFoundException::new);
 
-        member.updatePassword(passwordEncoder.encode(rawPassword));
+        member.updatePassword(passwordEncoder.encode(requestDTO.getPassword()));
     }
 
     public Boolean validateCreateDiaryRoom(Long memberId) {

@@ -148,10 +148,9 @@ public class MemberController {
     @NoAuth
     @PostMapping("/resetPassword")
     public ResponseEntity<Void> resetPassword(
-            @AuthenticationPrincipal LoginSession session,
             @RequestBody MemberPasswordRequestDTO requestDTO
     ){
-        memberService.resetPassword(session,requestDTO.getPassword());
+        memberService.resetPassword(requestDTO);
         return ResponseEntity.ok().build();
     }
 
