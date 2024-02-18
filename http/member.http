@@ -1,0 +1,85 @@
+### 회원가입
+
+POST http://localhost:8080/api/member/signUp
+Content-Type: application/json
+
+{
+  "loginId" : "jipdol2",
+  "email" : "jipdol2@gmail.com",
+  "password" : "1234",
+  "nickName" : "jipdol2"
+}
+
+### 아이디 찾기
+GET http://localhost:8080/api/member/me/id?email=jipdol2@gmail.com
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjQ1MzAzLCJleHAiOjE2ODUyNDU5MDN9.bcMecTIr5PC3_N5vLoKpr2cizXwVuPjk7AoH2e8QmzI
+
+### 비밀번호 확인 - 성공
+POST http://localhost:8080/api/member/me/pwd
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2ODU2MjExMjh9.LwDHZ2nBL71OpHfsrNtrLsRwQhaUNl5MGlHQZD7xgH4
+
+{
+  "password" : "1234"
+}
+
+### 비밀번호 확인 - 실패
+POST http://localhost:8080/api/member/me/pwd
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1NjIwNTI4LCJleHAiOjE2ODU2MjExMjh9.LwDHZ2nBL71OpHfsrNtrLsRwQhaUNl5MGlHQZD7xgH4
+
+{
+  "password" : "4444"
+}
+
+### 회원 수정
+PATCH http://localhost:8080/api/member/me
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjk3MzUyMzMzLCJleHAiOjE2OTczNTQxMzN9.tDGx-nA4hFiNz41TLgbKBx8mHHue1iCnUd7r5zW2f6k
+
+{
+  "email" : "jipdol2@gmail.com",
+  "password" : "4321",
+  "validationPassword" : "4321",
+  "nickName" : "jipsun2"
+}
+
+### 회원 수정 - 실패
+PATCH http://localhost:8080/api/member/me
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg1MjYzODE2LCJleHAiOjE2ODUyNjQ0MTZ9.wY3cNzKNVfuZeBUjfUgPnyKImZviU1W2_yP4RtjCwOs
+
+{
+  "email" : "",
+  "password" : "4321",
+  "validationPassword" : "4321",
+  "nickName" : "jipsun2"
+}
+
+### 비밀번호 변경 : 등록된 email 로 인증번호 전송
+POST localhost:8080/api/member/certification-number
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA1OTI5MzIxLCJleHAiOjE3MDU5Mjk2MjF9.ZQBIoF54uOpgGxXxcncc2fuo5Q8wg8Oe5YfumryqpEc
+
+### 비밀번호 변경 : 인증번호 확인
+POST localhost:8080/api/member/validation-certification-number
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA1OTI5MzIxLCJleHAiOjE3MDU5Mjk2MjF9.ZQBIoF54uOpgGxXxcncc2fuo5Q8wg8Oe5YfumryqpEc
+
+{
+  "certificationNumber" : "83673045"
+}
+
+### 비밀번호 초기화
+POST localhost:8080/api/member/resetPassword
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNzA1OTI5MzIxLCJleHAiOjE3MDU5Mjk2MjF9.ZQBIoF54uOpgGxXxcncc2fuo5Q8wg8Oe5YfumryqpEc
+
+{
+  "password": "4321"
+}
+
+### 회원 마이페이지 조회
+GET localhost:8080/api/member/myPage
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjk1ODg4NTA4LCJleHAiOjE2OTU4OTAzMDh9.azLjavjaIv3QY5vaoNF-wwq_lBqv2yllYD6jKAGsAI8

@@ -1,7 +1,14 @@
+buildscript {
+    dependencies {
+        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'share_diary'
@@ -22,11 +29,61 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'    // lombok과 mapstruct 함께 쓸 때 순서 충돌 문제 해결용
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//    h2
+    runtimeOnly 'com.h2database:h2'
+
+//    mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+//    JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+//    encrypt
+    implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
+//    validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+//    mailing
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+//    mockito
+    testImplementation 'org.mockito:mockito-core'
+
+//    mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+//  QueryDSL
+    implementation "com.querydsl:querydsl-core:5.0.0"
+    implementation "com.querydsl:querydsl-jpa:5.0.0"
+    implementation "com.querydsl:querydsl-apt:5.0.0"
+    implementation "com.querydsl:querydsl-sql:5.0.0"
+
+//    redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+//    sql logging
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
+//    rest assured
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+//    guava
+    implementation 'com.google.guava:guava:11.0.2'
+//    aop
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+//    swagger
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 }
+
+ext['spring-security.version']='5.8.4'
 
 tasks.named('test') {
     useJUnitPlatform()
@@ -35,51 +92,29 @@ tasks.named('test') {
 jar{
     enabled=false
 }
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-def webappDir = "$projectDir/src/main/reactjs"
+
+test{
+    exclude '**/*'
+}
+
+def querydslDir = "$projectDir/build/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
 
 sourceSets {
-    main {
-        resources {
-            srcDirs = ["$webappDir/build", "$projectDir/src/main/resources"]
-        }
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom compileClasspath
 }
 
-processResources {
-    dependsOn "copyWebApp"
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
-
-
-task copyWebApp(type: Copy) {
-    dependsOn "buildReact"
-    from "$webappDir/build"
-    into "$projectDir/src/main/resources/static"
-}
-
-
-task buildReact(type: Exec) {
-    dependsOn "installReact"
-    workingDir "$webappDir"
-    inputs.dir "$webappDir"
-    group = BasePlugin.BUILD_GROUP
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine "npm.cmd", "run-script", "build"
-    } else {
-        commandLine "npm", "run-script", "build"
-    }
-}
-
-task installReact(type: Exec) {
-    workingDir "$webappDir"
-    inputs.dir "$webappDir"
-    group = BasePlugin.BUILD_GROUP
-    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-        commandLine "npm.cmd", "audit", "fix"
-        commandLine 'npm.cmd', 'install'
-    } else {
-        commandLine "npm", "audit", "fix"
-        commandLine 'npm', 'install'
-    }
-}
-

@@ -1,0 +1,41 @@
+### 로그인
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "loginId" : "jipdol2",
+  "password" : "1234"
+}
+
+### 로그아웃
+POST http://localhost:8080/api/auth/logout
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg2NTc2ODUwLCJleHAiOjE2ODY1Nzc0NTB9.pGJE1TyHX5SbprY2-4Gwsj8rxJ30PzbyqYVu7x67bOM
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg2NTc2ODUwLCJleHAiOjE2ODY1NzgwNTB9.Hongi4sE73spx8IT6Y7Lf4fSrLRKiBYAOyEj46slGgc;
+
+### RefreshToken 확인
+GET http://localhost:8080/api/auth/GetRedis?token=eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjg2NDA3ODE2LCJleHAiOjE2ODY0MDkwMTZ9.EOeYr4N5C_jxLX-SJU5pH3kkwdIgrq2dIUy9CbM1U3A
+
+### 소셜 로그인 - authorization code get
+GET https://github.com/login/oauth/authorize?client_id=189505605f083d3c6449
+
+### 소셜 로그인 - accessToken get
+POST https://github.com/login/oauth/access_token
+Content-Type: application/json
+
+{
+  "code" : "50f07f1630f38ce34627"
+}
+
+### 소셜 로그인 - user get
+GET https://api.github.com/user
+Authorization: Bearer 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
+
+### 패스워드 변경
+POST http://localhost:8080/api/member/pwd
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjkyNDU2MTgwLCJleHAiOjE2OTI0NTc5ODB9.hNmhpDUS5V2vAWxygji9Zn5hqW7VFRimU0mVIsytMrc
+Content-Type: application/json
+
+{
+  "password" : "1234",
+  "updatePassword" : "4321"
+}
