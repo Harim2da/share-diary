@@ -20,7 +20,7 @@ jobs:
     
     # Docker 이미지 Build (2)
     - name: docker image build
-      run: docker build -t sharedDiary/master .
+      run: docker build -t shareddiary/master .
     
     # DockerHub Login (3)
     - name: docker login 
@@ -31,7 +31,7 @@ jobs:
 
     # Docker Hub push (4)
     - name: docker Hub push
-      run: docker push sharedDiary/master
+      run: docker push shareddiary/master
       
     # GET GitHub IP (5)
     - name: get GitHub IP 
