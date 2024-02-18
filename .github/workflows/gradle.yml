@@ -56,7 +56,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
+        username: ec2-user
         password: ${{ secrets.EC2_PASSWORD }} 
         port: ${{ secrets.EC2_SSH_PORT }}
         timeout: 60s
