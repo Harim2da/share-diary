@@ -63,7 +63,7 @@ jobs:
         script: |
           sudo docker stop master
           sudo docker rm master
-          sudo docker run -it -d -p 8080:8080 --name master shareddiary/master
+          sudo docker run -it -d -p 8080:8080 --name master --network compose_app_network shareddiary/master
     
     # REMOVE Github IP FROM security group (9)
     - name: Remove IP FROM security group
