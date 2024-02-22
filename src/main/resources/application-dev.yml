@@ -7,7 +7,7 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://master:3306/diarydb?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql_db:3306/diarydb?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
