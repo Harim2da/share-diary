@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name = "refresth_token_db")
+@Table(name = "refresh_token_db")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshTokenDB {
