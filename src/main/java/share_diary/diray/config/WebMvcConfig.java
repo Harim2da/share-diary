@@ -16,6 +16,10 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final AuthService authService;
+    private final String []allowedOrigins = {
+            "http://localhost:3000",
+            "http://3.37.251.88:3000"
+    };
 
     public WebMvcConfig(AuthService authService) {
         this.authService = authService;
@@ -43,6 +47,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         HttpMethod.PATCH.name(),
                         HttpMethod.DELETE.name()
                 )
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins(allowedOrigins);
     }
 }
