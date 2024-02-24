@@ -55,8 +55,8 @@ public class AuthController {
     @Operation(summary = "Logout Member",description = "로그아웃 API")
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(@AuthenticationPrincipal LoginSession loginSession, @CookieValue("REFRESH_TOKEN") String refreshToken){
-//        authService.removeRefreshToken(refreshToken);
-        authService.removeRefreshTokenToDB(refreshToken);
+        authService.removeRefreshToken(refreshToken);
+//        authService.removeRefreshTokenToDB(refreshToken);
         ResponseCookie cookie = expiredResponseCookie();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE,cookie.toString())
@@ -64,8 +64,8 @@ public class AuthController {
     }
 
     private ResponseCookie makeRefreshTokenCookie(Long id){
-//        String refreshToken = authService.makeRefreshToken(id);
-        String refreshToken = authService.makeRefreshTokenToDB(id);
+        String refreshToken = authService.makeRefreshToken(id);
+//        String refreshToken = authService.makeRefreshTokenToDB(id);
         return ResponseCookie.from("REFRESH_TOKEN",refreshToken)
                 .path("/")
                 .domain("localhost")
