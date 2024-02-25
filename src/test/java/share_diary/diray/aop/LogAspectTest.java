@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import share_diary.diray.member.MemberController;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Import(LogAspect.class)
 @SpringBootTest

@@ -31,8 +31,8 @@ public class MemberSignUpRequestDTO {
         this.nickName = nickName;
     }
 
-    public static MemberSignUpRequestDTO of(String memberId, String email, String password, String nickName){
-        return new MemberSignUpRequestDTO(memberId,email,password,nickName);
+    public static MemberSignUpRequestDTO of(String loginId, String email, String password, String nickName){
+        return new MemberSignUpRequestDTO(loginId,email,password,nickName);
     }
 
     public static Member fromToMember(MemberSignUpRequestDTO request,String encodedPassword, LocalDateTime now){
