@@ -38,3 +38,5 @@ out/
 
 */main/reactjs/node_modules/
 .DS_Store
+
+spy.log

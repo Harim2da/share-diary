@@ -10,6 +10,6 @@ endif::[]
 :sectlinks:
 
 [[Member-API]]
-== Member API
+== 1. Member API
 
 include::api/member/member.adoc[]

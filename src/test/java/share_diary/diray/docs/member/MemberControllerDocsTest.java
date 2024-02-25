@@ -5,14 +5,27 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.request.RequestDocumentation;
 import share_diary.diray.docs.RestDocsSupport;
 import share_diary.diray.member.MemberController;
 import share_diary.diray.member.MemberService;
+import share_diary.diray.member.domain.JoinStatus;
+import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,5 +75,54 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                                         .description("맴버 Nickname")
                         )
                 ));
+    }
+
+    @Test
+    @DisplayName("가입된 사용자의 아이디를 찾는다")
+    void findMemberId() throws Exception {
+        //given
+        String param = "jipdol2@gmail.com";
+
+        //when
+        given(memberService.findMemberByEmail(any(String.class)))
+                .willReturn(MemberDTO.builder()
+                        .id(1L)
+                        .loginId("jipdol2")
+                        .email("jipdol2@gmail.com")
+                        .nickName("jipdol2")
+                        .joinStatus(JoinStatus.USER.toString())
+                        .joinTime(LocalDateTime.of(2024, Month.FEBRUARY,25,23,0))
+                        .build()
+                );
+
+        //then
+        mockMvc.perform(
+                        get("/api/member/me/id")
+                                .param("email", param)
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("member-findMemberId",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email")
+                                        .description("맴버 Email")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER)
+                                        .description("맴버 ID"),
+                                fieldWithPath("loginId").type(JsonFieldType.STRING)
+                                        .description("맴버 로그인 ID"),
+                                fieldWithPath("email").type(JsonFieldType.STRING)
+                                        .description("맴버 Email"),
+                                fieldWithPath("nickName").type(JsonFieldType.STRING)
+                                        .description("맴버 Nickname"),
+                                fieldWithPath("joinStatus").type(JsonFieldType.STRING)
+                                        .description("맴버 가입 상태"),
+                                fieldWithPath("joinTime").type(JsonFieldType.STRING)
+                                        .description("맴버 가입 시간")
+                        ))
+                );
     }
 }

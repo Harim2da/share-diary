@@ -90,6 +90,10 @@ class MemberInviteHistoryRepositoryCustomImplTest {
         Long lastFindId = findByInviteHistories1Page.get(findByInviteHistories1Page.size() - 1).getId();
         List<MemberInviteHistory> findByInviteHistories2Page = memberInviteHistoryRepository.findAllByMemberInviteHistories(savedMember.getId(), lastFindId, limit);
 
+        System.out.println("lastFindId = " + lastFindId);
+        findByInviteHistories1Page.forEach(param-> System.out.println(param.getId()));
+        findByInviteHistories2Page.forEach(param-> System.out.println(param.getId()));
+
         assertThat(findByInviteHistories2Page)
                 .hasSize(2)
                 .extracting("email", "status", "hostUserId", "inviteDate")

@@ -1,7 +1,20 @@
+[[member-signUp]]
+== 1.1 회원가입
+
 ==== HTTP Request
 include::{snippets}/member-signUp/http-request.adoc[]
 include::{snippets}/member-signUp/request-fields.adoc[]
 
 ==== HTTP Response
 include::{snippets}/member-signUp/http-response.adoc[]
-include::{snippets}/member-signUp/response-body.adoc[]
+
+[[member-findMemberId]]
+== 1.2 아이디 찾기
+
+==== HTTP Request
+include::{snippets}/member-findMemberId/http-request.adoc[]
+include::{snippets}/member-findMemberId/request-parameters.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-findMemberId/http-response.adoc[]
+include::{snippets}/member-findMemberId/response-fields.adoc[]

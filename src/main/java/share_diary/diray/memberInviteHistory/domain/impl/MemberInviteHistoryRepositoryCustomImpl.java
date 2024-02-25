@@ -65,7 +65,10 @@ public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositoryS
                         memberInviteHistory.member.id.eq(loginId),
                         ltInviteHistoryId(inviteHistoryId)
                 )
-                .orderBy(memberInviteHistory.createDate.desc())
+                .orderBy(
+                        memberInviteHistory.createDate.desc(),
+                        memberInviteHistory.id.asc()
+                )
                 .limit(limit)
                 .fetch();
     }
