@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
 import share_diary.diray.docs.RestDocsSupport;
 import share_diary.diray.member.MemberController;
 import share_diary.diray.member.MemberService;
@@ -14,7 +12,6 @@ import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
