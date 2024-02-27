@@ -19,7 +19,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final String []allowedOrigins = {
             "http://localhost:3000",
             "http://3.37.251.88:3000",
-            "https://its-diary.vercel.app"
+            "https://its-diary.vercel.app",
+            "https://itsdiary.co.kr"
     };
 
     public WebMvcConfig(AuthService authService) {
