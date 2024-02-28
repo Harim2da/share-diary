@@ -41,17 +41,11 @@ public class DiaryRoomService {
     private final MemberRepository memberRepository;
     private final DiaryRoomMapper diaryRoomMapper;
 
-    public void joinNewMember(Member member, DiaryRoom diaryRoom) {
-//        2024/01/24 수정 : Optional이 empty 일때는 Objects.isNull 로 null checking 을 할 수 없습니다.
-//        Optional<MemberDiaryRoom> memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId());
-//        if(Objects.isNull(memberDiaryRoom)) {
-//            memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.USER));
-//        }
+    public MemberDiaryRoom joinNewMember(Member member, DiaryRoom diaryRoom) {
 
-        Optional<MemberDiaryRoom> memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId());
-        if(memberDiaryRoom.isEmpty()) {
-            memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.USER));
-        }
+        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId())
+                .orElseGet(() -> memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.USER)));
+        return memberDiaryRoom;
     }
 
     public void createDiaryRoom(Long memberId, DiaryRoomCreateRequest request, LocalDateTime now) {

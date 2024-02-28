@@ -55,6 +55,23 @@ class DiaryRoomServiceTest {
     }
 
     @Test
+    @DisplayName("일기방에 요청 유저가 없다면 일기방 맴버로 저장한다.")
+    void joinNewMember(){
+        //given
+        Member member = createMember();
+        Member savedMember = memberRepository.save(member);
+
+        DiaryRoom diaryRoom = DiaryRoom.of("testDiary", "jipsun2", LocalDateTime.of(2023, Month.DECEMBER, 28, 12, 30));
+        DiaryRoom savedDiaryRoom = diaryRoomRepository.save(diaryRoom);
+
+        //when
+        MemberDiaryRoom memberDiaryRoom = diaryRoomService.joinNewMember(savedMember, savedDiaryRoom);
+
+        //then
+        assertThat(memberDiaryRoom.getMember()).isEqualTo(savedMember);
+    }
+
+    @Test
     @DisplayName("등록된 일기방들을 최근 생성된 순으로 조회한다. - page 0")
     void getDiaryRooms() {
         //given
@@ -92,7 +109,7 @@ class DiaryRoomServiceTest {
 
     @Test
     @DisplayName("등록된 일기방들을 최근 생성된 순으로 조회한다. - page 1")
-    void getDiaryNextPageRooms() {
+    void getDiaryRooms2() {
         //given
         Member savedMember = memberRepository.save(createMember());
 
