@@ -51,9 +51,9 @@ class MemberApiTest extends ApiTest {
         final var response = MemberSteps.아이디찾기요청(email);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getString("loginId")).isEqualTo("jipdol2");
-        assertThat(response.jsonPath().getString("email")).isEqualTo("jipdol2@gmail.com");
-        assertThat(response.jsonPath().getString("nickName")).isEqualTo("집돌2");
+        assertThat(response.jsonPath().getString("data.loginId")).isEqualTo("jipdol2");
+        assertThat(response.jsonPath().getString("data.email")).isEqualTo("jipdol2@gmail.com");
+        assertThat(response.jsonPath().getString("data.nickName")).isEqualTo("집돌2");
     }
 
     @Test

@@ -22,4 +22,8 @@ public class MemberPasswordUpdateDTO {
         this.password = password;
         this.updatePassword = updatePassword;
     }
+
+    public static MemberPasswordUpdateDTO of(String password,String updatePassword){
+        return new MemberPasswordUpdateDTO(password,updatePassword);
+    }
 }

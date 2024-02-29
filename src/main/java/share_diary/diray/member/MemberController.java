@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
+import share_diary.diray.common.response.ApiResponse;
 import share_diary.diray.member.dto.MemberDTO;
 import share_diary.diray.member.dto.request.*;
 
@@ -31,10 +32,10 @@ public class MemberController {
     @Operation(summary = "SignUp Member",description = "회원가입 API")
     @NoAuth
     @PostMapping("/signUp")
-    public ResponseEntity<Void> signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
+    public ApiResponse<Void> signUp(@RequestBody @Valid MemberSignUpRequestDTO requestDTO){
         LocalDateTime now = LocalDateTime.now();
         memberService.joinMember(requestDTO,now);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok(null);
     }
 
     /**
@@ -56,8 +57,8 @@ public class MemberController {
     @Operation(summary = "Find Member",description = "아이디 찾기 API")
     @NoAuth
     @GetMapping("/me/id")
-    public MemberDTO findMemberId(@RequestParam("email") String email){
-        return memberService.findMemberByEmail(email);
+    public ApiResponse<MemberDTO> findMemberId(@RequestParam("email") String email){
+        return ApiResponse.ok(memberService.findMemberByEmail(email));
     }
 
     /**
@@ -66,9 +67,9 @@ public class MemberController {
      */
     @Operation(summary = "Check Member Password",description = "비밀번호 확인 API")
     @PostMapping("/me/pwd")
-    public ResponseEntity<Void> passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
+    public ApiResponse<Void> passwordCheck(@AuthenticationPrincipal LoginSession session, @RequestBody MemberPasswordRequestDTO requestDTO){
         memberService.passwordCheck(session.getId(),requestDTO);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok(null);
     }
 
     /**

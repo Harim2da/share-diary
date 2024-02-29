@@ -76,7 +76,7 @@ public class MemberInviteHistoryController {
             @RequestParam Integer limit
     ){
         List<MemberInviteHistoryDTO> byLoginUserInviteHistory = memberInviteHistoryService.findByLoginUserInviteHistory(loginSession.getId(),inviteHistoryId,limit);
-        return ApiResponse.of(byLoginUserInviteHistory);
+        return ApiResponse.ok(byLoginUserInviteHistory);
     }
 
 }

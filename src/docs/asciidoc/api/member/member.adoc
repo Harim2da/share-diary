@@ -18,3 +18,23 @@ include::{snippets}/member-findMemberId/request-parameters.adoc[]
 ==== HTTP Response
 include::{snippets}/member-findMemberId/http-response.adoc[]
 include::{snippets}/member-findMemberId/response-fields.adoc[]
+
+[[member-passwordCheck]]
+== 1.3 비밀번호 확인
+
+==== HTTP Request
+include::{snippets}/member-passwordCheck/http-request.adoc[]
+include::{snippets}/member-passwordCheck/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-passwordCheck/http-response.adoc[]
+
+[[member-updatePassword]]
+== 1.4 비밀번호 변경
+
+==== HTTP Request
+include::{snippets}/member-updatePassword/http-request.adoc[]
+include::{snippets}/member-updatePassword/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-updatePassword/http-response.adoc[]
