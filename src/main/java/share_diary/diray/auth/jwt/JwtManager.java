@@ -1,4 +1,4 @@
-package share_diary.diray.jwt;
+package share_diary.diray.auth.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -17,9 +17,9 @@ public class JwtManager {
     @Value("${jwt.secret}")
     private String KEY;
 
-    private static final int ACCESS_TIME = 60*5*1000;  //10분(임시 30분 조정)
+    private static final int ACCESS_TIME = 60*10*1000;  //10분(임시 30분 조정)
 
-    private static final int REFRESH_TIME = 60*20*1000; //20분
+    private static final int REFRESH_TIME = 60*30*1000; //20분
 
     public String makeAccessToken(Long id){
         return makeToken(id,ACCESS_TIME);

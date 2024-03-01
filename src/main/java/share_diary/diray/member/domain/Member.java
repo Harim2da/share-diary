@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -88,6 +89,12 @@ public class Member extends BaseTimeEntity {
         instance.email = email;
         instance.joinStatus = JoinStatus.WAITING;
         return instance;
+    }
+
+    public static List<Member> ofCreateInviteMembers(List<String> emails){
+        return emails.stream()
+                .map(Member::ofCreateInviteMember)
+                .collect(Collectors.toList());
     }
 
     public void updateJoinMember(MemberSignUpRequestDTO requestDTO,String encodedPassword,LocalDateTime now) {

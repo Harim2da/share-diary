@@ -24,6 +24,7 @@ public class MemberRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .fetch();
     }
 
+    @Override
     public boolean isJoinedMember(String email){
         return from(member)
                 .where(

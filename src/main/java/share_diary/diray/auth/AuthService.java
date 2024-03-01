@@ -17,7 +17,7 @@ import share_diary.diray.crypto.PasswordEncoder;
 import share_diary.diray.exception.jwt.TokenExpiredException;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
 import share_diary.diray.exception.member.MemberNotFoundException;
-import share_diary.diray.jwt.JwtManager;
+import share_diary.diray.auth.jwt.JwtManager;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 
