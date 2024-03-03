@@ -396,12 +396,12 @@ public class MemberControllerDocsTest extends RestDocsSupport {
         doNothing().when(memberService).resetPassword(any());
 
         //expected
-        mockMvc.perform(post("/api/member/validation-certification-number")
+        mockMvc.perform(post("/api/member/resetPassword")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("member-validation-certification-number",
+                .andDo(document("member-resetPassword",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -473,7 +473,7 @@ public class MemberControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(get("/api/member/myPage"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("member-uuid",
+                .andDo(document("member-mypage",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(

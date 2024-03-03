@@ -82,3 +82,44 @@ include::{snippets}/member-certification-number/request-fields.adoc[]
 ==== HTTP Response
 include::{snippets}/member-certification-number/http-response.adoc[]
 include::{snippets}//member-certification-number/response-fields.adoc[]
+
+[[member-validation-certification-number]]
+== 1.9 비밀번호 초기화 : 입력된 인증번호 유효성 검증
+
+==== HTTP Request
+include::{snippets}/member-validation-certification-number/http-request.adoc[]
+include::{snippets}/member-validation-certification-number/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-validation-certification-number/http-response.adoc[]
+include::{snippets}//member-validation-certification-number/response-fields.adoc[]
+
+[[member-resetPassword]]
+== 1.10 비밀번호 초기화 : 비밀번호 재설정
+
+==== HTTP Request
+include::{snippets}/member-resetPassword/http-request.adoc[]
+include::{snippets}/member-resetPassword/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-resetPassword/http-response.adoc[]
+
+[[member-validateMember]]
+== 1.11 멤버 초대 uuid 유효성 체크 API
+
+==== HTTP Request
+include::{snippets}/member-uuid/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-uuid/http-response.adoc[]
+include::{snippets}/member-uuid/response-fields.adoc[]
+
+[[member-findByMyInfo]]
+== 1.12 마이페이지 조회 API
+
+==== HTTP Request
+include::{snippets}/member-mypage/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-mypage/http-response.adoc[]
+include::{snippets}/member-mypage/response-fields.adoc[]
