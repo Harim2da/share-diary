@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.dailyDiary.DailyDiaryService;
-import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequest;
-import share_diary.diray.dailyDiary.dto.DailyDiaryDTO;
+import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequestDTO;
+import share_diary.diray.dailyDiary.controller.response.DailyDiaryDTO;
 
 @RestController
 @RequestMapping("/api/v0/daily-diaries")
@@ -39,7 +39,7 @@ public class DailyDiaryController {
     @PostMapping()
     public ResponseEntity<HttpStatus> createDailyDiary(
             @AuthenticationPrincipal LoginSession auth,
-            @RequestBody DailyDiaryCreateModifyRequest request
+            @RequestBody DailyDiaryCreateModifyRequestDTO request
     ) {
         dailyDiaryService.createDailyDiary(auth.getId(), request);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -48,7 +48,7 @@ public class DailyDiaryController {
     @PatchMapping("/{diaryId}")
     public ResponseEntity<DailyDiaryDTO> modifyDailyDiary(
             @PathVariable Long diaryId,
-            @RequestBody DailyDiaryCreateModifyRequest request,
+            @RequestBody DailyDiaryCreateModifyRequestDTO request,
             @AuthenticationPrincipal LoginSession auth
     ) {
         return ResponseEntity.ok(dailyDiaryService.modifyDailyDiary(diaryId, request, auth.getId()));

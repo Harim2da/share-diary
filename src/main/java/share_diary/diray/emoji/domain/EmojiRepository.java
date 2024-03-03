@@ -3,12 +3,12 @@ package share_diary.diray.emoji.domain;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import share_diary.diray.emoji.dto.DiaryEmojiDTO;
+import share_diary.diray.emoji.controller.response.DiaryEmojiDTO;
 
 public interface EmojiRepository extends JpaRepository<Emoji,Long>,
     EmojiRepositoryCustom{
 
-    @Query("SELECT new share_diary.diray.emoji.dto.DiaryEmojiDTO(" +
+    @Query("SELECT new share_diary.diray.emoji.controller.response.DiaryEmojiDTO(" +
                 "SUM(e.heartEmojiNumber)," +
                 "SUM(e.thumbSupEmojiNumber)," +
                 "SUM(e.partyPopperEmojiNumber), " +

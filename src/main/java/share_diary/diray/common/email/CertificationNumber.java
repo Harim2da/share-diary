@@ -1,11 +1,13 @@
 package share_diary.diray.common.email;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @RedisHash(value = "certificationNumber",timeToLive = 1800)
+@NoArgsConstructor
 public class CertificationNumber {
 
     @Id

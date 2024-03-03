@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
-import share_diary.diray.diaryRoom.DiaryRoom;
+import share_diary.diray.diaryRoom.domain.DiaryRoom;
 import share_diary.diray.exception.memberDiaryRoom.AlreadyExitedDiaryRoomException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.Role;

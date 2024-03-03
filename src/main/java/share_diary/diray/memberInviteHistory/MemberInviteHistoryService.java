@@ -1,11 +1,8 @@
 package share_diary.diray.memberInviteHistory;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -14,20 +11,19 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.common.email.EmailSenderComponent;
-import share_diary.diray.diaryRoom.DiaryRoom;
-import share_diary.diray.diaryRoom.DiaryRoomRepository;
+import share_diary.diray.diaryRoom.domain.DiaryRoom;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
 import share_diary.diray.exception.member.MemberIdOrPasswordErrorException;
 import share_diary.diray.exception.member.MemberNotFoundException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
-import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
+import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
-import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
+import share_diary.diray.memberInviteHistory.controller.response.MemberInviteHistoryDTO;
 import share_diary.diray.memberInviteHistory.event.InviteAcceptEvent;
 import share_diary.diray.memberInviteHistory.mapper.MemberInviteHistoryMapper;
 
@@ -43,7 +39,7 @@ public class MemberInviteHistoryService {
     private final MemberInviteHistoryMapper inviteHistoryMapper;
     private final MemberDiaryRoomRepository memberDiaryRoomRepository;
 
-    public void inviteRoomMembers(MemberInviteRequest request, LocalDateTime now) {
+    public void inviteRoomMembers(MemberInviteRequestDTO request, LocalDateTime now) {
         // 일기방 검증 및 host 체크
         Member hostMember = memberRepository.findById(request.getHostId())
                 .orElseThrow(MemberNotFoundException::new);

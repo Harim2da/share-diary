@@ -38,3 +38,47 @@ include::{snippets}/member-updatePassword/request-fields.adoc[]
 
 ==== HTTP Response
 include::{snippets}/member-updatePassword/http-response.adoc[]
+
+[[member-updateMember]]
+== 1.5 회원정보 수정
+
+==== HTTP Request
+include::{snippets}/member-updateMember/http-request.adoc[]
+include::{snippets}/member-updateMember/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-updateMember/http-response.adoc[]
+include::{snippets}/member-updateMember/response-fields.adoc[]
+
+[[member-validationLoginId]]
+== 1.6 아이디 중복체크
+
+==== HTTP Request
+include::{snippets}/member-loginId-validation/http-request.adoc[]
+include::{snippets}/member-loginId-validation/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-loginId-validation/http-response.adoc[]
+include::{snippets}/member-loginId-validation/response-fields.adoc[]
+
+[[member-validationEmail]]
+== 1.7 이메일 중복체크
+
+==== HTTP Request
+include::{snippets}/member-email-validation/http-request.adoc[]
+include::{snippets}/member-email-validation/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-email-validation/http-response.adoc[]
+include::{snippets}/member-email-validation/response-fields.adoc[]
+
+[[member-certification-number]]
+== 1.8 비밀번호 초기화 : 인증번호 email 로 전송
+
+==== HTTP Request
+include::{snippets}/member-certification-number/http-request.adoc[]
+include::{snippets}/member-certification-number/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-certification-number/http-response.adoc[]
+include::{snippets}//member-certification-number/response-fields.adoc[]

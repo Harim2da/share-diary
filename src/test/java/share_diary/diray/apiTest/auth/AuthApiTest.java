@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import share_diary.diray.apiTest.ApiTest;
 import share_diary.diray.apiTest.member.MemberSteps;
-import share_diary.diray.auth.dto.request.LoginRequestDTO;
+import share_diary.diray.auth.controller.request.LoginRequestDTO;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

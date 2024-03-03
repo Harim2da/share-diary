@@ -11,9 +11,9 @@ import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
 import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
-import share_diary.diray.memberInviteHistory.MemberInviteRequest;
-import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequest;
-import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
+import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
+import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequestDTO;
+import share_diary.diray.memberInviteHistory.controller.response.MemberInviteHistoryDTO;
 import share_diary.diray.common.response.ApiResponse;
 
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public class MemberInviteHistoryController {
      * */
     @PostMapping
     public ResponseEntity<HttpStatus> inviteRoomMembers(
-            @RequestBody MemberInviteRequest request,
+            @RequestBody MemberInviteRequestDTO request,
             @AuthenticationPrincipal LoginSession session
     ) {
         LocalDateTime now = LocalDateTime.now();
@@ -55,7 +55,7 @@ public class MemberInviteHistoryController {
     @NoAuth
     public ResponseEntity<HttpStatus> updateInviteHistory(
             @PathVariable Long historyId,
-            @RequestBody InviteUpdateRequest request
+            @RequestBody InviteUpdateRequestDTO request
             // 계정 토큰값 활용
     ) {
         memberInviteHistoryService.updateInviteHistory(historyId, request.getStatus());

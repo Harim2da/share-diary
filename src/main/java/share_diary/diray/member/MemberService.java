@@ -2,7 +2,6 @@ package share_diary.diray.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import share_diary.diray.common.email.CertificationNumber;
@@ -15,21 +14,20 @@ import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.ValidationMemberEmailException;
 import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
+import share_diary.diray.member.controller.request.*;
+import share_diary.diray.member.controller.response.MemberDTO;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.domain.Role;
-import share_diary.diray.member.dto.MemberDTO;
-import share_diary.diray.member.dto.request.*;
 import share_diary.diray.member.mapper.MemberMapper;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
+import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
+import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
-import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepository;
 
 @Slf4j
 @Service
@@ -158,7 +156,7 @@ public class MemberService {
         return memberRepository.existsByEmail(requestDTO.getEmail());
     }
 
-    public void sendCertificationNumber(MemberLoginIdAndEmailRequestDTO requestDTO) {
+    public int sendCertificationNumber(MemberLoginIdAndEmailRequestDTO requestDTO) {
         Member member = memberRepository.findByLoginId(requestDTO.getLoginId())
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -176,17 +174,19 @@ public class MemberService {
                     //TODO: email 실패 exception 생성
                     throw new IllegalArgumentException();
                 });
+        return certificationNumber;
     }
 
     private static int createMailVerifyNumber() {
         return (int) (Math.random() * (int) 1e8);
     }
 
-    public void validationCertificationNumber(int certificationNumber) {
+    public CertificationNumber validationCertificationNumber(int certificationNumber) {
         CertificationNumber findCertificationNumber = certificationNumberRepository.findById(certificationNumber)
                 .orElseThrow(CertificationNotFoundException::new);
         log.info("findCertificationNumber = {}",findCertificationNumber.getCertificationNumber());
         log.info("findMemberId = {}",findCertificationNumber.getMemberId());
+        return findCertificationNumber;
     }
 
     public void resetPassword(MemberLoginIdAndPasswordRequestDTO requestDTO) {

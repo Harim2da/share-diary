@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import share_diary.diray.apiTest.ApiTest;
 import share_diary.diray.apiTest.auth.AuthSteps;
 import share_diary.diray.member.domain.JoinStatus;
-import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
+import share_diary.diray.member.controller.request.MemberSignUpRequestDTO;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,9 +51,9 @@ class MemberApiTest extends ApiTest {
         final var response = MemberSteps.아이디찾기요청(email);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.jsonPath().getString("data.loginId")).isEqualTo("jipdol2");
-        assertThat(response.jsonPath().getString("data.email")).isEqualTo("jipdol2@gmail.com");
-        assertThat(response.jsonPath().getString("data.nickName")).isEqualTo("집돌2");
+        assertThat(response.jsonPath().getString("loginId")).isEqualTo("jipdol2");
+        assertThat(response.jsonPath().getString("email")).isEqualTo("jipdol2@gmail.com");
+        assertThat(response.jsonPath().getString("nickName")).isEqualTo("집돌2");
     }
 
     @Test
@@ -110,7 +110,8 @@ class MemberApiTest extends ApiTest {
         final var response = MemberSteps.아이디중복체크요청(MemberSteps.아이디중복체크요청_생성());
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.as(Boolean.class)).isEqualTo(true);
+//        assertThat(response.as(Boolean.class)).isEqualTo(true);
+        assertThat(response.jsonPath().getBoolean("data")).isEqualTo(true);
     }
 
     @Test
@@ -120,7 +121,8 @@ class MemberApiTest extends ApiTest {
         final var response = MemberSteps.이메일중복체크요청(MemberSteps.이메일중복체크요청_생성());
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.as(Boolean.class)).isEqualTo(true);
+//        assertThat(response.as(Boolean.class)).isEqualTo(true);
+        assertThat(response.jsonPath().getBoolean("data")).isEqualTo(true);
     }
 
     @Test

@@ -1,16 +1,16 @@
 package share_diary.diray.memberInviteHistory.domain.impl;
 
-import static share_diary.diray.member.domain.QMember.member;
-import static share_diary.diray.memberInviteHistory.domain.QMemberInviteHistory.memberInviteHistory;
-import static share_diary.diray.diaryRoom.QDiaryRoom.diaryRoom;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistoryRepositoryCustom;
+
+import java.util.List;
+import java.util.Optional;
+
+import static share_diary.diray.diaryRoom.domain.QDiaryRoom.diaryRoom;
+import static share_diary.diray.member.domain.QMember.member;
+import static share_diary.diray.memberInviteHistory.domain.QMemberInviteHistory.memberInviteHistory;
 
 public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositorySupport implements
         MemberInviteHistoryRepositoryCustom {
@@ -66,7 +66,7 @@ public class MemberInviteHistoryRepositoryCustomImpl extends QuerydslRepositoryS
                         ltInviteHistoryId(inviteHistoryId)
                 )
                 .orderBy(
-                        memberInviteHistory.createDate.desc(),
+                        memberInviteHistory.inviteDate.desc(),
                         memberInviteHistory.id.asc()
                 )
                 .limit(limit)

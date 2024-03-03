@@ -1,16 +1,15 @@
 package share_diary.diray.memberDiaryRoom.domain.impl;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import share_diary.diray.member.domain.Role;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepositoryCustom;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import static share_diary.diray.memberDiaryRoom.domain.QMemberDiaryRoom.memberDiaryRoom;
-import static share_diary.diray.diaryRoom.QDiaryRoom.diaryRoom;
 
 public class MemberDiaryRoomRepositoryCustomImpl extends QuerydslRepositorySupport implements MemberDiaryRoomRepositoryCustom {
 

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.emoji.domain.Emoji;
-import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
+import share_diary.diray.member.controller.request.MemberSignUpRequestDTO;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
 

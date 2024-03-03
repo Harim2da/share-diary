@@ -1,20 +1,19 @@
 package share_diary.diray.dailyDiary;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequest;
+import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequestDTO;
 import share_diary.diray.dailyDiary.domain.DailyDiary;
-import share_diary.diray.dailyDiary.dto.DailyDiaryDTO;
+import share_diary.diray.dailyDiary.controller.response.DailyDiaryDTO;
+import share_diary.diray.dailyDiary.domain.DailyDiaryRepository;
 import share_diary.diray.dailyDiary.mapper.DailyDiaryMapper;
-import share_diary.diray.exception.BaseException;
 import share_diary.diray.exception.dailyDiary.InvalidGetDiaryException;
 import share_diary.diray.exception.dailyDiary.InvalidRequestException;
 import share_diary.diray.exception.dailyDiary.TooManyDailyDiariesException;
@@ -35,7 +34,7 @@ public class DailyDiaryService {
     private final DailyDiaryMapper dailyDiaryMapper;
     private final MemberRepository memberRepository;
 
-    public void createDailyDiary(Long memberId, DailyDiaryCreateModifyRequest request) {
+    public void createDailyDiary(Long memberId, DailyDiaryCreateModifyRequestDTO request) {
         // 업로드할 일기방 속한 멤버인지 확인
         List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(
                 memberId);
@@ -58,7 +57,7 @@ public class DailyDiaryService {
         }
     }
 
-    public DailyDiaryDTO modifyDailyDiary(Long diaryId, DailyDiaryCreateModifyRequest request, Long memberId) {
+    public DailyDiaryDTO modifyDailyDiary(Long diaryId, DailyDiaryCreateModifyRequestDTO request, Long memberId) {
         // 하단에 member의 loginId를 뽑아 쓸 용도이자 연관관계를 꺼내 쓸 일이 없기 때문에 쿼리 메소드 사용
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);

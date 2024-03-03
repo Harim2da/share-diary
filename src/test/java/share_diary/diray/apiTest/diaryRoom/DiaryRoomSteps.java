@@ -5,7 +5,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
+import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequestDTO;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class DiaryRoomSteps {
 
     private final static String URL = "/api/v0/diary-rooms";
 
-    public static ExtractableResponse<Response> 일기방생성요청(String token,DiaryRoomCreateRequest request) {
+    public static ExtractableResponse<Response> 일기방생성요청(String token, DiaryRoomCreateRequestDTO request) {
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header(HttpHeaders.AUTHORIZATION, token)
@@ -24,9 +24,9 @@ public class DiaryRoomSteps {
                 .log().all().extract();
     }
 
-    public static DiaryRoomCreateRequest 일기방생성요청_생성(List<String> emails) {
+    public static DiaryRoomCreateRequestDTO 일기방생성요청_생성(List<String> emails) {
         final String diaryRoomName = "오늘의 일기방";
-        return new DiaryRoomCreateRequest(diaryRoomName,emails);
+        return new DiaryRoomCreateRequestDTO(diaryRoomName,emails);
     }
 
     public static ExtractableResponse<Response> 참여하고있는_일기방목록조회_요청(String token) {

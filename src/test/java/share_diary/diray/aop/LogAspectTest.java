@@ -7,8 +7,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import share_diary.diray.member.MemberController;
-import share_diary.diray.member.dto.request.MemberSignUpRequestDTO;
+import share_diary.diray.member.controller.MemberController;
+import share_diary.diray.member.controller.request.MemberSignUpRequestDTO;
 
 @ActiveProfiles("test")
 @AutoConfigureMockMvc

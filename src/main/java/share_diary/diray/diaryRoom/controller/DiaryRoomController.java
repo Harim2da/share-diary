@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.diaryRoom.DiaryRoomService;
-import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
-import share_diary.diray.diaryRoom.controller.request.DiaryRoomHostModifyRequest;
+import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequestDTO;
+import share_diary.diray.diaryRoom.controller.request.DiaryRoomHostModifyRequestDTO;
 import share_diary.diray.diaryRoom.controller.response.DiaryRoomMembersResponse;
-import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
+import share_diary.diray.diaryRoom.controller.response.DiaryRoomDTO;
 import share_diary.diray.exception.http.ForbiddenException;
 
 @Slf4j
@@ -41,7 +41,7 @@ public class DiaryRoomController {
      * */
     @PostMapping
     public ResponseEntity<HttpStatus> createDiaryRoom(
-            @RequestBody DiaryRoomCreateRequest request,
+            @RequestBody DiaryRoomCreateRequestDTO request,
             @AuthenticationPrincipal LoginSession session
             ) {
         LocalDateTime now = LocalDateTime.now();
@@ -98,7 +98,7 @@ public class DiaryRoomController {
     @PostMapping("/{diaryRoomId}")
     public ResponseEntity<HttpStatus> modifyDiaryRoomHost(
             @PathVariable Long diaryRoomId,
-            @RequestBody DiaryRoomHostModifyRequest request,
+            @RequestBody DiaryRoomHostModifyRequestDTO request,
             @AuthenticationPrincipal LoginSession session
     ) {
         if(!session.getId().equals(request.getAsIsHostId())) {

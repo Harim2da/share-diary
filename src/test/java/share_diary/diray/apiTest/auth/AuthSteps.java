@@ -5,7 +5,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import share_diary.diray.auth.dto.request.LoginRequestDTO;
+import share_diary.diray.auth.controller.request.LoginRequestDTO;
 
 public class AuthSteps {
 

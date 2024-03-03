@@ -3,10 +3,7 @@ package share_diary.diray.diaryRoom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -15,10 +12,12 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequest;
-import share_diary.diray.diaryRoom.controller.request.DiaryRoomHostModifyRequest;
+import share_diary.diray.diaryRoom.controller.request.DiaryRoomCreateRequestDTO;
+import share_diary.diray.diaryRoom.controller.request.DiaryRoomHostModifyRequestDTO;
 import share_diary.diray.diaryRoom.controller.response.DiaryRoomMembersResponse;
-import share_diary.diray.diaryRoom.dto.DiaryRoomDTO;
+import share_diary.diray.diaryRoom.controller.response.DiaryRoomDTO;
+import share_diary.diray.diaryRoom.domain.DiaryRoom;
+import share_diary.diray.diaryRoom.domain.DiaryRoomRepository;
 import share_diary.diray.diaryRoom.event.DiaryRoomCreateEvent;
 import share_diary.diray.diaryRoom.mapper.DiaryRoomMapper;
 import share_diary.diray.exception.diaryRoom.DiaryRoomNotFoundException;
@@ -48,7 +47,7 @@ public class DiaryRoomService {
         return memberDiaryRoom;
     }
 
-    public void createDiaryRoom(Long memberId, DiaryRoomCreateRequest request, LocalDateTime now) {
+    public void createDiaryRoom(Long memberId, DiaryRoomCreateRequestDTO request, LocalDateTime now) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
@@ -105,7 +104,7 @@ public class DiaryRoomService {
         }
     }
 
-    public void modifyDiaryRoomHost(Long diaryRoomId, DiaryRoomHostModifyRequest request, Long loginId) {
+    public void modifyDiaryRoomHost(Long diaryRoomId, DiaryRoomHostModifyRequestDTO request, Long loginId) {
 
         // 일기방을 가져온 뒤에, 멤버 둘 다 있는지 확인 후 Host 변경, 현 host 탈퇴
         LocalDate searchDate = LocalDate.now(); // zone 관련 수정 필요. 원래는 ZoneId로 가는 게 맞을 듯

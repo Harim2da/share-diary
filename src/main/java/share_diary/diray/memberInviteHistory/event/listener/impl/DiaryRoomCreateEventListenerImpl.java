@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import share_diary.diray.diaryRoom.event.DiaryRoomCreateEvent;
 import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
-import share_diary.diray.memberInviteHistory.MemberInviteRequest;
+import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
 import share_diary.diray.memberInviteHistory.event.listener.DiaryRoomCreateEventListener;
 
 import java.time.LocalDateTime;
@@ -20,6 +20,6 @@ public class DiaryRoomCreateEventListenerImpl implements DiaryRoomCreateEventLis
     @Override
     public void handleDiaryRoomCreateEvent(DiaryRoomCreateEvent event) {
         LocalDateTime now = LocalDateTime.now();
-        memberInviteHistoryService.inviteRoomMembers(MemberInviteRequest.of(event.getDiaryRoomId(), event.getEmails(), event.getHost().getId()),now);
+        memberInviteHistoryService.inviteRoomMembers(MemberInviteRequestDTO.of(event.getDiaryRoomId(), event.getEmails(), event.getHost().getId()),now);
     }
 }

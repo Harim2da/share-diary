@@ -5,7 +5,7 @@ import org.mapstruct.ReportingPolicy;
 import share_diary.diray.common.mapper.GenericMapper;
 import share_diary.diray.common.mapper.ReferenceMapper;
 import share_diary.diray.member.domain.Member;
-import share_diary.diray.member.dto.MemberDTO;
+import share_diary.diray.member.controller.response.MemberDTO;
 
 @Mapper(componentModel = "spring", uses = {
         ReferenceMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)

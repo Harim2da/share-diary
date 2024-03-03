@@ -3,12 +3,9 @@ package share_diary.diray.memberInviteHistory.mapper;
 import org.mapstruct.*;
 import share_diary.diray.common.mapper.GenericMapper;
 import share_diary.diray.common.mapper.ReferenceMapper;
-import share_diary.diray.member.domain.Member;
-import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 import share_diary.diray.memberInviteHistory.domain.MemberInviteHistory;
-import share_diary.diray.memberInviteHistory.dto.MemberInviteHistoryDTO;
+import share_diary.diray.memberInviteHistory.controller.response.MemberInviteHistoryDTO;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {

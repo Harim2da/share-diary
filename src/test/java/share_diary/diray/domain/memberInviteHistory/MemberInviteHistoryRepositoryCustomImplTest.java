@@ -2,15 +2,13 @@ package share_diary.diray.domain.memberInviteHistory;
 
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import share_diary.diray.DatabaseCleanup;
-import share_diary.diray.diaryRoom.DiaryRoom;
-import share_diary.diray.diaryRoom.DiaryRoomRepository;
+import share_diary.diray.diaryRoom.domain.DiaryRoom;
+import share_diary.diray.diaryRoom.domain.DiaryRoomRepository;
 import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
@@ -54,17 +52,15 @@ class MemberInviteHistoryRepositoryCustomImplTest {
         DiaryRoom savedDiaryRoom = diaryRoomRepository.save(diaryRoom);
 
         long hostId = 112L;
-        LocalDateTime pastTime = LocalDateTime.of(2024, Month.JANUARY, 4, 10, 30);
-        LocalDateTime lastTime = LocalDateTime.of(2024, Month.JANUARY, 5, 20, 30);
 
         List<MemberInviteHistory> memberInviteHistories = List.of(
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, pastTime),
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, pastTime),
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, pastTime),
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, lastTime),
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, lastTime),
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, lastTime),
-                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, lastTime)
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 1, 10, 30)),
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 2, 10, 30)),
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 3, 10, 30)),
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 4, 10, 30)),
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 5, 10, 30)),
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 6, 10, 30)),
+                MemberInviteHistory.of(savedMember, savedDiaryRoom, "jipdol2@gmail.com", hostId, LocalDateTime.of(2024, Month.JANUARY, 7, 10, 30))
         );
 
         memberInviteHistoryRepository.saveAll(memberInviteHistories);
@@ -78,11 +74,11 @@ class MemberInviteHistoryRepositoryCustomImplTest {
                 .hasSize(5)
                 .extracting("email", "status", "hostUserId", "inviteDate")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, lastTime),
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, lastTime),
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, lastTime),
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, lastTime),
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, pastTime)
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 7, 10, 30)),
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 6, 10, 30)),
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 5, 10, 30)),
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 4, 10, 30)),
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 3, 10, 30))
                 );
 
         //2번째 페이지
@@ -90,16 +86,16 @@ class MemberInviteHistoryRepositoryCustomImplTest {
         Long lastFindId = findByInviteHistories1Page.get(findByInviteHistories1Page.size() - 1).getId();
         List<MemberInviteHistory> findByInviteHistories2Page = memberInviteHistoryRepository.findAllByMemberInviteHistories(savedMember.getId(), lastFindId, limit);
 
-        System.out.println("lastFindId = " + lastFindId);
-        findByInviteHistories1Page.forEach(param-> System.out.println(param.getId()));
-        findByInviteHistories2Page.forEach(param-> System.out.println(param.getId()));
+//        findByInviteHistories1Page.forEach(param-> System.out.println(param.getId()+String.valueOf(param.getInviteDate())));
+//        System.out.println("lastFindId = " + lastFindId);
+//        findByInviteHistories2Page.forEach(param-> System.out.println(param.getId()+String.valueOf(param.getInviteDate())));
 
         assertThat(findByInviteHistories2Page)
                 .hasSize(2)
                 .extracting("email", "status", "hostUserId", "inviteDate")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, pastTime),
-                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, pastTime)
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 2, 10, 30)),
+                        Tuple.tuple("jipdol2@gmail.com", InviteAcceptStatus.INVITE, hostId, LocalDateTime.of(2024, Month.JANUARY, 1, 10, 30))
                 );
     }
 

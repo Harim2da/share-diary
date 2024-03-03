@@ -11,7 +11,7 @@ import share_diary.diray.apiTest.auth.AuthSteps;
 import share_diary.diray.apiTest.dailyDiary.DailyDiarySteps;
 import share_diary.diray.apiTest.diaryRoom.DiaryRoomSteps;
 import share_diary.diray.apiTest.member.MemberSteps;
-import share_diary.diray.emoji.dto.request.DiaryEmojiRequest;
+import share_diary.diray.emoji.controller.request.DiaryEmojiRequestDTO;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class EmojiApiTest extends ApiTest {
             //2. 일기 생성
         DailyDiarySteps.일기생성요청(token,DailyDiarySteps.일기생성요청_생성());
 
-        DiaryEmojiRequest request = new DiaryEmojiRequest("HEART");
+        DiaryEmojiRequestDTO request = new DiaryEmojiRequestDTO("HEART");
         //expected
         final var response = EmojiSteps.이모지클릭요청(token, request);
 
@@ -72,7 +72,7 @@ public class EmojiApiTest extends ApiTest {
         //2. 일기 생성
         DailyDiarySteps.일기생성요청(token,DailyDiarySteps.일기생성요청_생성());
 
-        DiaryEmojiRequest request = new DiaryEmojiRequest("HEART");
+        DiaryEmojiRequestDTO request = new DiaryEmojiRequestDTO("HEART");
         //expected
         EmojiSteps.이모지클릭요청(token, request);
 

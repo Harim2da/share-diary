@@ -6,7 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import share_diary.diray.common.mapper.GenericMapper;
 import share_diary.diray.common.mapper.ReferenceMapper;
 import share_diary.diray.emoji.domain.Emoji;
-import share_diary.diray.emoji.dto.DiaryEmojiDTO;
+import share_diary.diray.emoji.controller.response.DiaryEmojiDTO;
 
 @Mapper(componentModel = "spring", uses = {ReferenceMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EmojiMapper extends GenericMapper<DiaryEmojiDTO, Emoji> {

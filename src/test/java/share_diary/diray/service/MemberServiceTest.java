@@ -1,7 +1,6 @@
 package share_diary.diray.service;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +14,11 @@ import share_diary.diray.exception.member.PasswordNotCoincide;
 import share_diary.diray.exception.member.ValidationMemberEmailException;
 import share_diary.diray.exception.member.ValidationMemberIdException;
 import share_diary.diray.member.MemberService;
+import share_diary.diray.member.controller.request.*;
+import share_diary.diray.member.controller.response.MemberDTO;
 import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
-import share_diary.diray.member.dto.MemberDTO;
-import share_diary.diray.member.dto.request.*;
 
 import java.time.LocalDateTime;
 import java.time.Month;

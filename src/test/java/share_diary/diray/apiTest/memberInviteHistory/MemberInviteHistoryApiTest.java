@@ -10,7 +10,7 @@ import share_diary.diray.apiTest.ApiTest;
 import share_diary.diray.apiTest.auth.AuthSteps;
 import share_diary.diray.apiTest.diaryRoom.DiaryRoomSteps;
 import share_diary.diray.apiTest.member.MemberSteps;
-import share_diary.diray.memberInviteHistory.MemberInviteRequest;
+import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ class MemberInviteHistoryApiTest extends ApiTest {
         String token = loginResponse
                 .body().jsonPath().getString("accessToken");
         DiaryRoomSteps.일기방생성요청(token,DiaryRoomSteps.일기방생성요청_생성(List.of("jipsun2@gmail.com","jipal2@gmail.com")));
-        MemberInviteRequest request = MemberInvitesHistorySteps.일기방초대요청_생성(List.of("boyoung2@gmail.com", "somin2@gmail.com"));
+        MemberInviteRequestDTO request = MemberInvitesHistorySteps.일기방초대요청_생성(List.of("boyoung2@gmail.com", "somin2@gmail.com"));
 
         //expected
         final var response = MemberInvitesHistorySteps.일기방초대요청(token,request);

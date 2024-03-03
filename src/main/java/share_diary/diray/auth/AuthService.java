@@ -8,7 +8,7 @@ import share_diary.diray.auth.domain.token.RefreshToken;
 import share_diary.diray.auth.domain.token.RefreshTokenDB;
 import share_diary.diray.auth.domain.token.TokenDbRepository;
 import share_diary.diray.auth.domain.token.TokenRepository;
-import share_diary.diray.auth.dto.request.LoginRequestDTO;
+import share_diary.diray.auth.controller.request.LoginRequestDTO;
 import share_diary.diray.auth.oauth.OAuthManager;
 import share_diary.diray.auth.oauth.OAuthManagerFinder;
 import share_diary.diray.auth.oauth.SocialType;

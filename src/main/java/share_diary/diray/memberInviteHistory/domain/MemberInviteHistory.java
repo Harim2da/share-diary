@@ -7,10 +7,8 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import share_diary.diray.common.BaseTimeEntity;
-import share_diary.diray.diaryRoom.DiaryRoom;
-import share_diary.diray.exception.BaseException;
+import share_diary.diray.diaryRoom.domain.DiaryRoom;
 import share_diary.diray.exception.memberInviteHistory.AlreadyCheckedInviteException;
-import share_diary.diray.exception.memberInviteHistory.InvalidInviteHistoryIdException;
 import share_diary.diray.exception.memberInviteHistory.InvalidInviteUuidException;
 import share_diary.diray.member.domain.Member;
 
