@@ -1,4 +1,4 @@
-package share_diary.diray.docs.member;
+package share_diary.diray.docs.memberInviteHistory;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
