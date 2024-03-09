@@ -36,8 +36,7 @@ public class DailyDiaryService {
 
     public void createDailyDiary(Long memberId, DailyDiaryCreateModifyRequestDTO request) {
         // 업로드할 일기방 속한 멤버인지 확인
-        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(
-                memberId);
+        List<MemberDiaryRoom> memberDiaryRooms = memberDiaryRoomRepository.findAllByMemberId(memberId);
 
         if (CollectionUtils.isEmpty(memberDiaryRooms)) {
             throw new MemberNotFoundException();

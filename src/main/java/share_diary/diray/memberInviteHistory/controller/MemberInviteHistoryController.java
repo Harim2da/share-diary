@@ -1,20 +1,17 @@
 package share_diary.diray.memberInviteHistory.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import share_diary.diray.auth.domain.AuthenticationPrincipal;
 import share_diary.diray.auth.domain.LoginSession;
 import share_diary.diray.auth.domain.NoAuth;
-import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
-import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
-import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequestDTO;
-import share_diary.diray.memberInviteHistory.controller.response.MemberInviteHistoryDTO;
 import share_diary.diray.common.response.ApiResponse;
+import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
+import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequestDTO;
+import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
+import share_diary.diray.memberInviteHistory.controller.response.MemberInviteHistoryDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v0/member-invite-histories")
 @Slf4j
-@Tag(name = "MemberInviteHistory",description = "MemberInviteHistory API")
 public class MemberInviteHistoryController {
 
     private final MemberInviteHistoryService memberInviteHistoryService;
@@ -36,7 +32,7 @@ public class MemberInviteHistoryController {
      * @author harim
      * */
     @PostMapping
-    public ResponseEntity<HttpStatus> inviteRoomMembers(
+    public ResponseEntity<Void> inviteRoomMembers(
             @RequestBody MemberInviteRequestDTO request,
             @AuthenticationPrincipal LoginSession session
     ) {
@@ -44,7 +40,7 @@ public class MemberInviteHistoryController {
         // 초대하는 사람 본인 Id 추가
         request.updateHostId(session.getId());
         memberInviteHistoryService.inviteRoomMembers(request,now);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -53,13 +49,13 @@ public class MemberInviteHistoryController {
      */
     @PatchMapping("/{historyId}")
     @NoAuth
-    public ResponseEntity<HttpStatus> updateInviteHistory(
+    public ResponseEntity<Void> updateInviteHistory(
             @PathVariable Long historyId,
             @RequestBody InviteUpdateRequestDTO request
             // 계정 토큰값 활용
     ) {
         memberInviteHistoryService.updateInviteHistory(historyId, request.getStatus());
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -67,7 +63,6 @@ public class MemberInviteHistoryController {
      * 알림 내역 조회 api
      * @author jipdol2
      */
-    @Operation(summary = "Get Invite History",description = "알림 내역 조회 API")
     @GetMapping
     @NoAuth
     public ApiResponse<List<MemberInviteHistoryDTO>> findByInviteHistory(

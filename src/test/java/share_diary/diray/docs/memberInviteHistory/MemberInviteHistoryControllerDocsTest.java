@@ -3,6 +3,7 @@ package share_diary.diray.docs.memberInviteHistory;
 import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import share_diary.diray.docs.RestDocsSupport;
@@ -10,11 +11,14 @@ import share_diary.diray.memberInviteHistory.MemberInviteHistoryService;
 import share_diary.diray.memberInviteHistory.controller.MemberInviteHistoryController;
 import share_diary.diray.memberInviteHistory.controller.request.InviteUpdateRequestDTO;
 import share_diary.diray.memberInviteHistory.controller.request.MemberInviteRequestDTO;
+import share_diary.diray.memberInviteHistory.controller.response.MemberInviteHistoryDTO;
 import share_diary.diray.memberInviteHistory.domain.InviteAcceptStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -26,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
 
-    private final MemberInviteHistoryService memberInviteHistoryService = mock(MemberInviteHistoryService.class);
+    private final MemberInviteHistoryService memberInviteHistoryService = Mockito.mock(MemberInviteHistoryService.class);
 
     @Override
     protected Object initController() {
@@ -83,9 +87,14 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("memberInviteHistory-inviteRoomMembers",
+                .andDo(document("memberInviteHistory-updateInviteHistory",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .optional()
+                                        .description("초대 상태(수락/거절)")
+                        )
                 ));
     }
 
@@ -93,6 +102,23 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
     @DisplayName("나의 초대내역을 조회한다.")
     void findByInviteHistory() throws Exception {
         //given
+        List<MemberInviteHistoryDTO> list = List.of(
+                MemberInviteHistoryDTO.builder()
+                        .id(1L)
+                        .uuid(UUID.randomUUID().toString())
+                        .email("jipdol2@gmail.com")
+                        .hostUserId(1L)
+                        .hostUserNickname("gch03915")
+                        .status(InviteAcceptStatus.INVITE)
+                        .memberId(2L)
+                        .diaryRoomId(1L)
+                        .diaryRoomName("TEST 일기방")
+                        .inviteDate(LocalDateTime.now())
+                        .build()
+        );
+
+        given(memberInviteHistoryService.findByLoginUserInviteHistory(any(), anyLong(), anyInt()))
+                .willReturn(list);
 
         //expected
         mockMvc.perform(get("/api/v0/member-invite-histories")
@@ -111,27 +137,37 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
                                         .description("한 페이지에 조회되는 초대내역 개수")
                         ),
                         responseFields(
-                                fieldWithPath("id").type(JsonFieldType.NUMBER)
-                                        .description("초대내역 ID"),
-                                fieldWithPath("uuid").type(JsonFieldType.STRING)
-                                        .description("초대내역 uuid"),
-                                fieldWithPath("email").type(JsonFieldType.STRING)
-                                        .description("이메일"),
-                                fieldWithPath("hostId").type(JsonFieldType.NUMBER)
-                                        .description("일기방 방장 ID"),
-                                fieldWithPath("hostUserNickname").type(JsonFieldType.STRING)
-                                        .description("일기방 방장 닉네임"),
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("응답 code"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("응답 message"),
                                 fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 status"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data[].id").type(JsonFieldType.NUMBER)
+                                        .description("초대내역 ID"),
+                                fieldWithPath("data[].uuid").type(JsonFieldType.STRING)
+                                        .description("초대내역 uuid"),
+                                fieldWithPath("data[].email").type(JsonFieldType.STRING)
+                                        .description("이메일"),
+                                fieldWithPath("data[].hostUserId").type(JsonFieldType.NUMBER)
+                                        .description("일기방 방장 ID"),
+                                fieldWithPath("data[].hostUserNickname").type(JsonFieldType.STRING)
+                                        .description("일기방 방장 닉네임"),
+                                fieldWithPath("data[].status").type(JsonFieldType.STRING)
                                         .description("초대 내역 상태"),
-                                fieldWithPath("memberId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER)
                                         .description("초대 받은 사용자 ID"),
-                                fieldWithPath("diaryRoomId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data[].diaryRoomId").type(JsonFieldType.NUMBER)
                                         .description("일기방 ID"),
-                                fieldWithPath("diaryRoomName").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].diaryRoomName").type(JsonFieldType.STRING)
                                         .description("일기방 이름"),
-                                fieldWithPath("inviteDate").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].inviteDate").type(JsonFieldType.STRING)
                                         .description("초대한 날짜")
                         )
                 ));
+
+//        verify(memberInviteHistoryService).findByLoginUserInviteHistory(any(), anyLong(), anyInt());
     }
 }
