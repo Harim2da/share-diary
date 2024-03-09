@@ -1,0 +1,30 @@
+[[memberInviteHistory-inviteRoomMembers]]
+== 2.1 사용자 일기방에 초대
+
+==== HTTP Request
+include::{snippets}/memberInviteHistory-inviteRoomMembers/http-request.adoc[]
+include::{snippets}/memberInviteHistory-inviteRoomMembers/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/memberInviteHistory-inviteRoomMembers/http-response.adoc[]
+
+[[memberInviteHistory-updateInviteHistory]]
+== 2.2 사용자 일기방에 초대
+
+==== HTTP Request
+include::{snippets}/memberInviteHistory-updateInviteHistory/http-request.adoc[]
+include::{snippets}/memberInviteHistory-updateInviteHistory/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/memberInviteHistory-updateInviteHistory/http-response.adoc[]
+
+[[memberInviteHistory-findByInviteHistory]]
+== 2.3 사용자 일기방에 초대
+
+==== HTTP Request
+include::{snippets}/memberInviteHistory-findByInviteHistory/http-request.adoc[]
+include::{snippets}/memberInviteHistory-findByInviteHistory/request-parameters.adoc[]
+
+==== HTTP Response
+include::{snippets}/memberInviteHistory-findByInviteHistory/http-response.adoc[]
+include::{snippets}/memberInviteHistory-findByInviteHistory/response-fields.adoc[]

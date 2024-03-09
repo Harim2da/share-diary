@@ -13,3 +13,8 @@ endif::[]
 == 1. Member API
 
 include::api/member/member.adoc[]
+
+[[MemberInviteHistory-API]]
+== 2. MemberInviteHistory API
+
+include::api/memberInviteHistory/memberInviteHistroy.adoc[]

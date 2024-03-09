@@ -14,4 +14,8 @@ public class InviteUpdateRequestDTO {
 
     @NotBlank
     private InviteAcceptStatus status;
+
+    public static InviteUpdateRequestDTO of(InviteAcceptStatus status){
+        return new InviteUpdateRequestDTO(status);
+    }
 }
