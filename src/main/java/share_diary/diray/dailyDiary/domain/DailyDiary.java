@@ -1,18 +1,22 @@
 package share_diary.diray.dailyDiary.domain;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import share_diary.diray.common.BaseTimeEntity;
 import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequestDTO;
 import share_diary.diray.diaryRoom.domain.DiaryRoom;
 import share_diary.diray.emoji.domain.Emoji;
 
-@Table(name = "daily_diary")
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "daily_diary")
 public class DailyDiary extends BaseTimeEntity {
 
     @Id
@@ -35,17 +39,13 @@ public class DailyDiary extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private DiaryStatus status;
 
-/*    @Column
-    private LocalDateTime createDate;
-
+    //일기 작성자
     @Column
-    private String createBy;
+    private String writeMember;
 
+    //작성 시간
     @Column
-    private LocalDateTime modifyDate;
-
-    @Column
-    private String modifyBy;*/
+    private LocalDateTime writeDateTime;
 
     // 일기방
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,14 +56,25 @@ public class DailyDiary extends BaseTimeEntity {
     @OneToMany(mappedBy = "dailyDiary")
     private Set<Emoji> emoji = new HashSet<>();
 
-    public static DailyDiary of(String content, DiaryRoom diaryRoom, MyEmoji feeling, String createBy) {
+    public DailyDiary(Long id, String content, MyEmoji feeling, DiaryStatus status, String writeMember, LocalDateTime writeDateTime, DiaryRoom diaryRoom, Set<Emoji> emoji) {
+        this.id = id;
+        this.content = content;
+        this.feeling = feeling;
+        this.status = status;
+        this.writeMember = writeMember;
+        this.writeDateTime = writeDateTime;
+        this.diaryRoom = diaryRoom;
+        this.emoji = emoji;
+    }
+
+    public static DailyDiary of(String content, DiaryRoom diaryRoom, MyEmoji feeling, String writeMember, LocalDateTime writeDateTime) {
         DailyDiary instance = new DailyDiary();
         instance.content = content;
         instance.status = DiaryStatus.SHOW;
         instance.feeling = feeling;
+        instance.writeMember = writeMember;
+        instance.writeDateTime = writeDateTime;
         instance.diaryRoom = diaryRoom;
-//        instance.createBy = createBy;
-//        instance.modifyBy = createBy;
         return instance;
     }
 
@@ -79,3 +90,4 @@ public class DailyDiary extends BaseTimeEntity {
         return this;
     }
 }
+

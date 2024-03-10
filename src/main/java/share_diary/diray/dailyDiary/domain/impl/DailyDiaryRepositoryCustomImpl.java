@@ -19,12 +19,15 @@ public class DailyDiaryRepositoryCustomImpl extends QuerydslRepositorySupport im
     }
 
     @Override
-    public List<DailyDiary> findByLoginIdDiaryRoomIdAndSearchDate(String createBy,
-            DiaryRoom diaryRoom, LocalDate searchingDate) {
+    public List<DailyDiary> findByLoginIdDiaryRoomIdAndSearchDate(
+            String writeMember,
+            DiaryRoom diaryRoom,
+            LocalDate searchingDate
+    ) {
         return from(dailyDiary)
                 .where(
                         dailyDiary.diaryRoom.eq(diaryRoom)
-                                .and(dailyDiary.createBy.eq(createBy))
+                                .and(dailyDiary.writeMember.eq(writeMember))
                                 .and(searchPeriodBetween(searchingDate))
                 )
                 .fetch();
@@ -38,6 +41,6 @@ public class DailyDiaryRepositoryCustomImpl extends QuerydslRepositorySupport im
         LocalDateTime start = LocalDateTime.of(searchingDate, LocalTime.of(0,0,0));
         LocalDateTime end = LocalDateTime.of(searchingDate, LocalTime.of(23,59,59));
 
-        return dailyDiary.createDate.between(start, end);
+        return dailyDiary.writeDateTime.between(start, end);
     }
 }

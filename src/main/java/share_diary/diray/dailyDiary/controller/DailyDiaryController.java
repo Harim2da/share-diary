@@ -1,7 +1,6 @@
 package share_diary.diray.dailyDiary.controller;
 
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,11 +12,12 @@ import share_diary.diray.dailyDiary.DailyDiaryService;
 import share_diary.diray.dailyDiary.controller.request.DailyDiaryCreateModifyRequestDTO;
 import share_diary.diray.dailyDiary.controller.response.DailyDiaryDTO;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/api/v0/daily-diaries")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "DailyDiary",description = "DailyDiary API")
 public class DailyDiaryController {
 
     private final DailyDiaryService dailyDiaryService;
@@ -25,8 +25,8 @@ public class DailyDiaryController {
     /**
      * 한 번에 한 개의 일기만 조회하는 것으로 결정해
      * 일기는 단건 조회로 개발
-     * */
-    @GetMapping()
+     */
+    @GetMapping
     public ResponseEntity<DailyDiaryDTO> getDailyDiary(
             @RequestParam Long diaryRoomId,
             @RequestParam String searchDate,
@@ -36,12 +36,13 @@ public class DailyDiaryController {
         return ResponseEntity.ok(dailyDiaryService.getDailyDiary(auth.getId(), diaryRoomId, searchDate, memberId));
     }
 
-    @PostMapping()
-    public ResponseEntity<HttpStatus> createDailyDiary(
+    @PostMapping
+    public ResponseEntity<HttpStatus> writeDailyDiary(
             @AuthenticationPrincipal LoginSession auth,
             @RequestBody DailyDiaryCreateModifyRequestDTO request
     ) {
-        dailyDiaryService.createDailyDiary(auth.getId(), request);
+        LocalDateTime now = LocalDateTime.now();
+        dailyDiaryService.writeDailyDiary(auth.getId(), request, now);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
