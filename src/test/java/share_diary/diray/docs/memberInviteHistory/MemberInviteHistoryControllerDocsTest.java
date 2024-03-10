@@ -1,6 +1,5 @@
 package share_diary.diray.docs.memberInviteHistory;
 
-import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -32,6 +31,10 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
 
     private final MemberInviteHistoryService memberInviteHistoryService = Mockito.mock(MemberInviteHistoryService.class);
 
+    private static final String SCHEME = "https";
+    private static final String HOST = "itsdiary.store";
+    private static final int PORT = 443;
+
     @Override
     protected Object initController() {
         return new MemberInviteHistoryController(memberInviteHistoryService);
@@ -55,7 +58,10 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("memberInviteHistory-inviteRoomMembers",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("diaryRoomId").type(JsonFieldType.NUMBER)
@@ -88,7 +94,10 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("memberInviteHistory-updateInviteHistory",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -127,7 +136,10 @@ class MemberInviteHistoryControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("memberInviteHistory-findByInviteHistory",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("inviteHistoryId")
