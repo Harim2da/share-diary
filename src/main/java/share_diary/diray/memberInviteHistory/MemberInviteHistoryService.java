@@ -44,7 +44,7 @@ public class MemberInviteHistoryService {
         Member hostMember = memberRepository.findById(request.getHostId())
                 .orElseThrow(MemberNotFoundException::new);
 
-        DiaryRoom diaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(request.getHostId(), request.getDiaryRoomId())
+        DiaryRoom diaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoomHost(request.getHostId(), request.getDiaryRoomId())
                 .orElseThrow(DiaryRoomNotFoundException::new)
                 .getDiaryRoom();
 

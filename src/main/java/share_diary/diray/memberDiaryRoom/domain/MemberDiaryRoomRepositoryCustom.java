@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface MemberDiaryRoomRepositoryCustom {
 
-    Optional<MemberDiaryRoom> findByMemberIdAndDiaryRoomIdWithDiaryRoom(Long memberId, Long diaryRoomId);
+    Optional<MemberDiaryRoom> findByMemberIdAndDiaryRoomIdWithDiaryRoomHost(Long memberId, Long diaryRoomId);
 
     List<MemberDiaryRoom> findAllByMemberId(Long memberId);
 
