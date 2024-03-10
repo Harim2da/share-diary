@@ -64,9 +64,11 @@ public class MemberInviteHistory extends BaseTimeEntity {
     }
 
     public static MemberInviteHistory reInvite(Member member, MemberInviteHistory beforeHistory,LocalDateTime inviteDate) {
-        beforeHistory.status = InviteAcceptStatus.RE_INVITE;
-        return of(member, beforeHistory.getDiaryRoom(), member.getEmail(),
-                beforeHistory.getHostUserId(),inviteDate);
+//        beforeHistory.status = InviteAcceptStatus.RE_INVITE;
+        MemberInviteHistory afterHistory = of(member, beforeHistory.getDiaryRoom(), member.getEmail(),
+                beforeHistory.getHostUserId(), inviteDate);
+        afterHistory.status = InviteAcceptStatus.RE_INVITE;
+        return afterHistory;
     }
 
     public MemberInviteHistory updateAcceptStatus(InviteAcceptStatus status) {

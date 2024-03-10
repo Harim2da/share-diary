@@ -18,7 +18,7 @@ public class MemberDiaryRoomRepositoryCustomImpl extends QuerydslRepositorySuppo
     }
 
     @Override
-    public Optional<MemberDiaryRoom> findByMemberIdAndDiaryRoomIdWithDiaryRoom(
+    public Optional<MemberDiaryRoom> findByMemberIdAndDiaryRoomIdWithDiaryRoomHost(
             Long memberId,
             Long diaryRoomId
     ) {

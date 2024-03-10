@@ -1,6 +1,5 @@
 package share_diary.diray.docs.member;
 
-import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -8,11 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import share_diary.diray.common.email.CertificationNumber;
 import share_diary.diray.docs.RestDocsSupport;
-import share_diary.diray.member.controller.MemberController;
 import share_diary.diray.member.MemberService;
+import share_diary.diray.member.controller.MemberController;
 import share_diary.diray.member.controller.request.*;
-import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.controller.response.MemberDTO;
+import share_diary.diray.member.domain.JoinStatus;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -34,6 +33,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
 
     //    mocking
     private final MemberService memberService = Mockito.mock(MemberService.class);
+
+    private static final String SCHEME = "https";
+    private static final String HOST = "itsdiary.store";
+    private static final int PORT = 443;
 
     @Override
     protected Object initController() {
@@ -58,7 +61,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-signUp",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("loginId").type(JsonFieldType.STRING)
@@ -102,7 +108,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-findMemberId",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParameters(
                                 parameterWithName("email")
@@ -142,7 +151,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-passwordCheck",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("password").type(JsonFieldType.STRING)
@@ -168,7 +180,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-updatePassword",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("password").type(JsonFieldType.STRING)
@@ -205,7 +220,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-updateMember",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("email").type(JsonFieldType.STRING)
@@ -255,7 +273,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-loginId-validation",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("loginId").type(JsonFieldType.STRING)
@@ -292,7 +313,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-email-validation",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("email").type(JsonFieldType.STRING)
@@ -329,7 +353,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-certification-number",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("loginId").type(JsonFieldType.STRING)
@@ -370,7 +397,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-validation-certification-number",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("certificationNumber").type(JsonFieldType.NUMBER)
@@ -402,7 +432,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-resetPassword",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("loginId").type(JsonFieldType.STRING)
@@ -436,7 +469,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-uuid",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER)
@@ -474,7 +510,10 @@ public class MemberControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("member-mypage",
-                        preprocessRequest(prettyPrint()),
+                        preprocessRequest(modifyUris()
+                                .scheme(SCHEME)
+                                .host(HOST)
+                                .port(PORT), prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER)

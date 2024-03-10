@@ -1,24 +1,23 @@
-package share_diary.diray.service;
+package share_diary.diray.service.diaryRoom;
 
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import share_diary.diray.DatabaseCleanup;
+import share_diary.diray.diaryRoom.DiaryRoomService;
+import share_diary.diray.diaryRoom.controller.response.DiaryRoomDTO;
 import share_diary.diray.diaryRoom.domain.DiaryRoom;
 import share_diary.diray.diaryRoom.domain.DiaryRoomRepository;
-import share_diary.diray.diaryRoom.DiaryRoomService;
 import share_diary.diray.diaryRoom.domain.DiaryRoomStatus;
-import share_diary.diray.diaryRoom.controller.response.DiaryRoomDTO;
 import share_diary.diray.member.domain.JoinStatus;
 import share_diary.diray.member.domain.Member;
 import share_diary.diray.member.domain.MemberRepository;
 import share_diary.diray.member.domain.Role;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoom;
 import share_diary.diray.memberDiaryRoom.domain.MemberDiaryRoomRepository;
+import share_diary.diray.service.IntegrationTestSupport;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -28,9 +27,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class DiaryRoomServiceTest {
+class DiaryRoomServiceTest extends IntegrationTestSupport {
 
     //Database cleanUp
     @Autowired

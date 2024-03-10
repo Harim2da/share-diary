@@ -42,7 +42,7 @@ public class DiaryRoomService {
 
     public MemberDiaryRoom joinNewMember(Member member, DiaryRoom diaryRoom) {
 
-        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoom(member.getId(), diaryRoom.getId())
+        MemberDiaryRoom memberDiaryRoom = memberDiaryRoomRepository.findByMemberIdAndDiaryRoomIdWithDiaryRoomHost(member.getId(), diaryRoom.getId())
                 .orElseGet(() -> memberDiaryRoomRepository.save(MemberDiaryRoom.of(member, diaryRoom, Role.USER)));
         return memberDiaryRoom;
     }
