@@ -16,6 +16,10 @@ public class DiaryRoomRepositoryCustomImpl extends QuerydslRepositorySupport imp
         super(DiaryRoom.class);
     }
 
+    /**
+     * diaryRoomId 는 null 일 경우 (0~limit)
+     * null 이 아닌 경우 (diaryRoomId+1 ~ diaryRoomId + limit)
+     */
     @Override
     public List<DiaryRoom> findAllByMemberIdWithMemberDiaryRoom(Long memberId, Long diaryRoomId, int limit) {
         return from(diaryRoom)
