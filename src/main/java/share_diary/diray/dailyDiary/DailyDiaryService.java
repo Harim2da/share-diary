@@ -98,7 +98,7 @@ public class DailyDiaryService {
 
         // 현재 수정 가능한 내용이 일기 내용과 공개/비공개 전환 뿐이기에 쿼리 메소드 사용
         DailyDiary diary = dailyDiaryRepository.findById(diaryId)
-                .filter(dailyDiary -> dailyDiary.getCreateBy().equals(member.getLoginId()))
+                .filter(dailyDiary -> dailyDiary.getWriteMember().equals(member.getLoginId()))
                 .orElseThrow(InvalidRequestException::new);
 
         return dailyDiaryMapper.asDTO(diary.update(request));

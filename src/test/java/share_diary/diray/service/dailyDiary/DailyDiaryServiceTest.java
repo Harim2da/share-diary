@@ -136,7 +136,7 @@ class DailyDiaryServiceTest extends IntegrationTestSupport {
         DailyDiary diary = dailyDiaryRepository.save(dailyDiary);
 
         String modifyContent = "나는 일기를 수정했습니다.";
-        DailyDiaryCreateModifyRequestDTO request = DailyDiaryCreateModifyRequestDTO.of(content,MyEmoji.BAD,List.of(savedDiaryRoom.getId()),DiaryStatus.SHOW);
+        DailyDiaryCreateModifyRequestDTO request = DailyDiaryCreateModifyRequestDTO.of(modifyContent,MyEmoji.BAD,List.of(savedDiaryRoom.getId()),DiaryStatus.SHOW);
 
         //when
         dailyDiaryService.modifyDailyDiary(diary.getId(),request, savedMember.getId());

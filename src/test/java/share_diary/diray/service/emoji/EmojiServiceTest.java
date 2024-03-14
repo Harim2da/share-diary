@@ -76,7 +76,7 @@ class EmojiServiceTest extends IntegrationTestSupport {
         //then
         assertThat(diaryEmoji)
                 .extracting("heart","thumb","party","cake","devil")
-                .containsExactly(1,0,0,0,0);
+                .containsExactly(1L,0L,0L,0L,0L);
     }
 
     private Member createMember() {

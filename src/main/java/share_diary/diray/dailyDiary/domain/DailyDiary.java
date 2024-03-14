@@ -83,10 +83,12 @@ public class DailyDiary extends BaseTimeEntity {
         if (request.getContent() != null) {
             content = request.getContent();
         }
+        if(request.getFeeling() != null){
+            feeling = request.getFeeling();
+        }
         if (request.getStatus() != null) {
             status = request.getStatus();
         }
-
         return this;
     }
 }
