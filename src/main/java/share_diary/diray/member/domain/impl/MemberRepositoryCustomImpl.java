@@ -24,6 +24,9 @@ public class MemberRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .fetch();
     }
 
+    /**
+     * 일기방 초대를 통해 생성된 비회원 상태를 수락을 통해 회원으로 진행
+     */
     @Override
     public boolean isJoinedMember(String email){
         return from(member)
