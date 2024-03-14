@@ -19,6 +19,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
+    database: mysql   # H2 database 로 수정시 주석 필요
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # H2 database 로 수정시 주석 필요
+
     hibernate:
       ddl-auto: create
 #    properties:
