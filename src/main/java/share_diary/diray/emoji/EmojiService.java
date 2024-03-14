@@ -32,7 +32,7 @@ public class EmojiService {
     //mapper
     private final EmojiMapper emojiMapper;
 
-    public DiaryEmojiDTO click(Long loginId, Long diaryId,String emojiType) {
+    public DiaryEmojiDTO clickEmoji(Long loginId, Long diaryId, String emojiType) {
         //다이어리 조회
         //만약 다이어리가 없다면,예외
         DailyDiary diary = diaryRepository.findById(diaryId)
@@ -43,10 +43,7 @@ public class EmojiService {
         if (ObjectUtils.isEmpty(diary.getEmoji())) {
             Member member = memberRepository.findById(loginId)
                     .orElseThrow(MemberNotFoundException::new);
-            Emoji emoji = Emoji.of();
-            emoji.countEmoji(emojiType);
-            emoji.addMember(member);
-            emoji.addDailyDiary(diary);
+            Emoji emoji = Emoji.of(member,diary,emojiType);
             Emoji saveEmoji = emojiRepository.save(emoji);
             return emojiMapper.asDiaryEmojiDTO(saveEmoji);
         }

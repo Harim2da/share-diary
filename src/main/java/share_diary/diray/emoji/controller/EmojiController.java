@@ -33,7 +33,7 @@ public class EmojiController {
             @RequestBody DiaryEmojiRequestDTO request
     ){
 //        MyEmoji emoji = MyEmoji.valueOf(request.getEmoji().toUpperCase());
-        return emojiService.click(session.getId(),diaryId,request.getEmoji());
+        return emojiService.clickEmoji(session.getId(),diaryId,request.getEmoji());
     }
 
     /**

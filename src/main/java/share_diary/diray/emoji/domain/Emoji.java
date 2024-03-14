@@ -53,6 +53,14 @@ public class Emoji extends BaseTimeEntity {
         return new Emoji(0, 0, 0, 0, 0);
     }
 
+    public static Emoji of(Member member,DailyDiary diary,String emojiType){
+        Emoji emoji = Emoji.of();
+        emoji.countEmoji(emojiType);
+        emoji.addMember(member);
+        emoji.addDailyDiary(diary);
+        return emoji;
+    }
+
     public void countEmoji(String name) {
         switch (name) {
             case "HEART":
